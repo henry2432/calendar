@@ -1,115 +1,113 @@
-import os
 import requests
+import json
 import datetime
 import pytz
+import os
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
 
-# === 參數設定（由環境變數讀取） ===
-CK         = os.getenv("ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a")
-CS         = os.getenv("cs_4df8324d11b0d8df493b2335efc3a26929ec73b5")
-WC_API_URL = os.getenv("WC_SITE", "https://kayarine.club") + "/wp-json/wc/v3/orders"
-SHEET_NAME = os.getenv("SHEET_NAME", "WooCommerce Orders")
+# WooCommerce API 資訊
+WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
+WC_API_KEY = os.environ.get("ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a")
+WC_API_SECRET = os.environ.get("cs_4df8324d11b0d8df493b2335efc3a26929ec73b5")
 
-# Workflow 會先把 GCP_SA_JSON 寫成這個檔案
-CREDS_PATH = "/tmp/credentials.json"
+# Google Sheets 設定
+SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID")
+SHEET_NAME = "今日預約"
 
-# 寫入 credentials.json
-with open(CREDS_PATH, "w") as f:
-    f.write(os.getenv("GCP_SA_JSON"))
+# 時區設定
+hong_kong_tz = pytz.timezone("Asia/Hong_Kong")
+today = datetime.datetime.now(hong_kong_tz).date()
 
-# 時區 & 今日日期
-HK    = pytz.timezone("Asia/Hong_Kong")
-today = datetime.datetime.now(HK).date()
-start_date = (today - datetime.timedelta(days=120)).isoformat() + "T00:00:00"
+# 欲識別的產品 ID
+PRODUCT_NAMES = {
+    288: "單人獨木舟",
+    289: "雙人獨木舟",
+    290: "直立板"
+}
 
-# Google Sheets 認證
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
-creds = ServiceAccountCredentials.from_json_keyfile_name(CREDS_PATH, scope)
-gc    = gspread.authorize(creds)
-sheet = gc.open(SHEET_NAME).sheet1
-
-# 清空舊資料並重寫標題
-sheet.clear()
-header = [
-    "姓名", "電話",
-    "單人獨木舟", "雙人獨木舟", "直立板", "Tour",
-    "浮潛鏡", "防水袋", "電話防水袋"
-]
-sheet.append_row(header)
-
-# 服務 ID→名稱對照
-SERVICE_MAP = {
+# 服務名稱對應
+SERVICE_NAMES = {
     "31": "浮潛鏡",
     "32": "防水袋",
     "33": "電話防水袋"
 }
 
-# 1) 分頁抓取最近 4 個月內的訂單（最多 10 頁，每頁 100 筆）
-all_orders = []
-for page in range(1, 11):
+def fetch_today_orders():
     params = {
         "per_page": 100,
-        "page": page,
-        "after": start_date,
-        "consumer_key": CK,
-        "consumer_secret": CS
+        "orderby": "date",
+        "order": "desc",
     }
-    resp = requests.get(WC_API_URL, params=params)
-    resp.raise_for_status()
-    batch = resp.json()
-    if not batch:
-        break
-    all_orders.extend(batch)
+    res = requests.get(WC_API_URL, auth=(WC_API_KEY, WC_API_SECRET), params=params)
+    res.raise_for_status()
+    orders = res.json()
+    today_orders = []
 
-# 2) 篩選「今日預約」的訂單，並彙總設備 & 服務數量
-rows = []
-for order in all_orders:
-    # 初始化各項數量
-    equip = {"單人獨木舟":0, "雙人獨木舟":0, "直立板":0, "Tour":0}
-    svc   = {name:0 for name in SERVICE_MAP.values()}
-    matched = False
+    for order in orders:
+        if order["status"] not in ["processing", "completed", "on-hold"]:
+            continue
 
-    for item in order.get("line_items", []):
-        # 累計設備
-        pid = item["product_id"]
-        qty = item.get("quantity", 1)
-        if   pid == 288: equip["單人獨木舟"] += qty
-        elif pid == 289: equip["雙人獨木舟"] += qty
-        elif pid == 290: equip["直立板"]     += qty
-        else:            equip["Tour"]        += qty
+        order_items = []
+        services_counter = {"31": 0, "32": 0, "33": 0}
+        product_counts = {"單人獨木舟": 0, "雙人獨木舟": 0, "直立板": 0}
+        match = False
 
-        # 找出 YITH booking 資料，並計算服務數量
-        for meta in item.get("meta_data", []):
-            if meta.get("key") == "yith_booking_data":
-                data = meta["value"]
-                bk_date = datetime.datetime.fromtimestamp(int(data["from"]), HK).date()
-                if bk_date == today:
-                    matched = True
-                    qs = data.get("booking_service_quantities", {})
-                    for sid, name in SERVICE_MAP.items():
-                        svc[name] += int(qs.get(sid, "0"))
-                break
+        for item in order["line_items"]:
+            product_id = item["product_id"]
+            product_name = PRODUCT_NAMES.get(product_id)
+            if not product_name:
+                continue
 
-    if matched:
-        b = order["billing"]
-        name  = f"{b.get('first_name','')} {b.get('last_name','')}".strip()
-        phone = b.get("phone","")
-        row = [
-            name, phone,
-            equip["單人獨木舟"], equip["雙人獨木舟"],
-            equip["直立板"], equip["Tour"],
-            svc["浮潛鏡"], svc["防水袋"], svc["電話防水袋"]
-        ]
-        rows.append(row)
+            for meta in item["meta_data"]:
+                if meta["key"] == "yith_booking_data":
+                    booking_data = meta["value"]
+                    timestamp = booking_data["from"]
+                    booking_date = datetime.datetime.fromtimestamp(timestamp, hong_kong_tz).date()
+                    if booking_date != today:
+                        continue
+                    match = True
+                    product_counts[product_name] += item["quantity"]
 
-# 3) 批次寫入 Google Sheet
-if rows:
-    sheet.append_rows(rows, value_input_option="USER_ENTERED")
+                    quantities = booking_data.get("booking_service_quantities", {})
+                    for service_id in SERVICE_NAMES:
+                        qty = int(quantities.get(service_id, "0"))
+                        services_counter[service_id] += qty
 
-print(f"完成，寫入 {len(rows)} 筆今日預約訂單。")
+        if match:
+            today_orders.append({
+                "姓名": order["billing"]["first_name"] + " " + order["billing"]["last_name"],
+                "電話": order["billing"]["phone"],
+                "付款方式": order["payment_method_title"],
+                "狀態": order["status"],
+                **product_counts,
+                **{SERVICE_NAMES[sid]: services_counter[sid] for sid in SERVICE_NAMES}
+            })
+
+    return today_orders
+
+def write_to_sheet(orders):
+    credentials_info = json.loads(os.environ["GCP_SA_JSON"])
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_info,
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+
+    client = gspread.authorize(credentials)
+    sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
+    sheet.clear()
+
+    if not orders:
+        sheet.update("A1", [["今天沒有預約"]])
+        return
+
+    headers = list(orders[0].keys())
+    data = [headers] + [[order[h] for h in headers] for order in orders]
+    sheet.update("A1", data)
+
+if __name__ == "__main__":
+    orders = fetch_today_orders()
+    write_to_sheet(orders)
+
 
 
