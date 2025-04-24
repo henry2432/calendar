@@ -31,4 +31,4 @@ jobs:
           WC_SITE: ${{ secrets.WC_SITE }}
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python script.py
+        run: python script1.py
