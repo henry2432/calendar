@@ -11,7 +11,7 @@ CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"
 
 # Google Sheets 設定
 SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"  # ← 替換為你的 Sheet ID
-SHEET_NAME = "TodayBooking"
+SHEET_NAME = "WooCommerce Orders"
 
 # Booking 產品對應 ID
 PRODUCT_IDS = {
