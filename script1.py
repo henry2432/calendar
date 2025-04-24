@@ -10,7 +10,7 @@ CONSUMER_KEY = "ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a"
 CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"
 
 # Google Sheets 設定
-SHEET_ID = "your_google_sheet_id"
+SHEET_ID = "your_google_sheet_id"  # ← 替換為你的 Sheet ID
 SHEET_NAME = "TodayBooking"
 
 # Booking 產品對應 ID
@@ -68,21 +68,36 @@ def parse_order(order):
 
     for item in order.get("line_items", []):
         product_id = item["product_id"]
+
+        # 先找出對應的產品名稱
+        product_name = None
         for name_key, pid in PRODUCT_IDS.items():
             if product_id == pid:
-                for meta in item.get("meta_data", []):
-                    if meta["key"] == "yith_booking_data":
-                        booking = meta["value"]
-                        persons = int(booking.get("persons", 0))
-                        product_counts[name_key] += persons
-                        
-                        services = booking.get("booking_services", [])
-                        service_qty = booking.get("booking_service_quantities", {})
+                product_name = name_key
+                break
 
-                        for service_id in services:
-                            for service_name, sid in SERVICE_IDS.items():
-                                if sid == int(service_id):
-                                    product_counts[service_name] += int(service_qty.get(str(service_id), 0))
+        if not product_name:
+            continue
+
+        # 解析 booking 資料
+        for meta in item.get("meta_data", []):
+            if meta["key"] == "yith_booking_data":
+                booking = meta["value"]
+                persons = int(booking.get("persons", 0))
+                product_counts[product_name] += persons
+
+                # 服務選擇需以 booking_services 為主
+                selected_services = booking.get("booking_services", [])
+                service_quantities = booking.get("booking_service_quantities", {})
+
+                for service_id in selected_services:
+                    sid = int(service_id)
+                    for service_name, known_sid in SERVICE_IDS.items():
+                        if sid == known_sid:
+                            qty = int(service_quantities.get(str(sid), 0))
+                            product_counts[service_name] += qty
+                break
+
     return [name, phone, product_counts["單人獨木舟"], product_counts["雙人獨木舟"],
             product_counts["直立板"], product_counts["浮潛鏡"],
             product_counts["防水袋"], product_counts["電話防水袋"],
