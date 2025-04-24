@@ -19,11 +19,12 @@ SHEET_NAME = "今日預約"
 hong_kong_tz = pytz.timezone("Asia/Hong_Kong")
 today = datetime.datetime.now(hong_kong_tz).date()
 
-# 產品 ID 對應名稱
+# 欲識別的產品 ID 對應名稱
 PRODUCT_NAMES = {
     288: "單人獨木舟",
     289: "雙人獨木舟",
-    290: "直立板"
+    290: "直立板",
+    291: "Tour"
 }
 
 # 服務名稱對應
@@ -48,47 +49,49 @@ def fetch_today_orders():
         if order["status"] not in ["processing", "completed", "on-hold"]:
             continue
 
-        order_match = False
-        product_counts = {name: 0 for name in PRODUCT_NAMES.values()}
-        service_counts = {name: 0 for name in SERVICE_NAMES.values()}
+        order_summary = {
+            "姓名": order["billing"]["first_name"] + " " + order["billing"]["last_name"],
+            "電話": order["billing"]["phone"],
+            "付款方式": order["payment_method_title"],
+            "狀態": order["status"],
+            "單人獨木舟": 0,
+            "雙人獨木舟": 0,
+            "直立板": 0,
+            "Tour": 0,
+            "浮潛鏡": 0,
+            "防水袋": 0,
+            "電話防水袋": 0
+        }
+
+        match = False
 
         for item in order["line_items"]:
             product_id = item["product_id"]
             product_name = PRODUCT_NAMES.get(product_id)
-
             if not product_name:
                 continue
 
             for meta in item.get("meta_data", []):
                 if meta["key"] == "yith_booking_data":
                     booking_data = meta["value"]
-                    booking_date = datetime.datetime.fromtimestamp(
-                        booking_data["from"], hong_kong_tz
-                    ).date()
+                    timestamp = booking_data.get("from")
+                    if not timestamp:
+                        continue
+
+                    booking_date = datetime.datetime.fromtimestamp(timestamp, hong_kong_tz).date()
                     if booking_date != today:
                         continue
 
-                    # 有符合今天的預約
-                    order_match = True
+                    match = True
+                    quantity = item.get("quantity", 0)
+                    order_summary[product_name] += quantity
 
-                    # 累加產品數量
-                    product_counts[product_name] += item["quantity"]
+                    service_quantities = booking_data.get("booking_service_quantities", {})
+                    for sid, label in SERVICE_NAMES.items():
+                        order_summary[label] += int(service_quantities.get(sid, "0"))
 
-                    # 統計服務數量
-                    quantities = booking_data.get("booking_service_quantities", {})
-                    for sid, cname in SERVICE_NAMES.items():
-                        qty = int(quantities.get(sid, "0"))
-                        service_counts[cname] += qty
-
-        if order_match:
-            today_orders.append({
-                "姓名": order["billing"]["first_name"] + " " + order["billing"]["last_name"],
-                "電話": order["billing"]["phone"],
-                "付款方式": order["payment_method_title"],
-                "狀態": order["status"],
-                **product_counts,
-                **service_counts
-            })
+        if match:
+            today_orders.append(order_summary)
 
     return today_orders
 
@@ -108,12 +111,13 @@ def write_to_sheet(orders):
         return
 
     headers = list(orders[0].keys())
-    data = [headers] + [[order.get(h, "") for h in headers] for order in orders]
+    data = [headers] + [[order[h] for h in headers] for order in orders]
     sheet.update("A1", data)
 
 if __name__ == "__main__":
     orders = fetch_today_orders()
     write_to_sheet(orders)
+
 
 
 
