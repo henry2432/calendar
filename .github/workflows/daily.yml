@@ -1,0 +1,34 @@
+name: Daily Woo Export
+
+on:
+  schedule:
+    - cron: '0 23 * * *'    # UTC 23:00 = 香港 07:00
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with: { python-version: '3.x' }
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write credentials.json
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+        run: |
+          echo "$GCP_SA_JSON" > /tmp/credentials.json
+
+      - name: Run export script
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          WC_SITE: ${{ secrets.WC_SITE }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+        run: python script.py
