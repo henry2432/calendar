@@ -6,8 +6,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # WooCommerce API 設定
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
-CONSUMER_KEY = "your_consumer_key"
-CONSUMER_SECRET = "your_consumer_secret"
+CONSUMER_KEY = "ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a"
+CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"
 
 # Google Sheets 設定
 SHEET_ID = "your_google_sheet_id"
