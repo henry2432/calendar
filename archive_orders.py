@@ -14,7 +14,7 @@ now = datetime.now(tz)
 yesterday = now - timedelta(days=1)
 
 # Hardcode WooCommerce API URL (replace with your actual domain)
-WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"  # Replace with your actual domain
+WC_API_URL = "https://yourdomain.com/wp-json/wc/v3/orders"  # Replace with your actual domain
 CONSUMER_KEY = os.getenv("ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a")  # Your Consumer Key
 CONSUMER_SECRET = os.getenv("cs_4df8324d11b0d8df493b2335efc3a26929ec73b5")  # Your Consumer Secret
 
@@ -97,5 +97,31 @@ def parse_order(order):
         name, phone,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡"], counts["防水袋"], counts["電話防水袋"],
+        payment, status
+    ]
 
+# -----------------------------
+# 主流程：写入新订单
+# -----------------------------
+new_orders = fetch_new_orders()
+if not rows:
+    # 首次运行，写入标题行
+    header = ["Order ID", "姓名", "電話",
+              "單人獨木舟","雙人獨木舟","直立板",
+              "浮潛鏡","防水袋","電話防水袋",
+              "付款方式","訂單狀態"]
+    sheet_all.clear()
+    sheet_all.append_row(header)
+
+for ord_json in new_orders:
+    oid = str(ord_json["id"])
+    if oid in existing_oids:
+        continue  # 已记录，跳过
+
+    row = parse_order(ord_json)
+    sheet_all.append_row(row, value_input_option="USER_ENTERED")
+    idx = len(sheet_all.get_all_values())
+    format_cell_range(sheet_all, f"A{idx}:K{idx}", GREEN_FMT)
+
+print(f"{len(new_orders)} 筆當日訂單處理完成 (去重後新增 {len(new_orders)-len(existing_oids&{str(o['id']) for o in new_orders})} 筆)。")
 
