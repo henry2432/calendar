@@ -107,6 +107,9 @@ def append_rescheduled(order):
     )
     format_cell_range(sheet_today, f"A{row_idx}:J{row_idx}", green_fmt)
 
+print("今日日期：", today)
+print("改期表记录：", res_records)
+print("即日表现有记录：", existing)
 # 主流程：處理改期紀錄
 for rec in res_records:
     oid = str(rec.get("訂單號碼", "")).strip()
