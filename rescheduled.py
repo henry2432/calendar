@@ -25,7 +25,7 @@ CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"
 # -----------------------------
 
 SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
-DAILY_SHEET_NAME = "WooCommerce Orders"  # 即日訂單分頁名稱
+DAILY_SHEET_NAME = "即日訂單"  # 即日訂單分頁名稱
 RESCHEDULE_SHEET_NAME = "改期表"           # 改期表單回傳分頁名稱
 
 # -----------------------------
