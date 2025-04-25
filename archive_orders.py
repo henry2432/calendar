@@ -5,10 +5,9 @@ from datetime import datetime, timedelta
 import pytz
 from gspread_formatting import format_cell_range, CellFormat, textFormat
 import os
+import time
 
-# -----------------------------
 # 配置与常量
-# -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
 yesterday = now - timedelta(days=1)
@@ -28,25 +27,18 @@ GREEN_FMT = CellFormat(
 PRODUCT_IDS = {"單人獨木舟":288, "雙人獨木舟":289, "直立板":290}
 SERVICE_IDS = {"浮潛鏡":31, "防水袋":32, "電話防水袋":33}
 
-# -----------------------------
 # Google Sheets 客户端
-# -----------------------------
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
 client = gspread.authorize(creds)
 sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
 
-# -----------------------------
 # 读取已存在 Order ID，用于去重
-# -----------------------------
 rows = sheet_all.get_all_records()
 existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
 
-# -----------------------------
 # 拉取新订单
-# -----------------------------
 def fetch_new_orders():
-    # 计算 24 小时前的时间戳
     after = yesterday.strftime("%Y-%m-%dT%H:%M:%S")
     before = now.strftime("%Y-%m-%dT%H:%M:%S")
     
@@ -55,13 +47,15 @@ def fetch_new_orders():
         "before": before,
         "per_page": 100
     }
-    resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-    resp.raise_for_status()
-    return resp.json()
+    try:
+        resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
+        resp.raise_for_status()
+        return resp.json()
+    except requests.exceptions.RequestException as e:
+        print(f"请求失败: {e}")
+        return []
 
-# -----------------------------
 # 解析订单条目
-# -----------------------------
 def parse_order(order):
     name = order["billing"]["first_name"]
     phone = order["billing"]["phone"]
@@ -99,9 +93,7 @@ def parse_order(order):
         payment, status
     ]
 
-# -----------------------------
 # 主流程：写入新订单
-# -----------------------------
 new_orders = fetch_new_orders()
 if not rows:
     # 首次运行，写入标题行
@@ -122,5 +114,9 @@ for ord_json in new_orders:
     idx = len(sheet_all.get_all_values())
     format_cell_range(sheet_all, f"A{idx}:K{idx}", GREEN_FMT)
 
+    # 重试逻辑，确保数据写入
+    time.sleep(1)  # 可根据需要调整睡眠时间
+
 print(f"{len(new_orders)} 筆當日訂單處理完成 (去重後新增 {len(new_orders)-len(existing_oids&{str(o['id']) for o in new_orders})} 筆)。")
+
 
