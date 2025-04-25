@@ -38,11 +38,11 @@ PRODUCT_IDS = {"單人獨木舟": 288, "雙人獨木舟": 289, "直立板": 290}
 SERVICE_IDS = {"浮潛鏡": 31, "防水袋": 32, "電話防水袋": 33}
 
 # 取得單筆訂單資料
-
 def fetch_order(order_id):
     resp = requests.get(f"{WC_API_URL}/{order_id}", auth=(CONSUMER_KEY, CONSUMER_SECRET))
     if resp.status_code == 200:
         return resp.json()
+    print(f"Failed to fetch order {order_id}: {resp.status_code}")
     return None
 
 # 判斷訂單 booking 日期是否為今天
@@ -53,12 +53,12 @@ def booking_is_today(order):
                 ts = m.get("value", {}).get("from")
                 if ts:
                     bd = datetime.fromtimestamp(ts, tz).date()
+                    print(f"Booking date for order {order['id']} is {bd}, comparing with {today}")
                     return bd == today
     return False
 
 # 解析訂單成要寫入即日表的行資料
 # 使用與 script1.py 相同邏輯
-
 def parse_order(order):
     name = order["billing"]["first_name"]
     phone = order["billing"]["phone"]
@@ -93,12 +93,12 @@ def parse_order(order):
             payment, status]
 
 # 將改期單追加到即日表並套用深綠色字體格式
-
 def append_rescheduled(order):
     row = parse_order(order)
     key = f"{row[0]}|{row[1]}"
     if key in existing_keys:
         return
+    print(f"Appending order {row[0]} {row[1]} to today sheet.")
     sheet_today.append_row(row, value_input_option="USER_ENTERED")
     all_vals = sheet_today.get_all_values()
     row_idx = len(all_vals)
@@ -126,4 +126,3 @@ for rec in res_records:
 
 if __name__ == "__main__":
     pass
-
