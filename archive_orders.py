@@ -13,7 +13,7 @@ tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
 yesterday = now - timedelta(days=1)
 
-WC_API_URL = os.getenv("WC_SITE") + "/wp-json/wc/v3/orders"
+WC_API_URL = os.getenv("kayarine.club") + "/wp-json/wc/v3/orders"
 CONSUMER_KEY = os.getenv("ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a")
 CONSUMER_SECRET = os.getenv("cs_4df8324d11b0d8df493b2335efc3a26929ec73b5")
 
