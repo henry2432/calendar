@@ -2,7 +2,7 @@ name: Daily Woo Export
 
 on:
   schedule:
-    - cron: '0 23 * * *'    # UTC 23:00 = 香港 07:00
+    - cron: '0 23 * * *'    # 每天早上 7:00（HKT）
   workflow_dispatch:
 
 jobs:
@@ -32,3 +32,12 @@ jobs:
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python script1.py
+
+      - name: Run tour export script
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          WC_SITE: ${{ secrets.WC_SITE }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+        run: python tour.py
