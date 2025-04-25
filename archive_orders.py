@@ -15,10 +15,10 @@ yesterday = now - timedelta(days=1)
 
 # Hardcode WooCommerce API URL (replace with your actual domain)
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"  # Replace with your actual domain
-CONSUMER_KEY = os.getenv("ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a")  # Your Consumer Key
-CONSUMER_SECRET = os.getenv("cs_4df8324d11b0d8df493b2335efc3a26929ec73b5")  # Your Consumer Secret
+CONSUMER_KEY = "ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a"  # Your Consumer Key
+CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"  # Your Consumer Secret
 
-SHEET_ID = os.getenv("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs")  # Your Google Sheet ID
+SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"  # ← 替換為你的 Sheet I
 ALL_ORDERS_SHEET = "所有訂單"
 
 GREEN_FMT = CellFormat(
