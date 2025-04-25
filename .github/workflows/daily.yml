@@ -41,3 +41,13 @@ jobs:
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python tour.py
+
+      - name: Run rescheduled script
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          WC_SITE: ${{ secrets.WC_SITE }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+        run: python rescheduled.py
+
