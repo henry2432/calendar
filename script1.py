@@ -57,6 +57,15 @@ def parse_order(order):
     payment = order["payment_method_title"]
     status = order["status"]
 
+    status_map = {
+    "processing": "信用卡付款完成",
+    "on-hold": "需確認",
+    "completed": "已確認",
+    "cancelled": "已取消"
+}
+
+status = status_map.get(status_raw, status_raw)  # 預設用英文原始值 fallback
+
     product_counts = {
         "單人獨木舟": 0,
         "雙人獨木舟": 0,
