@@ -1,8 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import requests
 from datetime import datetime
 import pytz
-import requests
 from gspread_formatting import format_cell_range, CellFormat, textFormat
 
 # 時區與今日日期
@@ -29,22 +29,35 @@ sheet_res = client.open_by_key(SHEET_ID).worksheet(RESCHEDULE_SHEET_NAME)
 # 讀取改期表資料
 res_records = sheet_res.get_all_records()
 
-# 單筆訂單資料查詢
-# 使用 GET /orders/{id} 保證能抓到特定訂單
+# 讀取即日表現有紀錄，用於去重（使用姓名和電話組合作為唯一識別）
+existing = sheet_today.get_all_records()
+existing_keys = set(f"{r['姓名']}|{r['電話']}" for r in existing)
 
-def fetch_order_by_id(order_id):
-    url = f"{WC_API_URL}/{order_id}"
-    resp = requests.get(url, auth=(CONSUMER_KEY, CONSUMER_SECRET))
+# WooCommerce 資料解析設定
+PRODUCT_IDS = {"單人獨木舟": 288, "雙人獨木舟": 289, "直立板": 290}
+SERVICE_IDS = {"浮潛鏡": 31, "防水袋": 32, "電話防水袋": 33}
+
+# 取得單筆訂單資料
+
+def fetch_order(order_id):
+    resp = requests.get(f"{WC_API_URL}/{order_id}", auth=(CONSUMER_KEY, CONSUMER_SECRET))
     if resp.status_code == 200:
         return resp.json()
     return None
 
-# 解析 WooCommerce 訂單為要 append 的一列
-# 與 script1.py 相同邏輯
+# 判斷訂單 booking 日期是否為今天
+def booking_is_today(order):
+    for item in order.get("line_items", []):
+        for m in item.get("meta_data", []):
+            if m.get("key") == "yith_booking_data":
+                ts = m.get("value", {}).get("from")
+                if ts:
+                    bd = datetime.fromtimestamp(ts, tz).date()
+                    return bd == today
+    return False
 
-PRODUCT_IDS = {"單人獨木舟": 288, "雙人獨木舟": 289, "直立板": 290}
-SERVICE_IDS = {"浮潛鏡": 31, "防水袋": 32, "電話防水袋": 33}
-
+# 解析訂單成要寫入即日表的行資料
+# 使用與 script1.py 相同邏輯
 
 def parse_order(order):
     name = order["billing"]["first_name"]
@@ -54,53 +67,47 @@ def parse_order(order):
                   "completed": "已確認", "cancelled": "已取消"}
     status = status_map.get(order.get("status", ""), order.get("status", ""))
 
-    counts = {**{k: 0 for k in PRODUCT_IDS}, **{k: 0 for k in SERVICE_IDS}}
+    counts = {k: 0 for k in PRODUCT_IDS}
+    counts.update({k: 0 for k in SERVICE_IDS})
+
     for item in order.get("line_items", []):
         pid = item.get("product_id")
         # 旅程
-        for name_key, p in PRODUCT_IDS.items():
-            if pid == p:
-                # booking_data persons
-                for m in item.get("meta_data", []):
-                    if m.get("key") == "yith_booking_data":
-                        b = m.get("value", {})
-                        counts[name_key] += int(b.get("persons", 0))
-                        # services
-                        for sid in b.get("booking_services", []):
-                            for svc_name, svc_id in SERVICE_IDS.items():
-                                if int(sid) == svc_id:
-                                    counts[svc_name] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
-                        break
-        # 非旅程 items ignored
+        pname = next((n for n, id_ in PRODUCT_IDS.items() if id_ == pid), None)
+        if pname:
+            for m in item.get("meta_data", []):
+                if m.get("key") == "yith_booking_data":
+                    b = m.get("value", {})
+                    counts[pname] += int(b.get("persons", 0))
+                    # 服務
+                    for sid in b.get("booking_services", []):
+                        sid = int(sid)
+                        sname = next((n for n, id_ in SERVICE_IDS.items() if id_ == sid), None)
+                        if sname:
+                            counts[sname] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
+                    break
 
     return [name, phone,
             counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
             counts["浮潛鏡"], counts["防水袋"], counts["電話防水袋"],
             payment, status]
 
-# 匹配訂單的 booking 日期是否為目標日期
-def booking_is_on(order, target_date):
-    for item in order.get("line_items", []):
-        for m in item.get("meta_data", []):
-            if m.get("key") == "yith_booking_data":
-                ts = m.get("value", {}).get("from")
-                if ts:
-                    dt = datetime.fromtimestamp(ts, tz).date()
-                    return dt == target_date
-    return False
-
-# 追加改期訂單到即日表並標示深綠色
+# 將改期單追加到即日表並套用深綠色字體格式
 
 def append_rescheduled(order):
     row = parse_order(order)
+    key = f"{row[0]}|{row[1]}"
+    if key in existing_keys:
+        return
     sheet_today.append_row(row, value_input_option="USER_ENTERED")
-    # 找到剛 append 的列號
     all_vals = sheet_today.get_all_values()
     row_idx = len(all_vals)
-    fmt = CellFormat(textFormat=textFormat(foregroundColor={"red":0.0,"green":0.4,"blue":0.0}))
-    format_cell_range(sheet_today, f"A{row_idx}:J{row_idx}", fmt)
+    green_fmt = CellFormat(
+        textFormat=textFormat(foregroundColor={"red": 0.0, "green": 0.4, "blue": 0.0})
+    )
+    format_cell_range(sheet_today, f"A{row_idx}:J{row_idx}", green_fmt)
 
-# 主流程
+# 主流程：處理改期紀錄
 for rec in res_records:
     oid = str(rec.get("訂單號碼", "")).strip()
     date_str = rec.get("新預約日期", "").strip()
@@ -108,22 +115,15 @@ for rec in res_records:
         continue
     try:
         nd = datetime.strptime(date_str, "%Y/%m/%d").date()
-    except:
+    except ValueError:
         continue
-    # 只要新預約為今天
     if nd != today:
         continue
-    # fetch single order
-    ord_data = fetch_order_by_id(oid)
-    if not ord_data:
+    order = fetch_order(oid)
+    if not order or not booking_is_today(order):
         continue
-    # 確認 booking_data.from 也是今天
-    if not booking_is_on(ord_data, today):
-        continue
-    # 避免重複 append: 檢查即日表是否已有相同訂單ID, 假設姓名+電話+狀態能區分
-    # 這裡簡單以電話做識別
-    existing = sheet_today.get_all_records()
-    phones = [r.get("電話") for r in existing]
-    if ord_data.get("billing",{}).get("phone") in phones:
-        continue
-    append_rescheduled(ord_data)
+    append_rescheduled(order)
+
+if __name__ == "__main__":
+    pass
+
