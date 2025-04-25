@@ -1,58 +1,77 @@
-# availability.py
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime, timedelta
 import pytz
-import pandas as pd
 
-# 全域設定
-SHEET_ID = '1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs'
-NEW_ORDERS_SHEET_NAME = 'New Orders'            # 歷史訂單表
-EQUIPMENT_SHEET_NAME = 'Equipment Availability'  # 設備名額表
-
-# 設定時區與日期範圍
-tz = pytz.timezone('Asia/Hong_Kong')
+# -----------------------------
+# 設定時區與日期
+# -----------------------------
+tz = pytz.timezone("Asia/Hong_Kong")
 today = datetime.now(tz).date()
-end_date = today + timedelta(days=90)
+three_months_later = today + timedelta(days=90)
 
-# 設備容量設定 (可改為讀自 Sheet)
-CAPACITY = {
-    '單人獨木舟': 50,
-    '雙人獨木舟': 80,
-    '直立板': 20
-}
+# -----------------------------
+# Google Sheets 設定
+# -----------------------------
+SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
+ALL_ORDERS_SHEET_NAME = "所有訂單"  # 所有訂單分頁名稱
+AVAILABILITY_SHEET_NAME = "設備名額表"  # 設備名額表分頁名稱
 
-# 授權並取得 client
-def get_client():
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
-    return gspread.authorize(creds)
+# -----------------------------
+# 設備名額設定
+# -----------------------------
+PRODUCT_IDS = {"單人獨木舟": 50, "雙人獨木舟": 80, "直立板": 20}  # 設備初始數量
 
-client = get_client()
-sheet_orders = client.open_by_key(SHEET_ID).worksheet(NEW_ORDERS_SHEET_NAME)
+# -----------------------------
+# 建立 Google Sheets 客戶端
+# -----------------------------
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
+client = gspread.authorize(creds)
+sheet_all_orders = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET_NAME)
+sheet_availability = client.open_by_key(SHEET_ID).worksheet(AVAILABILITY_SHEET_NAME)
 
-# 讀取歷史訂單與彙整使用量
-df_orders = pd.DataFrame(sheet_orders.get_all_records())
-df_orders['日期'] = pd.to_datetime(df_orders['日期'], format='%Y/%m/%d').dt.date
-df_usage = df_orders.groupby('日期')[list(CAPACITY.keys())].sum().reindex(
-    pd.date_range(today, end_date).date, fill_value=0
-)
+# -----------------------------
+# 讀取所有訂單
+# -----------------------------
+all_orders = sheet_all_orders.get_all_records()
 
-# 計算剩餘量
-df_remain = df_usage.copy()
-for equip, cap in CAPACITY.items():
-    df_remain[equip] = cap - df_usage[equip]
+# -----------------------------
+# 設備剩餘數量統計
+# -----------------------------
+# 初始化設備數量
+availability = {key: value for key, value in PRODUCT_IDS.items()}
 
-# 寫入「設備名額表」
-sheet_equip = client.open_by_key(SHEET_ID).worksheet(EQUIPMENT_SHEET_NAME)
-sheet_equip.clear()
-header = ['日期'] + list(CAPACITY.keys())
-sheet_equip.append_row(header)
-for date, row in df_remain.iterrows():
-    sheet_equip.append_row([date.strftime('%Y/%m/%d')] + row.tolist(), value_input_option='USER_ENTERED')
+# 遍歷所有訂單，計算訂單中的設備數量
+for order in all_orders:
+    order_date_str = order.get('訂單日期', '')  # 假設有訂單日期欄位
+    if not order_date_str:
+        continue
+    try:
+        order_date = datetime.strptime(order_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        continue
+    
+    # 只處理未來 3 個月內的訂單
+    if order_date > three_months_later:
+        continue
 
-# 列印標題和容量設定
-print('設備名額表標題:', header)
-print('設備總數量設定:')
-for equip, cap in CAPACITY.items():
-    print(f'  - {equip}: {cap}')
+    # 解析訂單中的設備數量
+    for key in availability.keys():
+        if order.get(key, 0):  # 假設訂單中有設備數量欄位
+            availability[key] -= order.get(key, 0)
+
+# -----------------------------
+# 更新設備名額表
+# -----------------------------
+# 構造設備名額表的資料
+availability_data = [['設備', '剩餘數量']]
+for key, value in availability.items():
+    availability_data.append([key, value])
+
+# 清空並更新設備名額表
+sheet_availability.clear()
+sheet_availability.insert_rows(availability_data, 1)
+
+print("設備名額表更新完成！")
+
