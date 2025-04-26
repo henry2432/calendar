@@ -26,7 +26,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json'
 client = gspread.authorize(creds)
 
 equipment_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs").worksheet("設備名額表")
-reschedule_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs").worksheet("改期單")
+reschedule_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs").worksheet("改期表")
 
 # -----------------------------
 # 擷取 WooCommerce 訂單
