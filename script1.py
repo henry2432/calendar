@@ -5,7 +5,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # WooCommerce API 設定
-WC_API_URL = "https://kayarine.club/wp-json/wooapi/v3/orders"
+WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
 CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
 CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
 
@@ -36,8 +36,16 @@ def get_today_orders():
         "before": end,
         "per_page": 100
     }
-    response = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-    orders = response.json()
+    try:
+        response = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
+        response.raise_for_status()
+        orders = response.json()
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {e}, URL: {response.url}")
+        raise
+    except requests.exceptions.RequestException as e:
+        print(f"Request Error: {e}")
+        raise
     
     today_orders = []
     for order in orders:
@@ -133,5 +141,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
