@@ -7,30 +7,39 @@ from gspread_formatting import format_cell_range, CellFormat, textFormat
 import os
 
 # -----------------------------
-# 配置与常量
+# 配置與常量
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
 yesterday = now - timedelta(days=1)
 
-# Hardcode WooCommerce API URL (replace with your actual domain)
-WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"  # Replace with your actual domain
-CONSUMER_KEY = "ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a"  # Your Consumer Key
-CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"  # Your Consumer Secret
+# WooCommerce API 配置
+WC_API_URL = "https://kayarine.club/wp-json/wooapi/v3/orders"
+CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
+CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
 
-SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"  # ← 替換為你的 Sheet I
+SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
 ALL_ORDERS_SHEET = "所有訂單"
 
 GREEN_FMT = CellFormat(
     textFormat=textFormat(foregroundColor={"red":0.0,"green":0.4,"blue":0.0})
 )
 
-# WooCommerce 对应产品与服务
-PRODUCT_IDS = {"單人獨木舟":288, "雙人獨木舟":289, "直立板":290}
-SERVICE_IDS = {"浮潛鏡":31, "防水袋":32, "電話防水袋":33}
+# WooCommerce 對應產品與服務
+PRODUCT_IDS = {
+    "單人獨木舟": 81,
+    "雙人獨木舟": 82,
+    "直立板": 84
+}
+SERVICE_IDS = {
+    "浮潛鏡租借": 34,
+    "手機防水袋": 35,
+    "浮潛鏡加購": 36,
+    "防水袋加購": 37
+}
 
 # -----------------------------
-# Google Sheets 客户端
+# Google Sheets 客戶端
 # -----------------------------
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
@@ -38,22 +47,20 @@ client = gspread.authorize(creds)
 sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
 
 # -----------------------------
-# 读取已存在 Order ID，用于去重
+# 讀取已存在 Order ID，用於去重
 # -----------------------------
 rows = sheet_all.get_all_records()
 existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
 
 # -----------------------------
-# 拉取新订单
+# 拉取新訂單（按目標日期）
 # -----------------------------
-def fetch_new_orders():
-    # 计算 24 小时前的时间戳
-    after = yesterday.strftime("%Y-%m-%dT%H:%M:%S")
-    before = now.strftime("%Y-%m-%dT%H:%M:%S")
-    
+def fetch_new_orders(target_date):
+    start = target_date.strftime("%Y-%m-%dT00:00:00")
+    end = target_date.strftime("%Y-%m-%dT23:59:59")
     params = {
-        "after": after,
-        "before": before,
+        "after": start,
+        "before": end,
         "per_page": 100
     }
     resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
@@ -61,23 +68,24 @@ def fetch_new_orders():
     return resp.json()
 
 # -----------------------------
-# 解析订单条目
+# 解析訂單條目（包含預訂日期）
 # -----------------------------
 def parse_order(order):
     name = order["billing"]["first_name"]
     phone = order["billing"]["phone"]
     payment = order["payment_method_title"]
     status_map = {
-        "processing":"信用卡付款完成",
-        "on-hold":"需確認",
-        "completed":"已確認",
-        "cancelled":"已取消"
+        "processing": "信用卡付款完成",
+        "on-hold": "需確認",
+        "completed": "已確認",
+        "cancelled": "已取消"
     }
     status = status_map.get(order["status"], order["status"])
 
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
+    booking_date = ""
     for item in order.get("line_items", []):
         pid = item["product_id"]
         pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
@@ -86,6 +94,7 @@ def parse_order(order):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
                     counts[pname] += int(b.get("persons",0))
+                    booking_date = datetime.fromtimestamp(int(b.get("from")), tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
@@ -95,33 +104,34 @@ def parse_order(order):
     return [
         order["id"],         # Order ID
         name, phone,
+        booking_date,        # 預訂日期
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
-        counts["浮潛鏡"], counts["防水袋"], counts["電話防水袋"],
-        payment, status
+        counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
+        payment, status,
+        ""                   # 訂單到達？（初始為空）
     ]
 
 # -----------------------------
-# 主流程：写入新订单
+# 主流程：寫入新訂單
 # -----------------------------
-new_orders = fetch_new_orders()
+target_date = yesterday  # 提取昨日訂單
+new_orders = fetch_new_orders(target_date)
 if not rows:
-    # 首次运行，写入标题行
-    header = ["Order ID", "姓名", "電話",
-              "單人獨木舟","雙人獨木舟","直立板",
-              "浮潛鏡","防水袋","電話防水袋",
-              "付款方式","訂單狀態"]
+    header = ["Order ID", "姓名", "電話", "預訂日期",
+              "單人獨木舟", "雙人獨木舟", "直立板",
+              "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
+              "付款方式", "訂單狀態", "訂單到達？"]
     sheet_all.clear()
     sheet_all.append_row(header)
 
 for ord_json in new_orders:
     oid = str(ord_json["id"])
     if oid in existing_oids:
-        continue  # 已记录，跳过
+        continue
 
     row = parse_order(ord_json)
     sheet_all.append_row(row, value_input_option="USER_ENTERED")
     idx = len(sheet_all.get_all_values())
-    format_cell_range(sheet_all, f"A{idx}:K{idx}", GREEN_FMT)
+    format_cell_range(sheet_all, f"A{idx}:N{idx}", GREEN_FMT)
 
-print(f"{len(new_orders)} 筆當日訂單處理完成 (去重後新增 {len(new_orders)-len(existing_oids&{str(o['id']) for o in new_orders})} 筆)。")
-
+print(f"{len(new_orders)} 筆訂單處理完成 (去重後新增 {len(new_orders)-len(existing_oids&{str(o['id']) for o in new_orders})} 筆)。")
