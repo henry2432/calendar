@@ -2,7 +2,8 @@ name: Daily WooCommerce Export
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # 每天早上 7:00 (HKT)
+    - cron: '0 23 * * *'  # 每天早上 7:00 (HKT, UTC 23:00)
+    - cron: '0 19 * * *'  # 每天凌晨 3:00 (HKT, UTC 19:00)
   workflow_dispatch:
 
 jobs:
@@ -27,46 +28,57 @@ jobs:
           echo "$GCP_SA_JSON" > /tmp/credentials.json
 
       - name: Run availability script
+        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: ${{ secrets.WC_SITE }}
+          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python availability.py
 
       - name: Run archive orders script
+        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: ${{ secrets.WC_SITE }}
+          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python archive_orders.py
 
       - name: Run Woo Orders export script
+        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: ${{ secrets.WC_SITE }}
+          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python script1.py
 
       - name: Run Tour Orders export script
+        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: ${{ secrets.WC_SITE }}
+          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python tour.py
 
       - name: Run Rescheduled Orders export script
+        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: ${{ secrets.WC_SITE }}
+          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python rescheduled.py
+
+      - name: Run Update Arrival Status script
+        if: github.event.schedule == '0 19 * * *'  # 僅在 3:00 AM 運行
+        env:
+          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
+        run: python update_arrival_status.py
