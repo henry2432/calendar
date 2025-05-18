@@ -13,9 +13,9 @@ now = datetime.now(tz)
 today_str = now.strftime("%Y-%m-%d")
 
 PRODUCT_IDS = {
-    "單人獨木舟": 288,
-    "雙人獨木舟": 289,
-    "直立板": 290
+    "單人獨木舟": 81,
+    "雙人獨木舟": 82,
+    "直立板": 84
 }
 
 # -----------------------------
@@ -32,10 +32,9 @@ reschedule_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID
 # 擷取 WooCommerce 訂單
 # -----------------------------
 WC_API_URL = os.getenv("WC_API_URL") or "https://kayarine.club/wp-json/wc/v3/orders"
-CONSUMER_KEY = os.getenv("CONSUMER_KEY")
-CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
+CONSUMER_KEY = os.getenv("CONSUMER_KEY") or "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
+CONSUMER_SECRET = os.getenv("CONSUMER_SECRET") or "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
 
-# 抓過去 24 小時訂單，以防 missing
 params = {
     "after": (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S"),
     "per_page": 100
@@ -50,7 +49,6 @@ orders = resp.json()
 def parse_date(ts):
     return datetime.fromtimestamp(int(ts), tz).strftime("%Y-%m-%d")
 
-# 初始化日期統計
 future_counts = {}
 def add_counts(date_str, pid, persons):
     if date_str < today_str:
@@ -61,7 +59,6 @@ def add_counts(date_str, pid, persons):
     if name:
         future_counts[date_str][name] += persons
 
-# 處理 API 原始訂單
 for order in orders:
     for item in order.get("line_items", []):
         pid = item.get("product_id")
@@ -72,13 +69,11 @@ for order in orders:
                 persons = int(b.get("persons", 0))
                 add_counts(date_str, pid, persons)
 
-# 處理改期表（未完成改期單）
 reschedules = reschedule_sheet.get_all_records()
 for r in reschedules:
     if str(r.get("是否完成改期","")).strip() != "是":
         new_date = r.get("新預約日期")
         oid = str(r.get("訂單號碼","")).strip()
-        # 找 API 訂單
         order = next((o for o in orders if str(o.get("id")) == oid), None)
         if order:
             for item in order.get("line_items", []):
@@ -101,5 +96,4 @@ equipment_sheet.clear()
 equipment_sheet.append_rows(data, value_input_option="USER_ENTERED")
 
 print("設備名額表更新完成。")
-
 
