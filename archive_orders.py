@@ -14,7 +14,7 @@ now = datetime.now(tz)
 yesterday = now - timedelta(days=1)
 
 # WooCommerce API 配置
-WC_API_URL = "https://kayarine.club/wp-json/wooapi/v3/orders"
+WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
 CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
 CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
 
@@ -63,9 +63,16 @@ def fetch_new_orders(target_date):
         "before": end,
         "per_page": 100
     }
-    resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-    resp.raise_for_status()
-    return resp.json()
+    try:
+        resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
+        resp.raise_for_status()
+        return resp.json()
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {e}, URL: {resp.url}")
+        raise
+    except requests.exceptions.RequestException as e:
+        print(f"Request Error: {e}")
+        raise
 
 # -----------------------------
 # 解析訂單條目（包含預訂日期）
