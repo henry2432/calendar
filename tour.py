@@ -5,9 +5,9 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # WooCommerce API 設定
-WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
-CONSUMER_KEY = "ck_9269bc61a6553f1d1515a6ba7ad01f225a379b9a"
-CONSUMER_SECRET = "cs_4df8324d11b0d8df493b2335efc3a26929ec73b5"
+WC_API_URL = "https://kayarine.club/wp-json/wooapi/v3/orders"
+CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
+CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
 
 # Google Sheets 設定
 SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
@@ -15,13 +15,11 @@ SHEET_NAME_TOUR = "Tour Orders"
 
 # Tour 產品對應 ID
 TOUR_PRODUCT_IDS = {
-    1381: "親子團",
-    1115: "日落團",
-    296: "威士忌直立板",
-    297: "吊鐘",
-    298: "日出",
-    299: "SUP初階",
-    291: "橋咀獨木舟"
+    198: "白沙洲日出直立板團",
+    221: "白沙洲日落直立板團",
+    225: "白沙洲直立板入門班",
+    233: "橋咀島獨木舟浮潛體驗",
+    251: "威士忌直立板進階班"
 }
 
 def get_tour_orders():
