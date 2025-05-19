@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-seven_days_ago = now - timedelta(days=7)
+yesterday = now - timedelta(days=1)  # 恢復提取昨日訂單
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
@@ -44,9 +44,6 @@ SERVICE_IDS = {
     "防水袋加購": 37
 }
 
-# 允許的訂單狀態
-VALID_STATUSES = {"completed", "processing", "on-hold"}
-
 # -----------------------------
 # Google Sheets 客戶端
 # -----------------------------
@@ -62,6 +59,7 @@ try:
     creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
     client = gspread.authorize(creds)
     sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
+    logger.info("成功連接到 Google Sheets")
 except Exception as e:
     logger.error(f"無法連接到 Google Sheets: {e}")
     raise
@@ -78,11 +76,11 @@ except Exception as e:
     raise
 
 # -----------------------------
-# 拉取最近一週訂單
+# 拉取昨日訂單（恢復之前邏輯）
 # -----------------------------
-def fetch_new_orders():
-    start = seven_days_ago.strftime("%Y-%m-%dT00:00:00")
-    end = now.strftime("%Y-%m-%dT23:59:59")
+def fetch_new_orders(target_date):
+    start = target_date.strftime("%Y-%m-%dT00:00:00")
+    end = target_date.strftime("%Y-%m-%dT23:59:59")
     params = {
         "after": start,
         "before": end,
@@ -109,17 +107,11 @@ def fetch_new_orders():
         raise
 
 # -----------------------------
-# 解析訂單條目（使用 yith_booking_data 的 from）
+# 解析訂單條目（恢復之前邏輯）
 # -----------------------------
 def parse_order(order):
     if not isinstance(order, dict):
         logger.error(f"無效的訂單格式: {order}")
-        return None
-
-    # 過濾訂單狀態
-    status = order.get("status", "")
-    if status not in VALID_STATUSES:
-        logger.info(f"跳過訂單 {order.get('id', 'N/A')}，狀態為 {status}，不符條件")
         return None
 
     name = order.get("billing", {}).get("first_name", "")
@@ -132,12 +124,11 @@ def parse_order(order):
         "completed": "已確認",
         "cancelled": "已取消"
     }
-    status_display = status_map.get(status, status)
+    status = status_map.get(order.get("status", ""), order.get("status", ""))
 
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
-    # 設置預設值以避免解析失敗
     booking_date = ""
     for item in order.get("line_items", []):
         pid = item.get("product_id")
@@ -146,37 +137,27 @@ def parse_order(order):
             for m in item.get("meta_data", []):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
-                    counts[pname] += int(b.get("persons", 0))
+                    counts[pname] += int(b.get("persons",0))
                     from_timestamp = int(b.get("from", 0))
-                    if from_timestamp:
-                        booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
+                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
-                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
                     break
-
-    # 如果 booking_date 為空，設置為訂單創建日期
-    if not booking_date:
-        date_created = order.get("date_created", "")
-        if date_created:
-            try:
-                booking_date = datetime.strptime(date_created, "%Y-%m-%dT%H:%M:%S").strftime("%Y-%m-%d")
-            except ValueError as e:
-                logger.error(f"無法解析訂單日期 {date_created}: {e}")
-                booking_date = ""
 
     return [
         order.get("id", ""), name, phone, booking_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
-        payment, status_display, total, ""
+        payment, status, total, ""
     ]
 
 # -----------------------------
 # 主流程：寫入新訂單
 # -----------------------------
-new_orders = fetch_new_orders()
+target_date = yesterday
+new_orders = fetch_new_orders(target_date)
 if not rows:
     header = ["Order ID", "姓名", "電話", "預訂日期",
               "單人獨木舟", "雙人獨木舟", "直立板",
