@@ -4,6 +4,11 @@ from datetime import datetime, timedelta
 import pytz
 import requests
 import os
+import logging
+
+# 設置日誌
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # -----------------------------
 # 常數與設定
@@ -39,9 +44,19 @@ params = {
     "after": (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S"),
     "per_page": 100
 }
-resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-resp.raise_for_status()
-orders = resp.json()
+try:
+    resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
+    resp.raise_for_status()
+    orders = resp.json()
+    if not isinstance(orders, list):
+        logger.error(f"API 回應格式錯誤: {orders}")
+        raise TypeError("預期為訂單列表，但收到其他類型")
+except requests.exceptions.HTTPError as e:
+    logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
+    raise
+except requests.exceptions.RequestException as e:
+    logger.error(f"請求錯誤: {e}")
+    raise
 
 # -----------------------------
 # 整理未來訂單（含未完成改期單）
@@ -60,6 +75,9 @@ def add_counts(date_str, pid, persons):
         future_counts[date_str][name] += persons
 
 for order in orders:
+    if not isinstance(order, dict):
+        logger.error(f"無效的訂單格式: {order}")
+        continue
     for item in order.get("line_items", []):
         pid = item.get("product_id")
         for m in item.get("meta_data", []):
@@ -96,4 +114,3 @@ equipment_sheet.clear()
 equipment_sheet.append_rows(data, value_input_option="USER_ENTERED")
 
 print("設備名額表更新完成。")
-
