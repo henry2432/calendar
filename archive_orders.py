@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-seven_days_ago = now - timedelta(days=7)
+seven_days_ago = now - timedelta(days=7)  # 提取最近一週訂單
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
@@ -44,7 +44,7 @@ SERVICE_IDS = {
     "防水袋加購": 37
 }
 
-# 允許的訂單狀態
+# 允許的訂單狀態（排除 checkout-draft 和 cancelled）
 VALID_STATUSES = {"completed", "processing", "on-hold"}
 
 # -----------------------------
@@ -109,7 +109,7 @@ def fetch_new_orders():
         raise
 
 # -----------------------------
-# 解析訂單條目（使用 date_created 作為訂單日期）
+# 解析訂單條目（使用 yith_booking_data 的 from）
 # -----------------------------
 def parse_order(order):
     if not isinstance(order, dict):
@@ -137,16 +137,7 @@ def parse_order(order):
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
-    # 使用 date_created 作為訂單日期
-    date_created = order.get("date_created", "")
-    order_date = ""
-    if date_created:
-        try:
-            order_date = datetime.strptime(date_created, "%Y-%m-%dT%H:%M:%S").strftime("%Y-%m-%d")
-        except ValueError as e:
-            logger.error(f"無法解析訂單日期 {date_created}: {e}")
-            order_date = ""
-
+    booking_date = ""
     for item in order.get("line_items", []):
         pid = item.get("product_id")
         pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
@@ -154,15 +145,17 @@ def parse_order(order):
             for m in item.get("meta_data", []):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
-                    counts[pname] += int(b.get("persons", 0))
+                    counts[pname] += int(b.get("persons",0))
+                    from_timestamp = int(b.get("from", 0))
+                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
-                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
                     break
 
     return [
-        order.get("id", ""), name, phone, order_date,
+        order.get("id", ""), name, phone, booking_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
         payment, status_display, total, ""
@@ -173,7 +166,7 @@ def parse_order(order):
 # -----------------------------
 new_orders = fetch_new_orders()
 if not rows:
-    header = ["Order ID", "姓名", "電話", "訂單日期",
+    header = ["Order ID", "姓名", "電話", "預訂日期",
               "單人獨木舟", "雙人獨木舟", "直立板",
               "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
               "付款方式", "訂單狀態", "訂單總額", "訂單到達？"]
