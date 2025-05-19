@@ -43,6 +43,9 @@ SERVICE_IDS = {
     "防水袋加購": 37
 }
 
+# 允許的訂單狀態
+VALID_STATUSES = {"completed", "processing", "on-hold"}
+
 # -----------------------------
 # Google Sheets 客戶端
 # -----------------------------
@@ -80,13 +83,15 @@ def fetch_new_orders():
     try:
         resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
         resp.raise_for_status()
+        logger.info(f"API 請求成功，狀態碼: {resp.status_code}")
+        logger.info(f"原始回應: {resp.text}")
         orders = resp.json()
         if not isinstance(orders, list):
             logger.error(f"API 回應格式錯誤: {orders}")
             raise TypeError("預期為訂單列表，但收到其他類型")
         logger.info(f"從 API 提取 {len(orders)} 筆訂單，時間範圍: {start} 至 {end}")
         for order in orders:
-            logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}")
+            logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}, 狀態: {order.get('status', 'N/A')}")
         return orders
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
@@ -102,6 +107,13 @@ def parse_order(order):
     if not isinstance(order, dict):
         logger.error(f"無效的訂單格式: {order}")
         return None
+
+    # 過濾訂單狀態
+    status = order.get("status", "")
+    if status not in VALID_STATUSES:
+        logger.info(f"跳過訂單 {order.get('id', 'N/A')}，狀態為 {status}，不符條件")
+        return None
+
     name = order.get("billing", {}).get("first_name", "")
     phone = order.get("billing", {}).get("phone", "")
     payment = order.get("payment_method_title", "")
@@ -112,7 +124,7 @@ def parse_order(order):
         "completed": "已確認",
         "cancelled": "已取消"
     }
-    status = status_map.get(order.get("status", ""), order.get("status", ""))
+    status_display = status_map.get(status, status)
 
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
@@ -134,18 +146,18 @@ def parse_order(order):
             for m in item.get("meta_data", []):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
-                    counts[pname] += int(b.get("persons",0))
+                    counts[pname] += int(b.get("persons", 0))
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
-                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
                     break
 
     return [
         order.get("id", ""), name, phone, order_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
-        payment, status, total, ""
+        payment, status_display, total, ""
     ]
 
 # -----------------------------
@@ -167,14 +179,20 @@ for ord_json in new_orders:
         if oid in existing_oids:
             # 若訂單已存在，更新該行
             row_idx = existing_oids[oid]
-            sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
-            format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
-            logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
+            try:
+                sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
+                format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
+                logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
+            except Exception as e:
+                logger.error(f"更新訂單 {oid} 失敗: {e}")
         else:
             # 若訂單不存在，新增一行
-            sheet_all.append_row(row, value_input_option="USER_ENTERED")
-            idx = len(sheet_all.get_all_values())
-            format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
-            logger.info(f"新增訂單 {oid} 在第 {idx} 行")
+            try:
+                sheet_all.append_row(row, value_input_option="USER_ENTERED")
+                idx = len(sheet_all.get_all_values())
+                format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
+                logger.info(f"新增訂單 {oid} 在第 {idx} 行")
+            except Exception as e:
+                logger.error(f"新增訂單 {oid} 失敗: {e}")
 
 print(f"{len(new_orders)} 筆訂單處理完成。")
