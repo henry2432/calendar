@@ -47,15 +47,23 @@ SERVICE_IDS = {
 # Google Sheets 客戶端
 # -----------------------------
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
-client = gspread.authorize(creds)
-sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
+try:
+    creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
+    client = gspread.authorize(creds)
+    sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
+except Exception as e:
+    logger.error(f"無法連接到 Google Sheets: {e}")
+    raise
 
 # -----------------------------
 # 讀取已存在 Order ID，用於去重
 # -----------------------------
-rows = sheet_all.get_all_records()
-existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
+try:
+    rows = sheet_all.get_all_records()
+    existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}  # 記錄行號
+except Exception as e:
+    logger.error(f"無法讀取 Google Sheets 資料: {e}")
+    raise
 
 # -----------------------------
 # 拉取最近一週訂單
@@ -84,7 +92,7 @@ def fetch_new_orders():
         raise
 
 # -----------------------------
-# 解析訂單條目（包含預訂日期）
+# 解析訂單條目（包含預訂日期和訂單總額）
 # -----------------------------
 def parse_order(order):
     if not isinstance(order, dict):
@@ -93,6 +101,7 @@ def parse_order(order):
     name = order.get("billing", {}).get("first_name", "")
     phone = order.get("billing", {}).get("phone", "")
     payment = order.get("payment_method_title", "")
+    total = order.get("total", "0.00")  # 提取訂單總額
     status_map = {
         "processing": "信用卡付款完成",
         "on-hold": "需確認",
@@ -125,7 +134,7 @@ def parse_order(order):
         order.get("id", ""), name, phone, booking_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
-        payment, status, ""
+        payment, status, total, ""  # 訂單總額放在 N 欄，訂單到達？移到 O 欄
     ]
 
 # -----------------------------
@@ -136,15 +145,25 @@ if not rows:
     header = ["Order ID", "姓名", "電話", "預訂日期",
               "單人獨木舟", "雙人獨木舟", "直立板",
               "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
-              "付款方式", "訂單狀態", "訂單到達？"]
+              "付款方式", "訂單狀態", "訂單總額", "訂單到達？"]
     sheet_all.clear()
     sheet_all.append_row(header)
 
 for ord_json in new_orders:
     row = parse_order(ord_json)
-    if row and str(row[0]) not in existing_oids:
-        sheet_all.append_row(row, value_input_option="USER_ENTERED")
-        idx = len(sheet_all.get_all_values())
-        format_cell_range(sheet_all, f"A{idx}:N{idx}", GREEN_FMT)
+    if row:
+        oid = str(row[0])
+        if oid in existing_oids:
+            # 若訂單已存在，更新該行
+            row_idx = existing_oids[oid]
+            sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
+            format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
+            logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
+        else:
+            # 若訂單不存在，新增一行
+            sheet_all.append_row(row, value_input_option="USER_ENTERED")
+            idx = len(sheet_all.get_all_values())
+            format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
+            logger.info(f"新增訂單 {oid} 在第 {idx} 行")
 
 print(f"{len(new_orders)} 筆訂單處理完成。")
