@@ -1,84 +1,37 @@
-name: Daily WooCommerce Export
-
+name: Daily Updates
 on:
   schedule:
-    - cron: '0 23 * * *'  # 每天早上 7:00 (HKT, UTC 23:00)
-    - cron: '0 19 * * *'  # 每天凌晨 3:00 (HKT, UTC 19:00)
+    - cron: '0 1 * * *' # 每天香港時間上午9點 (UTC+8 -> UTC 1:00)
   workflow_dispatch:
 
 jobs:
-  export:
+  update_orders:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
-        with: 
-          python-version: '3.x'
-
+        with:
+          python-version: '3.9'
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Write credentials.json
-        env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: |
-          echo "$GCP_SA_JSON" > /tmp/credentials.json
-
-      - name: Run availability script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+          python -m pip install --upgrade pip
+          pip install requests gspread oauth2client gspread-formatting pytz
+      - name: Run archive_orders.py
         env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python availability.py
-
-      - name: Run archive orders script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS" > /tmp/credentials.json
+          python archive_orders.py
+      - name: Run script1.py
         env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python archive_orders.py
-
-      - name: Run Woo Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS" > /tmp/credentials.json
+          python script1.py
+      - name: Run availability.py
         env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python script1.py
-
-      - name: Run Tour Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python tour.py
-
-      - name: Run Rescheduled Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python rescheduled.py
-
-      - name: Run Update Arrival Status script
-        if: github.event.schedule == '0 19 * * *'  # 僅在 3:00 AM 運行
-        env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python update_arrival_status.py
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          echo "$GOOGLE_CREDENTIALS" > /tmp/credentials.json
+          python availability.py
