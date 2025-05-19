@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-seven_days_ago = now - timedelta(days=7)  # 提取最近一週訂單
+seven_days_ago = now - timedelta(days=7)
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
@@ -44,7 +44,7 @@ SERVICE_IDS = {
     "防水袋加購": 37
 }
 
-# 允許的訂單狀態（排除 checkout-draft 和 cancelled）
+# 允許的訂單狀態
 VALID_STATUSES = {"completed", "processing", "on-hold"}
 
 # -----------------------------
@@ -71,7 +71,7 @@ except Exception as e:
 # -----------------------------
 try:
     rows = sheet_all.get_all_records()
-    existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}  # 記錄行號
+    existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}
     logger.info(f"從 Google Sheets 讀取 {len(rows)} 筆現有訂單")
 except Exception as e:
     logger.error(f"無法讀取 Google Sheets 資料: {e}")
@@ -137,6 +137,7 @@ def parse_order(order):
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
+    # 設置預設值以避免解析失敗
     booking_date = ""
     for item in order.get("line_items", []):
         pid = item.get("product_id")
@@ -145,14 +146,25 @@ def parse_order(order):
             for m in item.get("meta_data", []):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
-                    counts[pname] += int(b.get("persons",0))
+                    counts[pname] += int(b.get("persons", 0))
                     from_timestamp = int(b.get("from", 0))
-                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
+                    if from_timestamp:
+                        booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
-                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
                     break
+
+    # 如果 booking_date 為空，設置為訂單創建日期
+    if not booking_date:
+        date_created = order.get("date_created", "")
+        if date_created:
+            try:
+                booking_date = datetime.strptime(date_created, "%Y-%m-%dT%H:%M:%S").strftime("%Y-%m-%d")
+            except ValueError as e:
+                logger.error(f"無法解析訂單日期 {date_created}: {e}")
+                booking_date = ""
 
     return [
         order.get("id", ""), name, phone, booking_date,
@@ -170,8 +182,13 @@ if not rows:
               "單人獨木舟", "雙人獨木舟", "直立板",
               "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
               "付款方式", "訂單狀態", "訂單總額", "訂單到達？"]
-    sheet_all.clear()
-    sheet_all.append_row(header)
+    try:
+        sheet_all.clear()
+        sheet_all.append_row(header)
+        logger.info("成功初始化 Google Sheets 標頭")
+    except Exception as e:
+        logger.error(f"無法初始化 Google Sheets 標頭: {e}")
+        raise
 
 for ord_json in new_orders:
     row = parse_order(ord_json)
@@ -195,5 +212,7 @@ for ord_json in new_orders:
                 logger.info(f"新增訂單 {oid} 在第 {idx} 行")
             except Exception as e:
                 logger.error(f"新增訂單 {oid} 失敗: {e}")
+    else:
+        logger.warning(f"訂單 {ord_json.get('id', 'N/A')} 解析失敗，跳過")
 
 print(f"{len(new_orders)} 筆訂單處理完成。")
