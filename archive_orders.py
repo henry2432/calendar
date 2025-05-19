@@ -61,6 +61,7 @@ except Exception as e:
 try:
     rows = sheet_all.get_all_records()
     existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}  # 記錄行號
+    logger.info(f"從 Google Sheets 讀取 {len(rows)} 筆現有訂單")
 except Exception as e:
     logger.error(f"無法讀取 Google Sheets 資料: {e}")
     raise
@@ -83,6 +84,9 @@ def fetch_new_orders():
         if not isinstance(orders, list):
             logger.error(f"API 回應格式錯誤: {orders}")
             raise TypeError("預期為訂單列表，但收到其他類型")
+        logger.info(f"從 API 提取 {len(orders)} 筆訂單，時間範圍: {start} 至 {end}")
+        for order in orders:
+            logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}")
         return orders
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
@@ -92,7 +96,7 @@ def fetch_new_orders():
         raise
 
 # -----------------------------
-# 解析訂單條目（包含預訂日期和訂單總額）
+# 解析訂單條目（使用 date_created 作為訂單日期）
 # -----------------------------
 def parse_order(order):
     if not isinstance(order, dict):
@@ -101,7 +105,7 @@ def parse_order(order):
     name = order.get("billing", {}).get("first_name", "")
     phone = order.get("billing", {}).get("phone", "")
     payment = order.get("payment_method_title", "")
-    total = order.get("total", "0.00")  # 提取訂單總額
+    total = order.get("total", "0.00")
     status_map = {
         "processing": "信用卡付款完成",
         "on-hold": "需確認",
@@ -113,7 +117,16 @@ def parse_order(order):
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
-    booking_date = ""
+    # 使用 date_created 作為訂單日期
+    date_created = order.get("date_created", "")
+    order_date = ""
+    if date_created:
+        try:
+            order_date = datetime.strptime(date_created, "%Y-%m-%dT%H:%M:%S").strftime("%Y-%m-%d")
+        except ValueError as e:
+            logger.error(f"無法解析訂單日期 {date_created}: {e}")
+            order_date = ""
+
     for item in order.get("line_items", []):
         pid = item.get("product_id")
         pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
@@ -122,8 +135,6 @@ def parse_order(order):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
                     counts[pname] += int(b.get("persons",0))
-                    from_timestamp = int(b.get("from", 0))
-                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
@@ -131,10 +142,10 @@ def parse_order(order):
                     break
 
     return [
-        order.get("id", ""), name, phone, booking_date,
+        order.get("id", ""), name, phone, order_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
-        payment, status, total, ""  # 訂單總額放在 N 欄，訂單到達？移到 O 欄
+        payment, status, total, ""
     ]
 
 # -----------------------------
@@ -142,7 +153,7 @@ def parse_order(order):
 # -----------------------------
 new_orders = fetch_new_orders()
 if not rows:
-    header = ["Order ID", "姓名", "電話", "預訂日期",
+    header = ["Order ID", "姓名", "電話", "訂單日期",
               "單人獨木舟", "雙人獨木舟", "直立板",
               "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
               "付款方式", "訂單狀態", "訂單總額", "訂單到達？"]
