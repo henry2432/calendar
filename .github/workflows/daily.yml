@@ -29,8 +29,18 @@ jobs:
         run: |
           echo "$GCP_SA_JSON" > /tmp/credentials.json
 
+      - name: Debug step - Check file existence
+        run: |
+          echo "檢查當前目錄檔案："
+          ls -la
+          echo "檢查 /tmp/credentials.json 是否存在："
+          ls -la /tmp/credentials.json || echo "檔案不存在"
+
+      - name: Debug step - Print simple message
+        run: echo "工作流程正常執行到此步驟"
+
       - name: Run availability script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+        if: github.event.schedule == '0 23 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -40,7 +50,7 @@ jobs:
         run: python availability.py
 
       - name: Run archive orders script
-        if: github.event.schedule == '0 23 * * *' || github.event.schedule == '0 4 * * *' || github.event.schedule == '0 7 * * *'  # 在 7:00 AM, 12:00 PM, 3:00 PM 運行
+        if: github.event.schedule == '0 23 * * *' || github.event.schedule == '0 4 * * *' || github.event.schedule == '0 7 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -50,7 +60,7 @@ jobs:
         run: python archive_orders.py
 
       - name: Run Woo Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+        if: github.event.schedule == '0 23 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -60,7 +70,7 @@ jobs:
         run: python script1.py
 
       - name: Run Tour Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+        if: github.event.schedule == '0 23 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -70,7 +80,7 @@ jobs:
         run: python tour.py
 
       - name: Run Rescheduled Orders export script
-        if: github.event.schedule == '0 23 * * *'  # 僅在 7:00 AM 運行
+        if: github.event.schedule == '0 23 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -80,7 +90,7 @@ jobs:
         run: python rescheduled.py
 
       - name: Run Update Arrival Status script
-        if: github.event.schedule == '0 19 * * *'  # 僅在 3:00 AM 運行
+        if: github.event.schedule == '0 19 * * *'
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python update_arrival_status.py
