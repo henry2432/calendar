@@ -5,6 +5,11 @@ from datetime import datetime, timedelta
 import pytz
 from gspread_formatting import format_cell_range, CellFormat, textFormat
 import os
+import logging
+
+# 設置日誌
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # -----------------------------
 # 配置與常量
@@ -49,8 +54,8 @@ sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
 # -----------------------------
 # 讀取已存在 Order ID，用於去重
 # -----------------------------
-#rows = sheet_all.get_all_records()
-#existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
+rows = sheet_all.get_all_records()
+existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
 
 # -----------------------------
 # 拉取新訂單（按目標日期）
@@ -66,42 +71,50 @@ def fetch_new_orders(target_date):
     try:
         resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
         resp.raise_for_status()
-        return resp.json()
+        orders = resp.json()
+        if not isinstance(orders, list):
+            logger.error(f"API 回應格式錯誤: {orders}")
+            raise TypeError("預期為訂單列表，但收到其他類型")
+        return orders
     except requests.exceptions.HTTPError as e:
-        print(f"HTTP Error: {e}, URL: {resp.url}")
+        logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
         raise
     except requests.exceptions.RequestException as e:
-        print(f"Request Error: {e}")
+        logger.error(f"請求錯誤: {e}")
         raise
 
 # -----------------------------
 # 解析訂單條目（包含預訂日期）
 # -----------------------------
 def parse_order(order):
-    name = order["billing"]["first_name"]
-    phone = order["billing"]["phone"]
-    payment = order["payment_method_title"]
+    if not isinstance(order, dict):
+        logger.error(f"無效的訂單格式: {order}")
+        return None
+    name = order.get("billing", {}).get("first_name", "")
+    phone = order.get("billing", {}).get("phone", "")
+    payment = order.get("payment_method_title", "")
     status_map = {
         "processing": "信用卡付款完成",
         "on-hold": "需確認",
         "completed": "已確認",
         "cancelled": "已取消"
     }
-    status = status_map.get(order["status"], order["status"])
+    status = status_map.get(order.get("status", ""), order.get("status", ""))
 
     counts = {k:0 for k in PRODUCT_IDS}
     counts.update({k:0 for k in SERVICE_IDS})
 
     booking_date = ""
     for item in order.get("line_items", []):
-        pid = item["product_id"]
+        pid = item.get("product_id")
         pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
         if pname:
             for m in item.get("meta_data", []):
                 if m.get("key")=="yith_booking_data":
                     b = m.get("value", {})
                     counts[pname] += int(b.get("persons",0))
-                    booking_date = datetime.fromtimestamp(int(b.get("from")), tz).strftime("%Y-%m-%d")
+                    from_timestamp = int(b.get("from", 0))
+                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
                         svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
                         if svc:
@@ -109,19 +122,16 @@ def parse_order(order):
                     break
 
     return [
-        order["id"],         # Order ID
-        name, phone,
-        booking_date,        # 預訂日期
+        order.get("id", ""), name, phone, booking_date,
         counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
         counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
-        payment, status,
-        ""                   # 訂單到達？（初始為空）
+        payment, status, ""
     ]
 
 # -----------------------------
 # 主流程：寫入新訂單
 # -----------------------------
-target_date = yesterday  # 提取昨日訂單
+target_date = yesterday
 new_orders = fetch_new_orders(target_date)
 if not rows:
     header = ["Order ID", "姓名", "電話", "預訂日期",
@@ -132,13 +142,10 @@ if not rows:
     sheet_all.append_row(header)
 
 for ord_json in new_orders:
-    oid = str(ord_json["id"])
-    if oid in existing_oids:
-        continue
-
     row = parse_order(ord_json)
-    sheet_all.append_row(row, value_input_option="USER_ENTERED")
-    idx = len(sheet_all.get_all_values())
-    format_cell_range(sheet_all, f"A{idx}:N{idx}", GREEN_FMT)
+    if row and str(row[0]) not in existing_oids:
+        sheet_all.append_row(row, value_input_option="USER_ENTERED")
+        idx = len(sheet_all.get_all_values())
+        format_cell_range(sheet_all, f"A{idx}:N{idx}", GREEN_FMT)
 
-print(f"{len(new_orders)} 筆訂單處理完成 (去重後新增 {len(new_orders)-len(existing_oids&{str(o['id']) for o in new_orders})} 筆)。")
+print(f"{len(new_orders)} 筆訂單處理完成。")
