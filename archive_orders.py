@@ -49,8 +49,8 @@ sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
 # -----------------------------
 # 讀取已存在 Order ID，用於去重
 # -----------------------------
-rows = sheet_all.get_all_records()
-existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
+#rows = sheet_all.get_all_records()
+#existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
 
 # -----------------------------
 # 拉取新訂單（按目標日期）
