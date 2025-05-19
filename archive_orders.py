@@ -1,12 +1,7 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 import requests
 from datetime import datetime, timedelta
 import pytz
-from gspread_formatting import format_cell_range, CellFormat, textFormat
-import os
 import logging
-import json
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -17,19 +12,12 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-yesterday = now - timedelta(days=1)  # 恢復提取昨日訂單
+yesterday = now - timedelta(days=1)
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
 CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
 CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
-
-SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
-ALL_ORDERS_SHEET = "所有訂單"
-
-GREEN_FMT = CellFormat(
-    textFormat=textFormat(foregroundColor={"red":0.0,"green":0.4,"blue":0.0})
-)
 
 # WooCommerce 對應產品與服務
 PRODUCT_IDS = {
@@ -45,38 +33,7 @@ SERVICE_IDS = {
 }
 
 # -----------------------------
-# Google Sheets 客戶端
-# -----------------------------
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-try:
-    with open('/tmp/credentials.json', 'r') as f:
-        creds_content = f.read()
-        if not creds_content:
-            logger.error("credentials.json 檔案為空")
-            raise ValueError("credentials.json 檔案為空")
-        creds_json = json.loads(creds_content)
-        logger.info(f"成功讀取 credentials.json，client_email: {creds_json.get('client_email', 'N/A')}")
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
-    client = gspread.authorize(creds)
-    sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
-    logger.info("成功連接到 Google Sheets")
-except Exception as e:
-    logger.error(f"無法連接到 Google Sheets: {e}")
-    raise
-
-# -----------------------------
-# 讀取已存在 Order ID，用於去重
-# -----------------------------
-try:
-    rows = sheet_all.get_all_records()
-    existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}
-    logger.info(f"從 Google Sheets 讀取 {len(rows)} 筆現有訂單")
-except Exception as e:
-    logger.error(f"無法讀取 Google Sheets 資料: {e}")
-    raise
-
-# -----------------------------
-# 拉取昨日訂單（恢復之前邏輯）
+# 拉取昨日訂單
 # -----------------------------
 def fetch_new_orders(target_date):
     start = target_date.strftime("%Y-%m-%dT00:00:00")
@@ -107,7 +64,7 @@ def fetch_new_orders(target_date):
         raise
 
 # -----------------------------
-# 解析訂單條目（恢復之前邏輯）
+# 解析訂單條目
 # -----------------------------
 def parse_order(order):
     if not isinstance(order, dict):
@@ -154,46 +111,18 @@ def parse_order(order):
     ]
 
 # -----------------------------
-# 主流程：寫入新訂單
+# 主流程：僅提取並打印訂單
 # -----------------------------
-target_date = yesterday
-new_orders = fetch_new_orders(target_date)
-if not rows:
-    header = ["Order ID", "姓名", "電話", "預訂日期",
-              "單人獨木舟", "雙人獨木舟", "直立板",
-              "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
-              "付款方式", "訂單狀態", "訂單總額", "訂單到達？"]
-    try:
-        sheet_all.clear()
-        sheet_all.append_row(header)
-        logger.info("成功初始化 Google Sheets 標頭")
-    except Exception as e:
-        logger.error(f"無法初始化 Google Sheets 標頭: {e}")
-        raise
-
-for ord_json in new_orders:
-    row = parse_order(ord_json)
-    if row:
-        oid = str(row[0])
-        if oid in existing_oids:
-            # 若訂單已存在，更新該行
-            row_idx = existing_oids[oid]
-            try:
-                sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
-                format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
-                logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
-            except Exception as e:
-                logger.error(f"更新訂單 {oid} 失敗: {e}")
+try:
+    target_date = yesterday
+    new_orders = fetch_new_orders(target_date)
+    for ord_json in new_orders:
+        row = parse_order(ord_json)
+        if row:
+            logger.info(f"解析訂單成功: {row}")
         else:
-            # 若訂單不存在，新增一行
-            try:
-                sheet_all.append_row(row, value_input_option="USER_ENTERED")
-                idx = len(sheet_all.get_all_values())
-                format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
-                logger.info(f"新增訂單 {oid} 在第 {idx} 行")
-            except Exception as e:
-                logger.error(f"新增訂單 {oid} 失敗: {e}")
-    else:
-        logger.warning(f"訂單 {ord_json.get('id', 'N/A')} 解析失敗，跳過")
-
-print(f"{len(new_orders)} 筆訂單處理完成。")
+            logger.warning(f"訂單 {ord_json.get('id', 'N/A')} 解析失敗，跳過")
+    print(f"{len(new_orders)} 筆訂單處理完成。")
+except Exception as e:
+    logger.error(f"腳本執行失敗: {e}")
+    raise
