@@ -3,6 +3,11 @@ import datetime
 import pytz
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import logging
+
+# 設置日誌
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # WooCommerce API 設定
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
@@ -27,10 +32,11 @@ SERVICE_IDS = {
     "防水袋加購": 37
 }
 
-def get_today_orders():
-    today = datetime.datetime.now(pytz.timezone('Asia/Hong_Kong'))
-    start = today.strftime("%Y-%m-%dT00:00:00")
-    end = today.strftime("%Y-%m-%dT23:59:59")
+def get_today_orders(target_date=None):
+    if target_date is None:
+        target_date = datetime.datetime.now(pytz.timezone('Asia/Hong_Kong'))
+    start = target_date.strftime("%Y-%m-%dT00:00:00")
+    end = target_date.strftime("%Y-%m-%dT23:59:59")
     params = {
         "after": start,
         "before": end,
@@ -39,105 +45,69 @@ def get_today_orders():
     try:
         response = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
         response.raise_for_status()
-        orders = response.json()
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTP Error: {e}, URL: {response.url}")
-        raise
+        return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Request Error: {e}")
+        logger.error(f"API 請求失敗: {e}")
         raise
-    
-    today_orders = []
-    for order in orders:
-        for item in order.get("line_items", []):
-            for meta in item.get("meta_data", []):
-                if meta.get("key") == "yith_booking_data":
-                    booking_data = meta["value"]
-                    booking_date = datetime.datetime.fromtimestamp(booking_data["from"], pytz.timezone('Asia/Hong_Kong'))
-                    if booking_date.date() == today.date():
-                        today_orders.append(order)
-                        break
-            else:
-                continue
-            break
-    return today_orders
 
-def parse_order(order):
-    name = order["billing"]["first_name"]
-    phone = order["billing"]["phone"]
-    payment = order["payment_method_title"]
-    status_raw = order["status"]
-
+def parse_order(order, tz):
+    name = order.get("billing", {}).get("first_name", "")
+    phone = order.get("billing", {}).get("phone", "")
+    payment = order.get("payment_method_title", "")
     status_map = {
         "processing": "信用卡付款完成",
         "on-hold": "需確認",
         "completed": "已確認",
         "cancelled": "已取消"
     }
-    status = status_map.get(status_raw, status_raw)
+    status = status_map.get(order.get("status", ""), order.get("status", ""))
 
-    product_counts = {
-        "單人獨木舟": 0,
-        "雙人獨木舟": 0,
-        "直立板": 0,
-        "浮潛鏡租借": 0,
-        "手機防水袋": 0,
-        "浮潛鏡加購": 0,
-        "防水袋加購": 0
-    }
+    counts = {k: 0 for k in PRODUCT_IDS}
+    counts.update({k: 0 for k in SERVICE_IDS})
+    booking_date = ""
 
     for item in order.get("line_items", []):
-        product_id = item["product_id"]
-        product_name = next((name_key for name_key, pid in PRODUCT_IDS.items() if product_id == pid), None)
-        if not product_name:
-            continue
-
-        for meta in item.get("meta_data", []):
-            if meta["key"] == "yith_booking_data":
-                booking = meta["value"]
-                persons = int(booking.get("persons", 0))
-                product_counts[product_name] += persons
-
-                selected_services = booking.get("booking_services", [])
-                service_quantities = booking.get("booking_service_quantities", {})
-
-                for service_id in selected_services:
-                    sid = int(service_id)
-                    for service_name, known_sid in SERVICE_IDS.items():
-                        if sid == known_sid:
-                            qty = int(service_quantities.get(str(sid), 0))
-                            product_counts[service_name] += qty
-                break
+        pid = item.get("product_id")
+        pname = next((n for n, p in PRODUCT_IDS.items() if p == pid), None)
+        if pname:
+            for m in item.get("meta_data", []):
+                if m.get("key") == "yith_booking_data":
+                    b = m.get("value", {})
+                    counts[pname] += int(b.get("persons", 0))
+                    from_timestamp = int(b.get("from", 0))
+                    booking_date = datetime.datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
+                    for sid in b.get("booking_services", []):
+                        svc = next((n for n, i in SERVICE_IDS.items() if i == int(sid)), None)
+                        if svc:
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
+                    break
 
     return [
-        name, phone,
-        product_counts["單人獨木舟"], product_counts["雙人獨木舟"], product_counts["直立板"],
-        product_counts["浮潛鏡租借"], product_counts["手機防水袋"],
-        product_counts["浮潛鏡加購"], product_counts["防水袋加購"],
-        payment, status,
-        ""  # 訂單到達？（初始為空）
+        order.get("id", ""), name, phone, booking_date,
+        counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
+        counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
+        payment, status, ""
     ]
 
-def write_to_sheet(data_rows):
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
-    client = gspread.authorize(creds)
-    sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
-    
+# 主流程
+tz = pytz.timezone("Asia/Hong_Kong")
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
+client = gspread.authorize(creds)
+sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
+
+orders = get_today_orders()
+if not sheet.get_all_records():
+    header = ["Order ID", "姓名", "電話", "預訂日期",
+              "單人獨木舟", "雙人獨木舟", "直立板",
+              "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
+              "付款方式", "訂單狀態", "訂單到達？"]
     sheet.clear()
-    headers = [
-        "姓名", "電話", "單人獨木舟", "雙人獨木舟", "直立板",
-        "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
-        "付款方式", "訂單狀態", "訂單到達？"
-    ]
-    sheet.append_row(headers)
-    for row in data_rows:
-        sheet.append_row(row)
+    sheet.append_row(header)
 
-def main():
-    orders = get_today_orders()
-    rows = [parse_order(order) for order in orders]
-    write_to_sheet(rows)
+for order in orders:
+    row = parse_order(order, tz)
+    if row:
+        sheet.append_row(row, value_input_option="USER_ENTERED")
 
-if __name__ == "__main__":
-    main()
+print("即日訂單更新完成。")
