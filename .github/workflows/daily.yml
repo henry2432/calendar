@@ -47,6 +47,9 @@ jobs:
           echo "檢查腳本是否可執行："
           python -m py_compile archive_orders.py || echo "腳本語法錯誤"
 
+      - name: Debug step - Before running archive orders script
+        run: echo "準備執行 archive_orders.py"
+
       - name: Run availability script
         if: github.event.schedule == '0 23 * * *'
         env:
@@ -58,7 +61,7 @@ jobs:
         run: python availability.py
 
       - name: Run archive orders script
-        if: github.event.schedule == '0 23 * * *' || github.event.schedule == '0 4 * * *' || github.event.schedule == '0 7 * * *'
+        # 移除 if 條件，確保步驟執行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
