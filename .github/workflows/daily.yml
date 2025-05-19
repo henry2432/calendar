@@ -39,6 +39,14 @@ jobs:
       - name: Debug step - Print simple message
         run: echo "工作流程正常執行到此步驟"
 
+      - name: Debug step - Check Python version and script content
+        run: |
+          python --version
+          echo "顯示 archive_orders.py 內容："
+          cat archive_orders.py
+          echo "檢查腳本是否可執行："
+          python -m py_compile archive_orders.py || echo "腳本語法錯誤"
+
       - name: Run availability script
         if: github.event.schedule == '0 23 * * *'
         env:
