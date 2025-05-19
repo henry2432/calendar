@@ -6,6 +6,7 @@ import pytz
 from gspread_formatting import format_cell_range, CellFormat, textFormat
 import os
 import logging
+import json
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -51,6 +52,13 @@ VALID_STATUSES = {"completed", "processing", "on-hold"}
 # -----------------------------
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 try:
+    with open('/tmp/credentials.json', 'r') as f:
+        creds_content = f.read()
+        if not creds_content:
+            logger.error("credentials.json 檔案為空")
+            raise ValueError("credentials.json 檔案為空")
+        creds_json = json.loads(creds_content)
+        logger.info(f"成功讀取 credentials.json，client_email: {creds_json.get('client_email', 'N/A')}")
     creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
     client = gspread.authorize(creds)
     sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
