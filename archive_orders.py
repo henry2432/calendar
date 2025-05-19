@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-yesterday = now - timedelta(days=1)
+seven_days_ago = now - timedelta(days=7)
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
@@ -58,11 +58,11 @@ rows = sheet_all.get_all_records()
 existing_oids = { str(r.get("Order ID","")).strip() for r in rows }
 
 # -----------------------------
-# 拉取新訂單（按目標日期）
+# 拉取最近一週訂單
 # -----------------------------
-def fetch_new_orders(target_date):
-    start = target_date.strftime("%Y-%m-%dT00:00:00")
-    end = target_date.strftime("%Y-%m-%dT23:59:59")
+def fetch_new_orders():
+    start = seven_days_ago.strftime("%Y-%m-%dT00:00:00")
+    end = now.strftime("%Y-%m-%dT23:59:59")
     params = {
         "after": start,
         "before": end,
@@ -131,8 +131,7 @@ def parse_order(order):
 # -----------------------------
 # 主流程：寫入新訂單
 # -----------------------------
-target_date = yesterday
-new_orders = fetch_new_orders(target_date)
+new_orders = fetch_new_orders()
 if not rows:
     header = ["Order ID", "姓名", "電話", "預訂日期",
               "單人獨木舟", "雙人獨木舟", "直立板",
