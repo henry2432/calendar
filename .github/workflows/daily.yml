@@ -23,6 +23,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check GOOGLE_CREDENTIALS
+        run: |
+          if [ -z "$GOOGLE_CREDENTIALS" ]; then
+            echo "錯誤：GOOGLE_CREDENTIALS 環境變數為空"
+            exit 1
+          else
+            echo "GOOGLE_CREDENTIALS 已設置"
+          fi
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
       - name: Write credentials.json
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
