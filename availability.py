@@ -1,9 +1,9 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import requests
 from datetime import datetime, timedelta
 import pytz
-import requests
-import os
+from gspread_formatting import format_cell_range, CellFormat, textFormat
 import logging
 import json
 
@@ -12,23 +12,55 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # -----------------------------
-# 常數與設定
+# 配置與常量
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-today_str = now.strftime("%Y-%m-%d")
+today = now.strftime("%Y-%m-%d")  # 即日日期：2025-05-23
+seven_days_ago = now - timedelta(days=7)
 
+# WooCommerce API 配置
+WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
+CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
+CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
+
+SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
+ALL_ORDERS_SHEET = "所有訂單"
+EQUIPMENT_SHEET = "設備名額表"
+
+GREEN_FMT = CellFormat(
+    textFormat=textFormat(foregroundColor={"red":0.0,"green":0.4,"blue":0.0})
+)
+
+# WooCommerce 對應產品與服務
 PRODUCT_IDS = {
     "單人獨木舟": 81,
     "雙人獨木舟": 82,
     "直立板": 84
 }
+SERVICE_IDS = {
+    "浮潛鏡租借": 34,
+    "手機防水袋": 35,
+    "浮潛鏡加購": 36,
+    "防水袋加購": 37
+}
 
-# 允許的訂單狀態
+# 允許的訂單狀態（排除 checkout-draft 和 cancelled）
 VALID_STATUSES = {"completed", "processing", "on-hold"}
 
+# 預期的標頭行
+EXPECTED_HEADERS = [
+    "Order ID", "姓名", "電話", "預訂日期",
+    "單人獨木舟", "雙人獨木舟", "直立板",
+    "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
+    "付款方式", "訂單狀態", "訂單總額", "訂單到達？"
+]
+
+# 設備名額表標頭
+EQUIPMENT_HEADERS = ["日期", "單人獨木舟", "雙人獨木舟", "直立板"]
+
 # -----------------------------
-# Google Sheets 授權與連線
+# Google Sheets 客戶端
 # -----------------------------
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 try:
@@ -41,103 +73,180 @@ try:
         logger.info(f"成功讀取 credentials.json，client_email: {creds_json.get('client_email', 'N/A')}")
     creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
     client = gspread.authorize(creds)
-    equipment_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs").worksheet("設備名額表")
-    reschedule_sheet = client.open_by_key("1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs").worksheet("改期表")
+    sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
+    sheet_equipment = client.open_by_key(SHEET_ID).worksheet(EQUIPMENT_SHEET)
+    logger.info("成功連接到 Google Sheets")
 except Exception as e:
     logger.error(f"無法連接到 Google Sheets: {e}")
     raise
 
 # -----------------------------
-# 擷取 WooCommerce 訂單
+# 讀取已存在訂單
 # -----------------------------
-WC_API_URL = os.getenv("WC_API_URL") or "https://kayarine.club/wp-json/wc/v3/orders"
-CONSUMER_KEY = os.getenv("CONSUMER_KEY") or "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
-CONSUMER_SECRET = os.getenv("CONSUMER_SECRET") or "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
-
-params = {
-    "after": (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S"),
-    "per_page": 100
-}
 try:
-    resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-    resp.raise_for_status()
-    logger.info(f"API 請求成功，狀態碼: {resp.status_code}")
-    logger.info(f"原始回應: {resp.text}")
-    orders = resp.json()
-    if not isinstance(orders, list):
-        logger.error(f"API 回應格式錯誤: {orders}")
-        raise TypeError("預期為訂單列表，但收到其他類型")
-    logger.info(f"從 API 提取 {len(orders)} 筆訂單")
-except requests.exceptions.HTTPError as e:
-    logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
-    raise
-except requests.exceptions.RequestException as e:
-    logger.error(f"請求錯誤: {e}")
+    rows = sheet_all.get_all_records(expected_headers=EXPECTED_HEADERS)
+    existing_oids = {str(r.get("Order ID", "")).strip(): idx + 2 for idx, r in enumerate(rows)}
+    logger.info(f"從 Google Sheets 讀取 {len(rows)} 筆現有訂單")
+except Exception as e:
+    logger.error(f"無法讀取 Google Sheets 資料: {e}")
     raise
 
 # -----------------------------
-# 整理未來訂單（含未完成改期單）
+# 拉取最近一週訂單
 # -----------------------------
-def parse_date(ts):
-    return datetime.fromtimestamp(int(ts), tz).strftime("%Y-%m-%d")
+def fetch_new_orders():
+    start = seven_days_ago.strftime("%Y-%m-%dT00:00:00")
+    end = now.strftime("%Y-%m-%dT23:59:59")
+    params = {
+        "after": start,
+        "before": end,
+        "per_page": 100
+    }
+    try:
+        resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
+        resp.raise_for_status()
+        logger.info(f"API 請求成功，狀態碼: {resp.status_code}")
+        orders = resp.json()
+        if not isinstance(orders, list):
+            logger.error(f"API 回應格式錯誤: {orders}")
+            raise TypeError("預期為訂單列表，但收到其他類型")
+        logger.info(f"從 API 提取 {len(orders)} 筆訂單，時間範圍: {start} 至 {end}")
+        for order in orders:
+            logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}, 狀態: {order.get('status', 'N/A')}")
+        return orders
+    except requests.exceptions.HTTPError as e:
+        logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
+        raise
+    except requests.exceptions.RequestException as e:
+        logger.error(f"請求錯誤: {e}")
+        raise
 
-future_counts = {}
-def add_counts(date_str, pid, persons):
-    if date_str < today_str:
-        return
-    if date_str not in future_counts:
-        future_counts[date_str] = {k: 0 for k in PRODUCT_IDS}
-    name = next((n for n, v in PRODUCT_IDS.items() if v == pid), None)
-    if name:
-        future_counts[date_str][name] += persons
-
-for order in orders:
+# -----------------------------
+# 解析訂單條目
+# -----------------------------
+def parse_order(order):
     if not isinstance(order, dict):
         logger.error(f"無效的訂單格式: {order}")
-        continue
-    # 過濾訂單狀態
+        return None
+
     status = order.get("status", "")
     if status not in VALID_STATUSES:
         logger.info(f"跳過訂單 {order.get('id', 'N/A')}，狀態為 {status}，不符條件")
-        continue
+        return None
+
+    name = order.get("billing", {}).get("first_name", "")
+    phone = order.get("billing", {}).get("phone", "")
+    payment = order.get("payment_method_title", "")
+    total = order.get("total", "0.00")
+    status_map = {
+        "processing": "信用卡付款完成",
+        "on-hold": "需確認",
+        "completed": "已確認",
+        "cancelled": "已取消"
+    }
+    status_display = status_map.get(status, status)
+
+    counts = {k:0 for k in PRODUCT_IDS}
+    counts.update({k:0 for k in SERVICE_IDS})
+
+    booking_date = ""
     for item in order.get("line_items", []):
         pid = item.get("product_id")
-        for m in item.get("meta_data", []):
-            if m.get("key") == "yith_booking_data":
-                b = m.get("value", {})
-                date_str = parse_date(b.get("from"))
-                persons = int(b.get("persons", 0))
-                add_counts(date_str, pid, persons)
+        pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
+        if pname:
+            for m in item.get("meta_data", []):
+                if m.get("key")=="yith_booking_data":
+                    b = m.get("value", {})
+                    counts[pname] += int(b.get("persons",0))
+                    from_timestamp = int(b.get("from", 0))
+                    booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
+                    for sid in b.get("booking_services", []):
+                        svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
+                        if svc:
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
+                    break
 
-reschedules = reschedule_sheet.get_all_records()
-for r in reschedules:
-    if str(r.get("是否完成改期","")).strip() != "是":
-        new_date = r.get("新預約日期")
-        oid = str(r.get("訂單號碼","")).strip()
-        order = next((o for o in orders if str(o.get("id")) == oid), None)
-        if order and order.get("status", "") in VALID_STATUSES:
-            for item in order.get("line_items", []):
-                pid = item.get("product_id")
-                for m in item.get("meta_data", []):
-                    if m.get("key") == "yith_booking_data":
-                        persons = int(m.get("value", {}).get("persons", 0))
-                        add_counts(new_date, pid, persons)
+    return [
+        order.get("id", ""), name, phone, booking_date,
+        counts["單人獨木舟"], counts["雙人獨木舟"], counts["直立板"],
+        counts["浮潛鏡租借"], counts["手機防水袋"], counts["浮潛鏡加購"], counts["防水袋加購"],
+        payment, status_display, total, ""
+    ]
 
 # -----------------------------
-# 寫入 Google Sheet
+# 提取即日訂單並更新設備名額表
 # -----------------------------
-header = ["日期"] + list(PRODUCT_IDS.keys())
-data = [header]
-for date in sorted(future_counts):
-    row = [date] + [future_counts[date][k] for k in PRODUCT_IDS]
-    data.append(row)
+new_orders = fetch_new_orders()
+if not rows:
+    try:
+        sheet_all.clear()
+        sheet_all.append_row(EXPECTED_HEADERS)
+        logger.info("成功初始化 Google Sheets 標頭")
+    except Exception as e:
+        logger.error(f"無法初始化 Google Sheets 標頭: {e}")
+        raise
 
+# 處理訂單並提取即日訂單
+immediate_orders = []
+for ord_json in new_orders:
+    row = parse_order(ord_json)
+    if row:
+        oid = str(row[0])
+        booking_date = row[3]  # 預訂日期
+        if booking_date == today:
+            immediate_orders.append(row)
+            logger.info(f"提取即日訂單: {oid}，預訂日期: {booking_date}")
+        if oid in existing_oids:
+            row_idx = existing_oids[oid]
+            try:
+                sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
+                format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
+                logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
+            except Exception as e:
+                logger.error(f"更新訂單 {oid} 失敗: {e}")
+        else:
+            try:
+                sheet_all.append_row(row, value_input_option="USER_ENTERED")
+                idx = len(sheet_all.get_all_values())
+                format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
+                logger.info(f"新增訂單 {oid} 在第 {idx} 行")
+            except Exception as e:
+                logger.error(f"新增訂單 {oid} 失敗: {e}")
+    else:
+        logger.warning(f"訂單 {ord_json.get('id', 'N/A')} 解析失敗，跳過")
+
+# 更新設備名額表
 try:
-    equipment_sheet.clear()
-    equipment_sheet.append_rows(data, value_input_option="USER_ENTERED")
-    logger.info("設備名額表更新完成")
+    # 重新讀取所有訂單
+    rows = sheet_all.get_all_records(expected_headers=EXPECTED_HEADERS)
+    # 按日期統計設備預訂總數
+    equipment_bookings = {}
+    for row in rows:
+        booking_date = row["預訂日期"]
+        if booking_date:
+            if booking_date not in equipment_bookings:
+                equipment_bookings[booking_date] = {"單人獨木舟": 0, "雙人獨木舟": 0, "直立板": 0}
+            equipment_bookings[booking_date]["單人獨木舟"] += int(row["單人獨木舟"] or 0)
+            equipment_bookings[booking_date]["雙人獨木舟"] += int(row["雙人獨木舟"] or 0)
+            equipment_bookings[booking_date]["直立板"] += int(row["直立板"] or 0)
+
+    # 準備設備名額表數據
+    equipment_data = [EQUIPMENT_HEADERS]
+    for date in sorted(equipment_bookings.keys()):
+        if date >= today:  # 僅顯示未來日期（含今日）
+            equipment_data.append([
+                date,
+                equipment_bookings[date]["單人獨木舟"],
+                equipment_bookings[date]["雙人獨木舟"],
+                equipment_bookings[date]["直立板"]
+            ])
+
+    # 更新設備名額表
+    sheet_equipment.clear()
+    sheet_equipment.update("A1:D" + str(len(equipment_data)), equipment_data, value_input_option="USER_ENTERED")
+    logger.info("成功更新設備名額表")
 except Exception as e:
-    logger.error(f"無法寫入 Google Sheets: {e}")
+    logger.error(f"更新設備名額表失敗: {e}")
     raise
 
-print("設備名額表更新完成。")
+print(f"處理 {len(new_orders)} 筆訂單，提取 {len(immediate_orders)} 筆即日訂單")
