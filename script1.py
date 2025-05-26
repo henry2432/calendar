@@ -83,7 +83,7 @@ try:
         logger.info(f"訂單 {row['Order ID']} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}', 訂單狀態: {row['訂單狀態']}")
         if booking_date == today:
             immediate_orders.append(row)
-            logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}")
+            logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}, 訂單詳細: {row}")
 
     # 按日期統計設備預訂總數
     equipment_bookings = {}
