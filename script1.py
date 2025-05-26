@@ -4,7 +4,6 @@ import pytz
 import logging
 import json
 from datetime import datetime
-from gspread_formatting import clear_cell_format
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -128,9 +127,8 @@ try:
     immediate_orders = list(immediate_orders_dict.values())
     logger.info(f"合併後總共提取 {len(immediate_orders)} 筆即日訂單")
 
-    # 清除「即日訂單」工作表的舊內容及格式
+    # 清除「即日訂單」工作表的舊內容
     sheet_immediate.clear()
-    clear_cell_format(sheet_immediate, "A1:O100")  # 清除格式
     sheet_immediate.append_row(EXPECTED_HEADERS)
 
     # 將即日訂單寫入「即日訂單」工作表
