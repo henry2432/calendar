@@ -21,6 +21,7 @@ SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
 ALL_ORDERS_SHEET = "所有訂單"
 RESCHEDULED_SHEET = "改期表"
 EQUIPMENT_SHEET = "設備名額表"
+IMMEDIATE_SHEET = "即日訂單"  # 新工作表用於存儲即日訂單
 
 # 預期的標頭行
 EXPECTED_HEADERS = [
@@ -50,6 +51,12 @@ try:
     sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
     sheet_rescheduled = client.open_by_key(SHEET_ID).worksheet(RESCHEDULED_SHEET)
     sheet_equipment = client.open_by_key(SHEET_ID).worksheet(EQUIPMENT_SHEET)
+    # 嘗試訪問「即日訂單」工作表，如果不存在則創建
+    try:
+        sheet_immediate = client.open_by_key(SHEET_ID).worksheet(IMMEDIATE_SHEET)
+    except gspread.exceptions.WorksheetNotFound:
+        sheet_immediate = client.open_by_key(SHEET_ID).add_worksheet(title=IMMEDIATE_SHEET, rows=100, cols=20)
+        sheet_immediate.append_row(EXPECTED_HEADERS)
     logger.info("成功連接到 Google Sheets")
 except Exception as e:
     logger.error(f"無法連接到 Google Sheets: {e}")
@@ -84,6 +91,24 @@ try:
         if booking_date == today:
             immediate_orders.append(row)
             logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}, 訂單詳細: {row}")
+
+    # 將即日訂單寫入「即日訂單」工作表
+    if immediate_orders:
+        immediate_data = [EXPECTED_HEADERS]
+        for order in immediate_orders:
+            immediate_data.append([
+                order["Order ID"], order["姓名"], order["電話"], order["預訂日期"],
+                order["單人獨木舟"], order["雙人獨木舟"], order["直立板"],
+                order["浮潛鏡租借"], order["手機防水袋"], order["浮潛鏡加購"], order["防水袋加購"],
+                order["付款方式"], order["訂單狀態"], order["訂單總額"], order["訂單到達？"]
+            ])
+        sheet_immediate.clear()
+        sheet_immediate.update("A1:O" + str(len(immediate_data)), immediate_data, value_input_option="USER_ENTERED")
+        logger.info("成功將即日訂單寫入「即日訂單」工作表")
+    else:
+        logger.warning("未提取到即日訂單，將清空「即日訂單」工作表")
+        sheet_immediate.clear()
+        sheet_immediate.append_row(EXPECTED_HEADERS)
 
     # 按日期統計設備預訂總數
     equipment_bookings = {}
