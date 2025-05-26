@@ -77,8 +77,10 @@ try:
     # 提取即日訂單
     immediate_orders = []
     for row in combined_orders:
-        booking_date = row["預訂日期"]
-        logger.info(f"訂單 {row['Order ID']} 預訂日期: {booking_date}")
+        booking_date = str(row["預訂日期"]).strip()  # 去除空格
+        # 僅保留日期部分（去除可能的時間部分）
+        booking_date = booking_date.split()[0] if " " in booking_date else booking_date
+        logger.info(f"訂單 {row['Order ID']} 預訂日期: {booking_date}, 訂單狀態: {row['訂單狀態']}")
         if booking_date == today:
             immediate_orders.append(row)
             logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}")
@@ -86,7 +88,7 @@ try:
     # 按日期統計設備預訂總數
     equipment_bookings = {}
     for row in combined_orders:
-        booking_date = row["預訂日期"]
+        booking_date = str(row["預訂日期"]).strip().split()[0]
         if booking_date:
             if booking_date not in equipment_bookings:
                 equipment_bookings[booking_date] = {"單人獨木舟": 0, "雙人獨木舟": 0, "直立板": 0}
