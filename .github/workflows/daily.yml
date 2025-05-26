@@ -2,32 +2,28 @@ name: Daily WooCommerce Export
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # 每天早上 7:00 (HKT, UTC 23:00)
-    - cron: '0 19 * * *'  # 每天凌晨 3:00 (HKT, UTC 19:00)
-    - cron: '0 4 * * *'   # 每天中午 12:00 (HKT, UTC 4:00)
-    - cron: '0 7 * * *'   # 每天下午 3:00 (HKT, UTC 7:00)
+    - cron: '0 23 * * *'  # UTC 23:00 (HKT 07:00 次日)
   workflow_dispatch:
 
 jobs:
   export:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with: 
+        with:
           python-version: '3.9'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Write credentials.json
+      - name: Create credentials file
         env:
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: |
-          echo "$GCP_SA_JSON" > /tmp/credentials.json
+        run: echo "$GCP_SA_JSON" > /tmp/credentials.json
 
       - name: Debug step - Check file existence
         run: |
@@ -50,18 +46,7 @@ jobs:
       - name: Debug step - Before running archive orders script
         run: echo "準備執行 archive_orders.py"
 
-      - name: Run availability script
-        if: github.event.schedule == '0 23 * * *'
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python availability.py
-
       - name: Run archive orders script
-        # 移除 if 條件，確保步驟執行
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -71,7 +56,6 @@ jobs:
         run: python archive_orders.py
 
       - name: Run Woo Orders export script
-        if: github.event.schedule == '0 23 * * *'
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
@@ -79,29 +63,3 @@ jobs:
           SHEET_NAME: ${{ secrets.SHEET_NAME }}
           GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
         run: python script1.py
-
-      - name: Run Tour Orders export script
-        if: github.event.schedule == '0 23 * * *'
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python tour.py
-
-      - name: Run Rescheduled Orders export script
-        if: github.event.schedule == '0 23 * * *'
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python rescheduled.py
-
-      - name: Run Update Arrival Status script
-        if: github.event.schedule == '0 19 * * *'
-        env:
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python update_arrival_status.py
