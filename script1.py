@@ -4,6 +4,7 @@ import pytz
 import logging
 import json
 from datetime import datetime
+from gspread_formatting import clear_cell_format
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -21,14 +22,20 @@ SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
 ALL_ORDERS_SHEET = "所有訂單"
 RESCHEDULED_SHEET = "改期表"
 EQUIPMENT_SHEET = "設備名額表"
-IMMEDIATE_SHEET = "即日訂單"  # 新工作表用於存儲即日訂單
+IMMEDIATE_SHEET = "即日訂單"  # 用於存儲即日訂單
 
-# 預期的標頭行
+# 「所有訂單」和「即日訂單」的標頭
 EXPECTED_HEADERS = [
     "Order ID", "姓名", "電話", "預訂日期",
     "單人獨木舟", "雙人獨木舟", "直立板",
     "浮潛鏡租借", "手機防水袋", "浮潛鏡加購", "防水袋加購",
     "付款方式", "訂單狀態", "訂單總額", "訂單到達？"
+]
+
+# 「改期表」的標頭
+RESCHEDULED_HEADERS = [
+    "時間戳記", "電子郵件地址", "訂單號碼", "新預約日期",
+    "備註", "電號號碼", "改期原因（如即日改期）", "訂單狀態"
 ]
 
 # 設備名額表標頭
@@ -49,7 +56,12 @@ try:
     creds = ServiceAccountCredentials.from_json_keyfile_name('/tmp/credentials.json', scope)
     client = gspread.authorize(creds)
     sheet_all = client.open_by_key(SHEET_ID).worksheet(ALL_ORDERS_SHEET)
-    sheet_rescheduled = client.open_by_key(SHEET_ID).worksheet(RESCHEDULED_SHEET)
+    # 嘗試訪問「改期表」工作表
+    try:
+        sheet_rescheduled = client.open_by_key(SHEET_ID).worksheet(RESCHEDULED_SHEET)
+    except gspread.exceptions.WorksheetNotFound:
+        logger.warning("「改期表」工作表不存在，將僅使用「所有訂單」數據")
+        sheet_rescheduled = None
     sheet_equipment = client.open_by_key(SHEET_ID).worksheet(EQUIPMENT_SHEET)
     # 嘗試訪問「即日訂單」工作表，如果不存在則創建
     try:
@@ -70,27 +82,56 @@ try:
     rows_all = sheet_all.get_all_records(expected_headers=EXPECTED_HEADERS)
     logger.info(f"從「所有訂單」讀取 {len(rows_all)} 筆訂單")
 
-    # 讀取改期表訂單
-    rows_rescheduled = sheet_rescheduled.get_all_records(expected_headers=EXPECTED_HEADERS)
-    logger.info(f"從「改期表」讀取 {len(rows_rescheduled)} 筆訂單")
+    # 將「所有訂單」數據轉為字典，方便查找
+    all_orders_dict = {str(row["Order ID"]): row for row in rows_all}
 
-    # 合併訂單並去重
-    all_orders = {row["Order ID"]: row for row in rows_all}
-    for row in rows_rescheduled:
-        all_orders[row["Order ID"]] = row  # 後者覆蓋前者，優先使用改期表數據
-    combined_orders = list(all_orders.values())
-    logger.info(f"合併後總共 {len(combined_orders)} 筆訂單")
-
-    # 提取即日訂單
-    immediate_orders = []
-    for row in combined_orders:
-        booking_date_raw = str(row["預訂日期"])  # 原始日期值
-        # 去除所有空格、換行符，並僅保留日期部分
+    # 提取即日訂單（直接從「所有訂單」）
+    immediate_orders_from_all = []
+    for row in rows_all:
+        booking_date_raw = str(row["預訂日期"])
         booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
-        logger.info(f"訂單 {row['Order ID']} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}', 訂單狀態: {row['訂單狀態']}")
+        logger.info(f"「所有訂單」訂單 {row['Order ID']} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}', 訂單狀態: {row['訂單狀態']}")
         if booking_date == today:
-            immediate_orders.append(row)
-            logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}, 訂單詳細: {row}")
+            immediate_orders_from_all.append(row)
+            logger.info(f"從「所有訂單」提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}")
+
+    # 讀取改期表訂單（如果存在）
+    immediate_orders_from_rescheduled = []
+    if sheet_rescheduled:
+        try:
+            # 檢查「改期表」標頭
+            rescheduled_headers = sheet_rescheduled.row_values(1)
+            logger.info(f"「改期表」標頭: {rescheduled_headers}")
+            if not all(header in rescheduled_headers for header in ["訂單號碼", "新預約日期"]):
+                logger.warning("「改期表」缺少必要標頭（訂單號碼或新預約日期），跳過該工作表")
+            else:
+                rows_rescheduled = sheet_rescheduled.get_all_records()
+                logger.info(f"從「改期表」讀取 {len(rows_rescheduled)} 筆訂單")
+                for row in rows_rescheduled:
+                    booking_date_raw = str(row["新預約日期"])
+                    booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
+                    order_id = str(row["訂單號碼"])
+                    logger.info(f"「改期表」訂單 {order_id} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}'")
+                    if booking_date == today and order_id in all_orders_dict:
+                        order_data = all_orders_dict[order_id].copy()
+                        order_data["預訂日期"] = booking_date  # 更新預訂日期為新預約日期
+                        immediate_orders_from_rescheduled.append(order_data)
+                        logger.info(f"從「改期表」提取即日訂單: {order_id}，新預約日期: {booking_date}")
+        except Exception as e:
+            logger.warning(f"讀取「改期表」失敗，跳過該工作表：{e}")
+
+    # 合併即日訂單並去重
+    immediate_orders_dict = {row["Order ID"]: row for row in immediate_orders_from_rescheduled}  # 改期表優先
+    for row in immediate_orders_from_all:
+        if row["Order ID"] not in immediate_orders_dict:
+            immediate_orders_dict[row["Order ID"]] = row
+    immediate_orders = list(immediate_orders_dict.values())
+    logger.info(f"合併後總共提取 {len(immediate_orders)} 筆即日訂單")
+
+    # 清除「即日訂單」工作表的舊內容及格式
+    sheet_immediate.clear()
+    clear_cell_format(sheet_immediate, "A1:O100")  # 清除格式
+    sheet_immediate.append_row(EXPECTED_HEADERS)
 
     # 將即日訂單寫入「即日訂單」工作表
     if immediate_orders:
@@ -102,18 +143,20 @@ try:
                 order["浮潛鏡租借"], order["手機防水袋"], order["浮潛鏡加購"], order["防水袋加購"],
                 order["付款方式"], order["訂單狀態"], order["訂單總額"], order["訂單到達？"]
             ])
-        sheet_immediate.clear()
         sheet_immediate.update("A1:O" + str(len(immediate_data)), immediate_data, value_input_option="USER_ENTERED")
         logger.info("成功將即日訂單寫入「即日訂單」工作表")
     else:
-        logger.warning("未提取到即日訂單，將清空「即日訂單」工作表")
-        sheet_immediate.clear()
-        sheet_immediate.append_row(EXPECTED_HEADERS)
+        logger.warning("未提取到即日訂單，「即日訂單」工作表僅保留標頭")
 
-    # 按日期統計設備預訂總數
+    # 按日期統計設備預訂總數（包括改期表更新後的日期）
     equipment_bookings = {}
-    for row in combined_orders:
-        booking_date = str(row["預訂日期"]).strip().split()[0]
+    for row in all_orders_dict.values():
+        # 如果訂單在改期表中，使用新預約日期
+        booking_date_raw = row["預訂日期"]
+        order_id = str(row["Order ID"])
+        if order_id in immediate_orders_dict:
+            booking_date_raw = immediate_orders_dict[order_id]["預訂日期"]
+        booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
         if booking_date:
             if booking_date not in equipment_bookings:
                 equipment_bookings[booking_date] = {"單人獨木舟": 0, "雙人獨木舟": 0, "直立板": 0}
