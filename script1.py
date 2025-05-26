@@ -77,10 +77,10 @@ try:
     # 提取即日訂單
     immediate_orders = []
     for row in combined_orders:
-        booking_date = str(row["預訂日期"]).strip()  # 去除空格
-        # 僅保留日期部分（去除可能的時間部分）
-        booking_date = booking_date.split()[0] if " " in booking_date else booking_date
-        logger.info(f"訂單 {row['Order ID']} 預訂日期: {booking_date}, 訂單狀態: {row['訂單狀態']}")
+        booking_date_raw = str(row["預訂日期"])  # 原始日期值
+        # 去除所有空格、換行符，並僅保留日期部分
+        booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
+        logger.info(f"訂單 {row['Order ID']} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}', 訂單狀態: {row['訂單狀態']}")
         if booking_date == today:
             immediate_orders.append(row)
             logger.info(f"提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}")
