@@ -47,6 +47,9 @@ jobs:
           python -m py_compile script1.py || echo "script1.py 語法錯誤"
 
       - name: Debug step - Check environment variables
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
         run: |
           echo "CONSUMER_KEY: ${CONSUMER_KEY}"
           echo "CONSUMER_SECRET: ${CONSUMER_SECRET}"
@@ -56,6 +59,9 @@ jobs:
           fi
 
       - name: Debug step - Before running archive orders script
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
         run: echo "準備執行 archive_orders.py"
 
       - name: Run archive orders script
@@ -70,6 +76,9 @@ jobs:
         run: sleep 60  # 等待 60 秒，避免 Google Sheets API 配額超限
 
       - name: Debug step - Before running script1.py
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
         run: echo "準備執行 script1.py"
 
       - name: Run Woo Orders export script
