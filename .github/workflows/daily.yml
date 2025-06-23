@@ -1,4 +1,4 @@
- name: Daily WooCommerce Export
+name: Daily WooCommerce Export
 
 on:
   schedule:
