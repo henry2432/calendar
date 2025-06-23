@@ -4,3 +4,4 @@ pytz
 google-auth
 oauth2client
 gspread-formatting
+httpx
