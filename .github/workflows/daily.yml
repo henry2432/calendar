@@ -40,8 +40,11 @@ jobs:
           python --version
           echo "顯示 archive_orders.py 內容："
           cat archive_orders.py
+          echo "顯示 script1.py 內容："
+          cat script1.py
           echo "檢查腳本是否可執行："
-          python -m py_compile archive_orders.py || echo "腳本語法錯誤"
+          python -m py_compile archive_orders.py || echo "archive_orders.py 語法錯誤"
+          python -m py_compile script1.py || echo "script1.py 語法錯誤"
 
       - name: Debug step - Before running archive orders script
         run: echo "準備執行 archive_orders.py"
@@ -50,16 +53,28 @@ jobs:
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python archive_orders.py
+        run: |
+          python archive_orders.py
+          echo "archive_orders.py 執行完成，檢查退出碼: $?"
+
+      - name: Add delay to avoid quota limit
+        run: sleep 60  # 等待 60 秒，避免 Google Sheets API 配額超限
+
+      - name: Debug step - Before running script1.py
+        run: echo "準備執行 script1.py"
 
       - name: Run Woo Orders export script
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-          WC_SITE: "https://kayarine.club/wp-json/wc/v3/orders"
-          SHEET_NAME: ${{ secrets.SHEET_NAME }}
-          GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}
-        run: python script1.py
+        run: |
+          python script1.py
+          echo "script1.py 執行完成，檢查退出碼: $?"
+
+      - name: Debug step - Verify execution
+        run: |
+          echo "工作流程執行結束，檢查是否有錯誤"
+          if [ $? -ne 0 ]; then
+            echo "執行過程中發生錯誤"
+            exit 1
+          fi
