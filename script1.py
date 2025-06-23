@@ -4,6 +4,7 @@ import pytz
 import logging
 import json
 from datetime import datetime
+import time
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 # -----------------------------
 tz = pytz.timezone("Asia/Hong_Kong")
 now = datetime.now(tz)
-today = now.strftime("%Y-%m-%d")  # 即日日期：2025-05-26
+today = now.strftime("%Y-%m-%d")  # 即日日期：2025-06-23
 logger.info(f"當前日期: {today}")
 
 SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
@@ -43,7 +44,7 @@ EQUIPMENT_HEADERS = ["日期", "單人獨木舟", "雙人獨木舟", "直立板"
 # -----------------------------
 # Google Sheets 客戶端
 # -----------------------------
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 try:
     with open('/tmp/credentials.json', 'r') as f:
         creds_content = f.read()
@@ -90,7 +91,7 @@ try:
         booking_date_raw = str(row["預訂日期"])
         booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
         logger.info(f"「所有訂單」訂單 {row['Order ID']} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}', 訂單狀態: {row['訂單狀態']}")
-        if booking_date == today:
+        if booking_date == today and row["訂單狀態"] in ["信用卡付款完成", "已確認", "需確認"]:
             immediate_orders_from_all.append(row)
             logger.info(f"從「所有訂單」提取即日訂單: {row['Order ID']}，預訂日期: {booking_date}")
 
@@ -109,7 +110,7 @@ try:
                 for row in rows_rescheduled:
                     booking_date_raw = str(row["新預約日期"])
                     booking_date = booking_date_raw.strip().split()[0] if " " in booking_date_raw else booking_date_raw
-                    order_id = str(row["訂單號碼"])
+                    order_id = str(row["訂單號碼"].split()[0]) if row.get("訂單號碼") else ""
                     logger.info(f"「改期表」訂單 {order_id} 原始預訂日期: '{booking_date_raw}', 處理後日期: '{booking_date}'")
                     if booking_date == today and order_id in all_orders_dict:
                         order_data = all_orders_dict[order_id].copy()
@@ -119,31 +120,36 @@ try:
         except Exception as e:
             logger.warning(f"讀取「改期表」失敗，跳過該工作表：{e}")
 
-    # 合併即日訂單並去重
-    immediate_orders_dict = {row["Order ID"]: row for row in immediate_orders_from_rescheduled}  # 改期表優先
+    # 合併即日訂單並去重（改期表優先）
+    immediate_orders_dict = {row["Order ID"]: row for row in immediate_orders_from_rescheduled}
     for row in immediate_orders_from_all:
         if row["Order ID"] not in immediate_orders_dict:
             immediate_orders_dict[row["Order ID"]] = row
     immediate_orders = list(immediate_orders_dict.values())
     logger.info(f"合併後總共提取 {len(immediate_orders)} 筆即日訂單")
 
-    # 清除「即日訂單」工作表的舊內容
-    sheet_immediate.clear()
-    sheet_immediate.append_row(EXPECTED_HEADERS)
-
-    # 將即日訂單寫入「即日訂單」工作表
+    # 清除「即日訂單」工作表的舊內容並寫入（加入配額控制）
     if immediate_orders:
+        time.sleep(1)  # 清空前延遲 1 秒
+        sheet_immediate.clear()
+        logger.info(f"成功清空「{IMMEDIATE_SHEET}」")
+        sheet_immediate.append_row(EXPECTED_HEADERS)
         immediate_data = [EXPECTED_HEADERS]
         for order in immediate_orders:
-            immediate_data.append([
+            row = [
                 order["Order ID"], order["姓名"], order["電話"], order["預訂日期"],
                 order["單人獨木舟"], order["雙人獨木舟"], order["直立板"],
                 order["浮潛鏡租借"], order["手機防水袋"], order["浮潛鏡加購"], order["防水袋加購"],
                 order["付款方式"], order["訂單狀態"], order["訂單總額"], order["訂單到達？"]
-            ])
+            ]
+            immediate_data.append(row)
+            time.sleep(1)  # 每行寫入間隔 1 秒，避免超過配額
         sheet_immediate.update("A1:O" + str(len(immediate_data)), immediate_data, value_input_option="USER_ENTERED")
         logger.info("成功將即日訂單寫入「即日訂單」工作表")
     else:
+        time.sleep(1)  # 清空前延遲 1 秒
+        sheet_immediate.clear()
+        sheet_immediate.append_row(EXPECTED_HEADERS)
         logger.warning("未提取到即日訂單，「即日訂單」工作表僅保留標頭")
 
     # 按日期統計設備預訂總數（包括改期表更新後的日期）
@@ -173,8 +179,10 @@ try:
                 equipment_bookings[date]["直立板"]
             ])
 
-    # 更新設備名額表
+    # 更新設備名額表（加入配額控制）
+    time.sleep(1)  # 清空前延遲 1 秒
     sheet_equipment.clear()
+    logger.info(f"成功清空「{EQUIPMENT_SHEET}」")
     sheet_equipment.update("A1:D" + str(len(equipment_data)), equipment_data, value_input_option="USER_ENTERED")
     logger.info("成功更新設備名額表")
 except Exception as e:
