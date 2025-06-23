@@ -1,4 +1,4 @@
-name: Daily WooCommerce Export
+ name: Daily WooCommerce Export
 
 on:
   schedule:
@@ -45,6 +45,15 @@ jobs:
           echo "檢查腳本是否可執行："
           python -m py_compile archive_orders.py || echo "archive_orders.py 語法錯誤"
           python -m py_compile script1.py || echo "script1.py 語法錯誤"
+
+      - name: Debug step - Check environment variables
+        run: |
+          echo "CONSUMER_KEY: ${CONSUMER_KEY}"
+          echo "CONSUMER_SECRET: ${CONSUMER_SECRET}"
+          if [ -z "${CONSUMER_KEY}" ] || [ -z "${CONSUMER_SECRET}" ]; then
+            echo "環境變數缺失，請檢查 Secrets 設置"
+            exit 1
+          fi
 
       - name: Debug step - Before running archive orders script
         run: echo "準備執行 archive_orders.py"
