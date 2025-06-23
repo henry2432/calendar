@@ -1,12 +1,13 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import requests
+import httpx
 from datetime import datetime, timedelta
 import pytz
 from gspread_formatting import format_cell_range, CellFormat, textFormat
 import os
 import logging
 import json
+from urllib3.util.retry import Retry
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -21,14 +22,14 @@ seven_days_ago = now - timedelta(days=7)
 
 # WooCommerce API 配置
 WC_API_URL = "https://kayarine.club/wp-json/wc/v3/orders"
-CONSUMER_KEY = "ck_634b531fa4ac6b7a58a3ba3a33ad49174449e1d1"
-CONSUMER_SECRET = "cs_4c8599ff7dcbad53e34cef3b67e4d86955b18175"
+CONSUMER_KEY = "***"
+CONSUMER_SECRET = "***"
 
 SHEET_ID = "1hIQ8lhv91ZlUtA0JuKiBIoJMaSDRtcIEPe24h7ID6zs"
 ALL_ORDERS_SHEET = "所有訂單"
 
 GREEN_FMT = CellFormat(
-    textFormat=textFormat(foregroundColor={"red":0.0,"green":0.4,"blue":0.0})
+    textFormat=textFormat(foregroundColor={"red": 0.0, "green": 0.4, "blue": 0.0})
 )
 
 # WooCommerce 對應產品與服務
@@ -50,7 +51,7 @@ VALID_STATUSES = {"completed", "processing", "on-hold"}
 # -----------------------------
 # Google Sheets 客戶端
 # -----------------------------
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 try:
     with open('/tmp/credentials.json', 'r') as f:
         creds_content = f.read()
@@ -87,25 +88,34 @@ def fetch_new_orders():
     params = {
         "after": start,
         "before": end,
-        "per_page": 100
+        "per_page": 25
     }
+    auth = (CONSUMER_KEY, CONSUMER_SECRET)
+    retry_strategy = Retry(
+        total=5,
+        backoff_factor=2,
+        status_forcelist=[500, 502, 503, 504],
+        allowed_methods=["GET"],
+        backoff_max=10
+    )
     try:
-        resp = requests.get(WC_API_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET), params=params)
-        resp.raise_for_status()
-        logger.info(f"API 請求成功，狀態碼: {resp.status_code}")
-        logger.info(f"原始回應: {resp.text}")
-        orders = resp.json()
-        if not isinstance(orders, list):
-            logger.error(f"API 回應格式錯誤: {orders}")
-            raise TypeError("預期為訂單列表，但收到其他類型")
-        logger.info(f"從 API 提取 {len(orders)} 筆訂單，時間範圍: {start} 至 {end}")
-        for order in orders:
-            logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}, 狀態: {order.get('status', 'N/A')}")
-        return orders
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTP 錯誤: {e}, URL: {resp.url}")
+        with httpx.Client() as client:
+            response = client.get(WC_API_URL, auth=auth, params=params, timeout=30.0)
+            response.raise_for_status()
+            logger.info(f"API 請求成功，狀態碼: {response.status_code}")
+            logger.info(f"原始回應前 500 字符: {response.text[:500]}...")
+            orders = response.json()
+            if not isinstance(orders, list):
+                logger.error(f"API 回應格式錯誤: {orders}")
+                raise TypeError("預期為訂單列表，但收到其他類型")
+            logger.info(f"從 API 提取 {len(orders)} 筆訂單，時間範圍: {start} 至 {end}")
+            for order in orders:
+                logger.info(f"訂單 ID: {order.get('id', 'N/A')}, 創建日期: {order.get('date_created', 'N/A')}, 狀態: {order.get('status', 'N/A')}")
+            return orders
+    except httpx.HTTPStatusError as e:
+        logger.error(f"HTTP 錯誤: {e}, URL: {e.response.url}")
         raise
-    except requests.exceptions.RequestException as e:
+    except httpx.RequestError as e:
         logger.error(f"請求錯誤: {e}")
         raise
 
@@ -135,24 +145,24 @@ def parse_order(order):
     }
     status_display = status_map.get(status, status)
 
-    counts = {k:0 for k in PRODUCT_IDS}
-    counts.update({k:0 for k in SERVICE_IDS})
+    counts = {k: 0 for k in PRODUCT_IDS}
+    counts.update({k: 0 for k in SERVICE_IDS})
 
     booking_date = ""
     for item in order.get("line_items", []):
         pid = item.get("product_id")
-        pname = next((n for n,p in PRODUCT_IDS.items() if p==pid), None)
+        pname = next((n for n, p in PRODUCT_IDS.items() if p == pid), None)
         if pname:
             for m in item.get("meta_data", []):
-                if m.get("key")=="yith_booking_data":
+                if m.get("key") == "yith_booking_data":
                     b = m.get("value", {})
-                    counts[pname] += int(b.get("persons",0))
+                    counts[pname] += int(b.get("persons", 0))
                     from_timestamp = int(b.get("from", 0))
                     booking_date = datetime.fromtimestamp(from_timestamp, tz).strftime("%Y-%m-%d")
                     for sid in b.get("booking_services", []):
-                        svc = next((n for n,i in SERVICE_IDS.items() if i==int(sid)), None)
+                        svc = next((n for n, i in SERVICE_IDS.items() if i == int(sid)), None)
                         if svc:
-                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid),0))
+                            counts[svc] += int(b.get("booking_service_quantities", {}).get(str(sid), 0))
                     break
 
     return [
@@ -163,7 +173,7 @@ def parse_order(order):
     ]
 
 # -----------------------------
-# 主流程：寫入新訂單
+# 主流程：僅新增未存在的訂單
 # -----------------------------
 new_orders = fetch_new_orders()
 if not rows:
@@ -179,29 +189,25 @@ if not rows:
         logger.error(f"無法初始化 Google Sheets 標頭: {e}")
         raise
 
+new_count = 0
 for ord_json in new_orders:
     row = parse_order(ord_json)
     if row:
         oid = str(row[0])
-        if oid in existing_oids:
-            # 若訂單已存在，更新該行
-            row_idx = existing_oids[oid]
+        if oid not in existing_oids:
+            # 僅新增未存在的訂單
             try:
-                sheet_all.update(f"A{row_idx}:O{row_idx}", [row], value_input_option="USER_ENTERED")
-                format_cell_range(sheet_all, f"A{row_idx}:O{row_idx}", GREEN_FMT)
-                logger.info(f"更新訂單 {oid} 在第 {row_idx} 行")
-            except Exception as e:
-                logger.error(f"更新訂單 {oid} 失敗: {e}")
-        else:
-            # 若訂單不存在，新增一行
-            try:
+                time.sleep(1)  # 加入延遲，避免超過配額
                 sheet_all.append_row(row, value_input_option="USER_ENTERED")
                 idx = len(sheet_all.get_all_values())
                 format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
                 logger.info(f"新增訂單 {oid} 在第 {idx} 行")
+                new_count += 1
             except Exception as e:
                 logger.error(f"新增訂單 {oid} 失敗: {e}")
+        else:
+            logger.info(f"訂單 {oid} 已存在，跳過更新")
     else:
         logger.warning(f"訂單 {ord_json.get('id', 'N/A')} 解析失敗，跳過")
 
-print(f"{len(new_orders)} 筆訂單處理完成。")
+print(f"{new_count} 筆新訂單處理完成。")
