@@ -8,6 +8,7 @@ import os
 import logging
 import json
 from urllib3.util.retry import Retry
+import time  # 添加 time 模組
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -197,7 +198,7 @@ for ord_json in new_orders:
         if oid not in existing_oids:
             # 僅新增未存在的訂單
             try:
-                time.sleep(1)  # 加入延遲，避免超過配額
+                time.sleep(1)  # 使用 time 模組的 sleep 函數
                 sheet_all.append_row(row, value_input_option="USER_ENTERED")
                 idx = len(sheet_all.get_all_values())
                 format_cell_range(sheet_all, f"A{idx}:O{idx}", GREEN_FMT)
