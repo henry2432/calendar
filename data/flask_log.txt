@@ -1,0 +1,19 @@
+INFO:db_manager:Database initialized.
+INFO:sheet_manager:Attempting to load credentials from: ./credentials.json
+INFO:sheet_manager:File exists at ./credentials.json
+INFO:sheet_manager:Connected to Google Sheets
+INFO:sheet_manager:Checking headers for: All Orders
+INFO:sheet_manager:Checking headers for: Today's Orders
+INFO:sheet_manager:Checking headers for: Equipment Availability
+INFO:sheet_manager:Checking headers for: Tours & Courses
+INFO:sheet_manager:Checking headers for: Customer List
+INFO:sheet_manager:Checking headers for: Coupons
+INFO:sheet_manager:Checking headers for: Promotions
+INFO:sheet_manager:Checking headers for: Settings
+INFO:sheet_manager:Checking headers for: Campaigns
+INFO:__main__:Worker thread started...
+ * Serving Flask app 'app'
+ * Debug mode: on
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+On macOS, try searching for and disabling 'AirPlay Receiver' in System Settings.

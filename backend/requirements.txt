@@ -5,3 +5,7 @@ google-auth
 oauth2client
 gspread-formatting
 httpx
+Flask
+flask-cors
+Flask-Limiter
+python-dotenv

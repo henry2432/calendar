@@ -1,0 +1,707 @@
+[30-Jan-2026 09:28:11 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:28:12 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:28:12 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:28:12 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:12 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:28:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:28:13 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:28:13 UTC] PHP Notice:  呼叫 WP_Scripts::localize 函式的方式<strong>不正確</strong>。<code>$l10n</code> 參數必須是陣列。如需將任意資料傳遞至指令碼，請改用 <code>wp_add_inline_script()</code> 函式。 請參閱〈<a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">WordPress 的偵錯功能</a>〉以進一步了解相關資訊。 (這項訊息新增於 5.7.0 版) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:51 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:28:51 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:28:51 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:28:51 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:52 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:52 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:28:52 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:28:53 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:28:53 UTC] PHP Notice:  呼叫 WP_Scripts::localize 函式的方式<strong>不正確</strong>。<code>$l10n</code> 參數必須是陣列。如需將任意資料傳遞至指令碼，請改用 <code>wp_add_inline_script()</code> 函式。 請參閱〈<a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">WordPress 的偵錯功能</a>〉以進一步了解相關資訊。 (這項訊息新增於 5.7.0 版) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:53 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:28:53 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:28:53 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:28:54 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:54 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:28:54 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:28:54 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:29:04 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:29:04 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:29:04 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:29:04 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:29:05 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:29:05 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:29:05 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:30:03 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:30:03 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:30:03 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:30:03 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:30:03 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:30:03 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:30:03 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:30:03 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:30:04 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:30:04 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:30:04 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:30:04 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:30:04 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:30:04 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:30:05 UTC] Cron reschedule event error for hook: action_scheduler_run_queue, Error code: could_not_set, Error message: The cron event list could not be saved., Data: {"schedule":"every_minute","args":["WP Cron"],"interval":60}
+[30-Jan-2026 09:32:24 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:32:25 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:32:25 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:32:25 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:32:25 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:32:25 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:32:25 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:32:45 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:32:45 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:32:45 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:32:46 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:32:46 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:32:46 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:32:46 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:39 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:39 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:39 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:39 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:40 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:40 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:40 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:40 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:40 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:40 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:41 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:41 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:41 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:42 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:42 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:42 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:44 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:44 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:44 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:44 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:44 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:45 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:45 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:46 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:46 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:49 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:49 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:51 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:51 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:51 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:51 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:51 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:51 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:51 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:51 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:52 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:53 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:53 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:53 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:53 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:53 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:53 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:53 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:53 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:53 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:34:54 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:54 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:55 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:55 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:56 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:34:56 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:56 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:57 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:57 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:57 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:57 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] kayarine_proxy_check received - Method: POST | IP: 162.158.193.20
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Request data: {"action":"kayarine_proxy_check","date":"2026-01-30","woocommerce-login-nonce":null,"_wpnonce":null,"woocommerce-reset-password-nonce":null}
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Processing availability check for date: 2026-01-30
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:34:58 UTC] [Inventory] Calculating usage for date: 2026-01-30 | Cache disabled: NO
+[30-Jan-2026 09:34:58 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Prepared Params: ["2026-01-30","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-01-30'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Simple meta count for date 2026-01-30: 1
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:34:58 UTC] [Inventory] No results found for date: 2026-01-30
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Availability result: {"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":50,"remaining":0},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":60,"remaining":0},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":10,"remaining":0},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":20,"remaining":0},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":20,"remaining":0},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":20,"remaining":0},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":16,"remaining":0},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":20,"remaining":0},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":10,"remaining":0},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":10,"remaining":0},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":10,"remaining":0},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":20,"remaining":0}}
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Sending response: {"status":"success","date":"2026-01-30","availability":{"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":50,"remaining":0},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":60,"remaining":0},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":10,"remaining":0},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":20,"remaining":0},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":20,"remaining":0},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":20,"remaining":0},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":16,"remaining":0},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":20,"remaining":0},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":10,"remaining":0},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":10,"remaining":0},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":10,"remaining":0},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":20,"remaining":0}}}
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] kayarine_proxy_check received - Method: POST | IP: 162.158.193.21
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Request data: {"action":"kayarine_proxy_check","date":"2026-01-31","woocommerce-login-nonce":null,"_wpnonce":null,"woocommerce-reset-password-nonce":null}
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Processing availability check for date: 2026-01-31
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:34:58 UTC] [Inventory] Calculating usage for date: 2026-01-31 | Cache disabled: NO
+[30-Jan-2026 09:34:58 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Prepared Params: ["2026-01-31","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-01-31'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Simple meta count for date 2026-01-31: 1
+[30-Jan-2026 09:34:58 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:34:58 UTC] [Inventory] No results found for date: 2026-01-31
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Availability result: {"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":50,"remaining":0},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":60,"remaining":0},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":10,"remaining":0},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":20,"remaining":0},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":20,"remaining":0},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":20,"remaining":0},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":16,"remaining":0},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":20,"remaining":0},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":10,"remaining":0},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":10,"remaining":0},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":10,"remaining":0},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":20,"remaining":0}}
+[30-Jan-2026 09:34:58 UTC] [Kayarine AJAX] Sending response: {"status":"success","date":"2026-01-31","availability":{"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":50,"remaining":0},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":60,"remaining":0},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":10,"remaining":0},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":20,"remaining":0},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":20,"remaining":0},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":20,"remaining":0},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":20,"remaining":0},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":16,"remaining":0},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":20,"remaining":0},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":10,"remaining":0},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":10,"remaining":0},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":10,"remaining":0},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":20,"remaining":0}}}
+[30-Jan-2026 09:34:58 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:34:58 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:00 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:00 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:00 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:01 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:01 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:01 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:02 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:02 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:02 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:03 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:03 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:03 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:03 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:04 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:04 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:04 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:04 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:04 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:04 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:04 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:05 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:05 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:05 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:05 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:05 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:05 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:06 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:35:06 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:06 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:07 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>viwec-email-template-customizer</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:07 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:08 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:35:08 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:08 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:08 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>yith-booking-for-woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /opt/bitnami/wordpress/wp-includes/functions.php on line 6121
+[30-Jan-2026 09:35:09 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:09 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:09 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:09 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:10 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:10 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:10 UTC] [Kayarine AJAX] kayarine_proxy_check received - Method: POST | IP: 162.158.193.21
+[30-Jan-2026 09:35:10 UTC] [Kayarine AJAX] Request data: {"action":"kayarine_proxy_check","date":"2026-04-09","woocommerce-login-nonce":null,"_wpnonce":null,"woocommerce-reset-password-nonce":null}
+[30-Jan-2026 09:35:10 UTC] [Kayarine AJAX] Processing availability check for date: 2026-04-09
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:10 UTC] [Inventory] Calculating usage for date: 2026-04-09 | Cache disabled: NO
+[30-Jan-2026 09:35:10 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Prepared Params: ["2026-04-09","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-04-09'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Simple meta count for date 2026-04-09: 0
+[30-Jan-2026 09:35:10 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:35:10 UTC] [Inventory] No results found for date: 2026-04-09
+[30-Jan-2026 09:35:10 UTC] [Kayarine AJAX] Availability result: {"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":0,"remaining":50},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":0,"remaining":60},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":0,"remaining":10},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":0,"remaining":20},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":0,"remaining":20},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":0,"remaining":20},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":0,"remaining":20},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":0,"remaining":20},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":0,"remaining":16},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":0,"remaining":20},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":0,"remaining":10},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":0,"remaining":10},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":0,"remaining":10},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":0,"remaining":20}}
+[30-Jan-2026 09:35:10 UTC] [Kayarine AJAX] Sending response: {"status":"success","date":"2026-04-09","availability":{"6954":{"name":"\u55ae\u4eba\u7368\u6728\u821f","limit":50,"used":0,"remaining":50},"6955":{"name":"\u96d9\u4eba\u7368\u6728\u821f","limit":60,"used":0,"remaining":60},"6963":{"name":"\u5bb6\u5ead\u7368\u6728\u821f","limit":10,"used":0,"remaining":10},"6956":{"name":"\u76f4\u7acb\u677f","limit":20,"used":0,"remaining":20},"6966":{"name":"\u6d6e\u6f5b\u9762\u7f69 (Snorkel Mask)","limit":20,"used":0,"remaining":20},"6967":{"name":"\u624b\u6a5f\u9632\u6c34\u888b (Phone Case)","limit":20,"used":0,"remaining":20},"6957":{"name":"\u767d\u6c99\u6d32\u65e5\u51fa\u76f4\u7acb\u677f\u5718","limit":20,"used":0,"remaining":20},"6958":{"name":"\u767d\u6c99\u6d32\u65e5\u843d\u76f4\u7acb\u677f\u5718","limit":20,"used":0,"remaining":20},"6959":{"name":"\u767d\u6c99\u6d32\u76f4\u7acb\u677f\u5165\u9580\u73ed","limit":16,"used":0,"remaining":16},"6960":{"name":"\u6a4b\u5480\u5cf6\u7368\u6728\u821f\u6d6e\u6f5b\u9ad4\u9a57","limit":20,"used":0,"remaining":20},"6961":{"name":"\u5a01\u58eb\u5fcc\u76f4\u7acb\u677f\u9032\u968e\u73ed","limit":10,"used":0,"remaining":10},"6962":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9285\u7ae0","limit":10,"used":0,"remaining":10},"6964":{"name":"\u76f4\u7acb\u677f\u4e2d\u7d1a\u8ab2\u7a0b \u2013 \u9280\u7ae0","limit":10,"used":0,"remaining":10},"6965":{"name":"Sup Yoga \u76f4\u7acb\u677f\u745c\u4f3d","limit":20,"used":0,"remaining":20}}}
+[30-Jan-2026 09:35:12 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:12 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:12 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:12 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:12 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:12 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:13 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:15 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:15 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:15 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:16 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:16 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:19 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:19 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:19 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:22 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:22 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:23 UTC] [Inventory] Calculating usage for date: 2026-04-09 | Cache disabled: NO
+[30-Jan-2026 09:35:23 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Prepared Params: ["2026-04-09","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-04-09'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Simple meta count for date 2026-04-09: 0
+[30-Jan-2026 09:35:23 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:35:23 UTC] [Inventory] No results found for date: 2026-04-09
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:23 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:24 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:24 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:36 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:36 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:36 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:37 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:37 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:37 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:38 UTC] [Inventory] Calculating usage for date: 2026-04-09 | Cache disabled: NO
+[30-Jan-2026 09:35:38 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Prepared Params: ["2026-04-09","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-04-09'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Simple meta count for date 2026-04-09: 0
+[30-Jan-2026 09:35:38 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:35:38 UTC] [Inventory] No results found for date: 2026-04-09
+[30-Jan-2026 09:35:42 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:42 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:42 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:43 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:43 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:44 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:35:45 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:35:45 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:35:45 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:35:45 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:35:46 UTC] [Kayarine Checkout] Points recalculation - User: 1, Available: 74, Applied: 0, CartTotal: 1000
+[30-Jan-2026 09:36:17 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:36:17 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:36:17 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:36:18 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:36:18 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:37:18 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:37:18 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:37:18 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:37:19 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:37:19 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:37:25 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:37:25 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:37:25 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:37:26 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:37:26 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Detected status format: WITHOUT wc-
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] DB statuses detected: []
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Using statuses: ["pending","processing","completed","on-hold"]
+[30-Jan-2026 09:37:26 UTC] [Inventory] Calculating usage for date: 2026-04-09 | Cache disabled: NO
+[30-Jan-2026 09:37:26 UTC] [Inventory] SQL Statuses: pending, processing, completed, on-hold
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Original SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = %s
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN (%s,%s,%s,%s)
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Prepared Params: ["2026-04-09","pending","processing","completed","on-hold"]
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Prepared SQL: 
+            SELECT
+                item_meta_product.meta_value as product_id,
+                SUM( CAST(order_item_meta_qty.meta_value AS UNSIGNED) ) as total_qty
+            FROM wp_woocommerce_order_itemmeta as item_meta_date
+            
+            INNER JOIN wp_woocommerce_order_items as items
+                ON item_meta_date.order_item_id = items.order_item_id
+            
+            INNER JOIN wp_posts as orders
+                ON items.order_id = orders.ID
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as item_meta_product
+                ON items.order_item_id = item_meta_product.order_item_id
+                AND item_meta_product.meta_key = '_product_id'
+            
+            INNER JOIN wp_woocommerce_order_itemmeta as order_item_meta_qty
+                ON items.order_item_id = order_item_meta_qty.order_item_id
+                AND order_item_meta_qty.meta_key = '_qty'
+
+            WHERE
+                (item_meta_date.meta_key = 'kayarine_booking_date' OR item_meta_date.meta_key = '_kayarine_booking_date')
+                AND item_meta_date.meta_value = '2026-04-09'
+                AND orders.post_type = 'shop_order'
+                AND orders.post_status IN ('pending','processing','completed','on-hold')
+            
+            GROUP BY product_id
+        
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Query Result: Array
+(
+)
+
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Simple meta count for date 2026-04-09: 0
+[30-Jan-2026 09:37:26 UTC] [Inventory DEBUG] Order count with matching statuses: 0
+[30-Jan-2026 09:37:26 UTC] [Inventory] No results found for date: 2026-04-09
+[30-Jan-2026 09:37:26 UTC] ████ [Kayarine] save_order_item_meta() HOOK TRIGGERED ████
+[30-Jan-2026 09:37:26 UTC] [Kayarine] Order ID: 0 | Cart Key: 08f1147e287dde56a4c514de47d2b2ab
+[30-Jan-2026 09:37:26 UTC] [Kayarine] Values received: {"kayarine_booking_date":"2026-04-09","kayarine_booking_group":"697c7b527b8d0","key":"08f1147e287dde56a4c514de47d2b2ab","product_id":6963,"variation_id":0,"variation":[],"quantity":5,"data_hash":"b5c1d5ca8bae6d4896cf1807cdf763f0","line_tax_data":{"subtotal":[],"total":[]},"line_subtotal":1000,"line_subtotal_tax":0,"line_total":1000,"line_tax":0,"data":{}}
+[30-Jan-2026 09:37:26 UTC] [Kayarine] Has kayarine_booking_date? YES ✅
+[30-Jan-2026 09:37:26 UTC] [Kayarine] Item Product ID: 6963 | Qty: 5 | Item ID: 0
+[30-Jan-2026 09:37:26 UTC] [Kayarine Meta Save] BEFORE save() - Product: 6963 | Qty: 5 | Date: 2026-04-09 | Item ID before save: 0
+[30-Jan-2026 09:37:26 UTC] [Kayarine Meta DEBUG] Saving with meta_key: kayarine_booking_date (無下劃線)
+[30-Jan-2026 09:37:27 UTC] [Kayarine Meta Save] AFTER save() - Item ID: 1100 | Product: 6963 | Date: 2026-04-09
+[30-Jan-2026 09:37:27 UTC] [Kayarine Cache Clear] Order ID: 7216 | Clearing 1 dates: 2026-04-09
+[30-Jan-2026 09:37:27 UTC] [Kayarine Cache Clear] Cleared cache for: 2026-04-09
+[30-Jan-2026 09:37:30 UTC] [Kayarine Cache] Order Status Changed - ID: 7216, From: pending, To: on-hold
+[30-Jan-2026 09:37:30 UTC] [Kayarine Cache Clear] Order ID: 7216 | Clearing 1 dates: 2026-04-09
+[30-Jan-2026 09:37:30 UTC] [Kayarine Cache Clear] Cleared cache for: 2026-04-09
+[30-Jan-2026 09:37:31 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42
+[30-Jan-2026 09:37:32 UTC] [Kayarine] Member Dashboard initialized - AJAX hooks registered
+[30-Jan-2026 09:37:32 UTC] [Kayarine 1.4.14] Plugin initialization successful
+[30-Jan-2026 09:37:32 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$file is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 28
+[30-Jan-2026 09:37:32 UTC] PHP Deprecated:  Creation of dynamic property njt_core_plugin::$args is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/includes/classes/njt-core.php on line 29
+[30-Jan-2026 09:37:33 UTC] PHP Deprecated:  Creation of dynamic property njt_google_reviews::$placeID_html is deprecated in /bitnami/wordpress/wp-content/plugins/ninja-google-review/ninja-google-reviews.php on line 42

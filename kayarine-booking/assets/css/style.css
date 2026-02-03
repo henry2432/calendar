@@ -1,0 +1,1611 @@
+/**
+ * Kayarine Booking Styles
+ * Source of Truth: templates/tour_booking_preview.html & templates/unified_booking_preview.html
+ * 
+ * This file strictly implements the CSS from the approved templates.
+ */
+
+/* =========================================
+   Base & Reset
+   ========================================= */
+.kayarine-booking-card,
+.unified-booking {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   Layout Containers
+   ========================================= */
+
+/* Tour Booking Card (Sidebar/Standalone) */
+.kayarine-booking-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    background: #fff;
+    width: 100%;
+}
+
+/* Unified Booking Container */
+.unified-booking {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Tour Full Page Layout */
+.product-page-layout {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first */
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    /* padding handled by theme usually, but template has padding: 40px */
+}
+
+@media (min-width: 900px) {
+    .product-page-layout {
+        grid-template-columns: 1fr 400px;
+    }
+}
+
+/* =========================================
+   Typography & Headers
+   ========================================= */
+.kb-title, 
+.kb-section-title {
+    font-size: 1.5rem; /* Unified size */
+    font-weight: 700;
+    color: #2d3748;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tour Specific Title Style */
+.kb-title {
+    font-size: 1.2rem;
+    border-bottom: 2px solid #3182ce;
+    padding-bottom: 10px;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.kb-subtitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #edf2f7;
+    color: #2d3748;
+}
+
+/* Smaller section header for Tour Add-ons */
+.kb-section-header {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 20px 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #edf2f7;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.kb-section-header::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: #a0aec0;
+    transition: transform 0.2s;
+}
+.kb-section-header.collapsed::after {
+    transform: rotate(-90deg);
+}
+/* Wrapper for toggleable content */
+.kb-toggle-content {
+    display: block; /* Default shown */
+}
+
+/* =========================================
+   Calendar & Date Picking
+   ========================================= */
+.kb-date-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* Flatpickr Customization */
+.flatpickr-calendar {
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    margin: 0 auto !important;
+}
+
+.flatpickr-day {
+    border-radius: 8px !important;
+    margin-top: 4px !important;
+}
+
+/* Highlight Selected Date (Weekday) */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.selected:focus {
+    background: #3182ce !important;
+    border-color: #3182ce !important;
+    color: #fff !important;
+}
+
+/* Weekend/Holiday Style (Unselected) */
+.flatpickr-day.kb-weekend,
+.flatpickr-day.kb-date-weekend,
+.flatpickr-day.kb-date-holiday {
+    background: #fbd38d !important;
+    color: #744210 !important;
+    border-color: #fbd38d !important;
+}
+
+/* Highlight Selected Weekend/Holiday - MUST override unselected style */
+.flatpickr-day.selected.kb-weekend,
+.flatpickr-day.selected.kb-date-weekend,
+.flatpickr-day.selected.kb-date-holiday {
+    background: #e65100 !important; /* Darker Orange/Red for contrast */
+    border-color: #e65100 !important;
+    color: #fff !important;
+}
+
+/* Disabled/Blocked Dates */
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+    background: #f7fafc !important;
+    color: #cbd5e0 !important;
+    border-color: transparent !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Blocked Weekends specifically */
+.flatpickr-day.kb-weekend.flatpickr-disabled,
+.flatpickr-day.kb-date-weekend.flatpickr-disabled {
+    background: #feebc8 !important; /* Faded Orange */
+    color: #dd6b20 !important;
+    opacity: 0.5;
+}
+
+/* Hide extra days */
+.flatpickr-day.nextMonthDay, 
+.flatpickr-day.prevMonthDay { 
+    visibility: hidden; 
+}
+
+/* Legend */
+.kb-legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 10px;
+}
+
+.kb-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.kb-dot.weekday { border: 1px solid #cbd5e0; background: #fff; }
+.kb-dot.weekend { background: #fbd38d; }
+
+
+/* =========================================
+   Grids & Cards (Unified Booking)
+   ========================================= */
+.kb-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 cols */
+    gap: 10px;
+}
+
+@media (min-width: 768px) {
+    .kb-grid {
+        grid-template-columns: repeat(4, 1fr); /* Desktop: 4 cols */
+        gap: 20px;
+    }
+}
+
+.kb-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.2s;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.kb-card-img {
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    background: #edf2f7;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.kb-card-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    display: block;
+}
+
+.kb-card-price {
+    color: #ed8936;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+
+/* =========================================
+   Quantity Controls (Pills)
+   ========================================= */
+.kb-qty-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f7fafc;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+/* Base Pill Container */
+.kb-pill {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    width: 100px; /* Default width */
+}
+
+/* Unified Card Specific Pill Width */
+.kb-card .kb-pill {
+    width: 100%;
+    max-width: 120px;
+    margin: 0 auto;
+}
+
+/* Tour Card Pill Width override */
+.kayarine-booking-card .kb-pill {
+    width: 120px;
+}
+
+/* Buttons */
+.kb-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: all 0.2s;
+    border: none;
+    box-sizing: border-box; /* Critical for border width */
+}
+
+/* Minus Button */
+.kb-btn.minus {
+    background: #ffffff;
+    border: 1px solid #000000;
+    color: #000000;
+}
+.kb-btn.minus:hover {
+    background: #f7fafc;
+}
+
+/* Plus Button */
+.kb-btn.plus {
+    background: #ed8936;
+    border: 1px solid #ed8936;
+    color: #ffffff;
+}
+.kb-btn.plus:hover {
+    background: #dd6b20;
+    border-color: #dd6b20;
+}
+
+/* Input Value */
+.kb-val {
+    width: 40px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #2d3748;
+    padding: 0;
+    margin: 0;
+    /* Remove arrows in some browsers */
+    -moz-appearance: textfield; 
+}
+.kb-val::-webkit-outer-spin-button,
+.kb-val::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* =========================================
+   Lists (Add-ons & Rows)
+   ========================================= */
+.kb-list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kb-sale-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px dashed #e2e8f0;
+    gap: 15px;
+    background: #fff;
+}
+
+/* Unified adds a border and radius, Tour uses dashed bottom only. 
+   Let's check template. 
+   Unified: border: 1px solid #e2e8f0; border-radius: 8px;
+   Tour: border-bottom: 1px dashed #e2e8f0; 
+   We will differentiate via parent context.
+*/
+.unified-booking .kb-sale-row {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    border-bottom: 1px solid #e2e8f0; /* Reset dashed */
+}
+
+.kb-sale-thumb {
+    width: 50px;
+    height: 50px;
+    background: #edf2f7;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+.kb-sale-info {
+    flex-grow: 1;
+}
+
+.kb-sale-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #2d3748;
+}
+
+.kb-sale-price {
+    font-size: 0.85rem;
+    color: #ed8936;
+    font-weight: bold;
+}
+
+/* Tour Rental Item (Text based) */
+.kb-rental-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+
+/* =========================================
+   Footer & Submit
+   ========================================= */
+.kb-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+/* Unified footer has flex */
+.unified-booking .kb-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kb-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ed8936;
+}
+
+/* Submit Button */
+.kb-submit {
+    width: 100%;
+    padding: 12px;
+    background: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(66,153,225,0.3);
+    transition: background 0.2s;
+}
+
+.kb-submit:hover {
+    background: #3182ce;
+}
+
+/* Unified button is pill shaped and auto width */
+.unified-booking .kb-submit {
+    width: auto;
+    padding: 12px 30px;
+    border-radius: 30px;
+}
+
+/* =========================================
+   Product Page Layout (Left Col)
+   ========================================= */
+.left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product-image {
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    padding-top: 75%; /* 4:3 Aspect Ratio */
+    width: 100%;
+    background-color: #edf2f7;
+}
+
+.gallery-carousel {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    cursor: grab;
+}
+
+.gallery-carousel:active {
+    cursor: grabbing;
+}
+
+.gallery-item {
+    flex: 0 0 100px;
+    height: 100px;
+    background: #edf2f7;
+    border-radius: 8px;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid transparent;
+    user-select: none;
+}
+
+.gallery-item:hover {
+    border-color: #3182ce;
+}
+
+/* Active/Selected Gallery Item */
+.gallery-item.active {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.3);
+}
+
+/* Hidden Default Sales Items */
+.kb-hidden-default {
+    display: none !important;
+}
+
+/* Draggable Main Image Carousel */
+.left-col {
+    overflow: hidden; /* Contain the slider */
+}
+
+.product-image-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+    gap: 0; /* No gap for full swipe */
+    cursor: grab;
+    width: 100%;
+}
+
+.product-image-slider:active {
+    cursor: grabbing;
+}
+
+.product-image-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    padding-top: 75%; /* Aspect Ratio */
+    background-size: cover;
+    background-position: center;
+    background-color: #edf2f7;
+    scroll-snap-align: start;
+    border-radius: 12px;
+}
+
+/* =========================================
+   Member Authentication Wrapper (Login & Register Promo)
+   ========================================= */
+.kayarine-auth-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 900px;
+    margin: 40px auto;
+    align-items: flex-start;
+}
+
+/* Login Section (Left) */
+.kayarine-member-login {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.kayarine-member-login h3 {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.kayarine-member-login p {
+    color: #718096;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.kayarine-member-login form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.kayarine-member-login label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.kayarine-member-login input[type="text"],
+.kayarine-member-login input[type="password"],
+.kayarine-member-login input.input-text {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.2s;
+    background: #f7fafc;
+}
+
+.kayarine-member-login input:focus {
+    border-color: #3182ce;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(49,130,206,0.1);
+}
+
+.kayarine-member-login input[type="submit"],
+.kayarine-member-login button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(49,130,206,0.3);
+}
+
+.kayarine-member-login input[type="submit"]:hover,
+.kayarine-member-login button[type="submit"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px rgba(49,130,206,0.4);
+}
+
+.kayarine-member-login .login-remember {
+    font-size: 0.9rem;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.kayarine-member-login .lost_password {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    padding-top: 15px;
+    border-top: 1px solid #edf2f7;
+}
+
+.kayarine-member-login .lost_password a {
+    color: #718096;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.kayarine-member-login .lost_password a:hover {
+    color: #3182ce;
+}
+
+/* Registration Promo Section (Right) */
+.kayarine-member-register-promo {
+    flex: 1;
+    min-width: 300px;
+    background: linear-gradient(135deg, #ebf8ff 0%, #fff 100%);
+    border: 1px solid #bee3f8;
+    border-radius: 16px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.kayarine-member-register-promo h4 {
+    font-size: 1.4rem;
+    color: #2c5282;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.kayarine-member-register-promo p {
+    color: #4a5568;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.kayarine-member-register-promo .benefit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+}
+
+.kayarine-member-register-promo .benefit-list li {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+}
+
+.kb-btn-register {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #fff;
+    color: #3182ce;
+    border: 2px solid #3182ce;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.kb-btn-register:hover {
+    background: #3182ce;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* =========================================
+   Kayarine Auth Tab System (Purple & Orange)
+   ========================================= */
+
+.kayarine-auth-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.kayarine-auth-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.kayarine-auth-header {
+    background: linear-gradient(135deg, #7B68EE 0%, #6A5ACD 100%);
+    padding: 30px;
+    text-align: center;
+    color: white;
+}
+
+.kayarine-auth-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.kayarine-auth-header p {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.95;
+}
+
+.kayarine-auth-tabs {
+    display: flex;
+    border-bottom: 2px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.kayarine-auth-tab-btn {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #999;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.kayarine-auth-tab-btn:hover {
+    color: #7B68EE;
+    background: rgba(123, 104, 238, 0.05);
+}
+
+.kayarine-auth-tab-btn.active {
+    color: #7B68EE;
+    border-bottom-color: #7B68EE;
+    background: #ffffff;
+}
+
+.kayarine-auth-panel {
+    display: none;
+    opacity: 0;
+}
+
+.kayarine-auth-panel.active {
+    display: block;
+    opacity: 1;
+}
+
+.kayarine-auth-panel-content {
+    padding: 30px;
+}
+
+/* Form Overrides */
+.kayarine-auth-panel-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.kayarine-auth-panel-content .form-row,
+.kayarine-auth-panel-content .woocommerce-form__group {
+    margin-bottom: 0 !important;
+}
+
+.kayarine-auth-panel-content label {
+    display: block !important;
+    margin-bottom: 6px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    font-size: 0.9rem !important;
+}
+
+.kayarine-auth-panel-content input[type="text"],
+.kayarine-auth-panel-content input[type="email"],
+.kayarine-auth-panel-content input[type="password"],
+.kayarine-auth-panel-content input.input-text {
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+}
+
+.kayarine-auth-panel-content input[type="text"]:focus,
+.kayarine-auth-panel-content input[type="email"]:focus,
+.kayarine-auth-panel-content input[type="password"]:focus {
+    border-color: #7B68EE !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.1) !important;
+}
+
+.kayarine-auth-panel-content input[type="checkbox"] {
+    accent-color: #7B68EE !important;
+    cursor: pointer !important;
+    margin-right: 6px !important;
+}
+
+.kayarine-auth-panel-content label.login-remember {
+    display: flex !important;
+    align-items: center !important;
+    font-weight: normal !important;
+}
+
+.kayarine-auth-panel-content button[type="submit"],
+.kayarine-auth-panel-content input[type="submit"] {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    background: linear-gradient(135deg, #FF8C42 0%, #FF7A3D 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.25) !important;
+    margin-top: 5px !important;
+}
+
+.kayarine-auth-panel-content button[type="submit"]:hover,
+.kayarine-auth-panel-content input[type="submit"]:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.35) !important;
+}
+
+.kayarine-auth-panel-content a {
+    color: #7B68EE !important;
+    text-decoration: none !important;
+}
+
+.kayarine-auth-panel-content a:hover {
+    color: #6A5ACD !important;
+    text-decoration: underline !important;
+}
+
+.kayarine-auth-panel-content .woocommerce-error {
+    background: #fee !important;
+    border-left: 4px solid #c00 !important;
+    color: #c00 !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    margin-bottom: 15px !important;
+}
+
+.kayarine-auth-panel-content .woocommerce-message {
+    background: #efe !important;
+    border-left: 4px solid #0a0 !important;
+    color: #050 !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .kayarine-auth-wrapper {
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    .kayarine-auth-header {
+        padding: 20px;
+    }
+
+    .kayarine-auth-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .kayarine-auth-tab-btn {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+
+    .kayarine-auth-panel-content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .kayarine-auth-wrapper {
+        margin: 10px auto;
+        padding: 5px;
+    }
+
+    .kayarine-auth-header {
+        padding: 15px;
+    }
+
+    .kayarine-auth-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .kayarine-auth-header p {
+        font-size: 0.85rem;
+    }
+
+    .kayarine-auth-tab-btn {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .kayarine-auth-panel-content {
+        padding: 15px;
+    }
+
+    .kayarine-auth-panel-content input[type="text"],
+    .kayarine-auth-panel-content input[type="email"],
+    .kayarine-auth-panel-content input[type="password"] {
+        font-size: 16px !important;
+    }
+}
+
+.kayarine-auth-tab-btn:focus-visible {
+    outline: 2px solid #7B68EE;
+    outline-offset: -2px;
+}
+
+.kayarine-auth-panel-content input:focus-visible {
+    outline: 2px solid #7B68EE;
+    outline-offset: 2px;
+}
+
+/* =========================================
+   Additional Auth Form Styles
+   ========================================= */
+
+.kayarine-form-group {
+    margin-bottom: 15px;
+}
+
+.kayarine-form-input {
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+}
+
+.kayarine-form-input:focus {
+    border-color: #7B68EE !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.1) !important;
+}
+
+.kayarine-checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.kayarine-checkbox-group label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-bottom: 0 !important;
+    font-weight: normal !important;
+}
+
+.kayarine-checkbox-group input[type="checkbox"] {
+    accent-color: #7B68EE !important;
+    cursor: pointer !important;
+}
+
+.kayarine-btn-submit {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    background: linear-gradient(135deg, #FF8C42 0%, #FF7A3D 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.25) !important;
+}
+
+.kayarine-btn-submit:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.35) !important;
+}
+
+.kayarine-btn-primary {
+    display: block !important;
+    width: 100% !important;
+    padding: 12px 20px !important;
+    background: linear-gradient(135deg, #FF8C42 0%, #FF7A3D 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.25) !important;
+    margin-bottom: 20px !important;
+}
+
+.kayarine-btn-primary:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.35) !important;
+    text-decoration: none !important;
+}
+
+.kayarine-btn-secondary {
+    display: inline-block !important;
+    padding: 10px 20px !important;
+    background: #f0f0f0 !important;
+    color: #7B68EE !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.kayarine-btn-secondary:hover {
+    background: #e8e8e8 !important;
+    border-color: #7B68EE !important;
+    text-decoration: none !important;
+}
+
+.kayarine-switch-tab-btn {
+    background: none !important;
+    border: none !important;
+    color: #7B68EE !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 0.9rem !important;
+    padding: 0 !important;
+    margin-left: 4px !important;
+}
+
+.kayarine-switch-tab-btn:hover {
+    color: #6A5ACD !important;
+    text-decoration: underline !important;
+}
+
+.kayarine-auth-subtitle {
+    color: #666 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 20px !important;
+}
+
+.kayarine-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.kayarine-benefit-card {
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.kayarine-benefit-card:hover {
+    border-color: #7B68EE;
+    background: rgba(123, 104, 238, 0.05);
+}
+
+.kayarine-benefit-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.kayarine-benefit-card h3 {
+    font-size: 0.95rem;
+    color: #333;
+    margin: 0 0 6px 0;
+    font-weight: 700;
+}
+
+.kayarine-benefit-card p {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.kayarine-member-welcome {
+    margin: 30px 0;
+}
+
+.kayarine-member-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .kayarine-benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kayarine-member-actions {
+        flex-direction: column;
+    }
+
+    .kayarine-btn-secondary {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+    }
+}
+
+/* =========================================
+   Kayarine Member Login - Simplified Redesign
+   Using WooCommerce Standard Shortcode
+   ========================================= */
+
+/* Main Container */
+.kayarine-member-login-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.kayarine-login-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Header */
+.kayarine-login-header {
+    background: linear-gradient(135deg, #7B68EE 0%, #6A5ACD 100%);
+    padding: 30px;
+    text-align: center;
+    color: white;
+}
+
+.kayarine-login-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.kayarine-login-header p {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.95;
+}
+
+/* Login Content */
+.kayarine-login-content {
+    padding: 30px;
+}
+
+/* =========================================
+   WooCommerce Form Styling (Override)
+   ========================================= */
+
+/* Forms */
+.kayarine-login-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Form Rows */
+.kayarine-login-content .form-row {
+    margin-bottom: 0 !important;
+}
+
+.kayarine-login-content .form-row label {
+    display: block !important;
+    margin-bottom: 6px !important;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+/* Inputs */
+.kayarine-login-content input[type="text"],
+.kayarine-login-content input[type="email"],
+.kayarine-login-content input[type="password"],
+.kayarine-login-content input.input-text,
+.kayarine-login-content .woocommerce-form__input {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+}
+
+.kayarine-login-content input[type="text"]:focus,
+.kayarine-login-content input[type="email"]:focus,
+.kayarine-login-content input[type="password"]:focus {
+    border-color: #7B68EE !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.1) !important;
+}
+
+/* Checkbox */
+.kayarine-login-content input[type="checkbox"] {
+    accent-color: #7B68EE !important;
+    cursor: pointer !important;
+}
+
+.kayarine-login-content .woocommerce-form__label-for-checkbox,
+.kayarine-login-content label.woocommerce-form__label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-weight: normal !important;
+    font-size: 0.9rem !important;
+}
+
+/* Buttons */
+.kayarine-login-content button[type="submit"],
+.kayarine-login-content input[type="submit"],
+.kayarine-login-content .woocommerce-button {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    background: linear-gradient(135deg, #FF8C42 0%, #FF7A3D 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3) !important;
+}
+
+.kayarine-login-content button[type="submit"]:hover,
+.kayarine-login-content input[type="submit"]:hover,
+.kayarine-login-content .woocommerce-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(255, 140, 66, 0.4) !important;
+}
+
+/* Links */
+.kayarine-login-content a {
+    color: #7B68EE !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.kayarine-login-content a:hover {
+    color: #6A5ACD !important;
+    text-decoration: underline !important;
+}
+
+/* Messages */
+.kayarine-login-content .woocommerce-form__group {
+    margin-bottom: 15px !important;
+}
+
+.kayarine-login-content .woocommerce-error,
+.kayarine-login-content .woocommerce-message {
+    margin-bottom: 20px !important;
+    padding: 12px 15px !important;
+    border-radius: 8px !important;
+}
+
+.kayarine-login-content .woocommerce-error {
+    background: #FEE !important;
+    border-color: #F00 !important;
+    color: #C00 !important;
+}
+
+.kayarine-login-content .woocommerce-message {
+    background: #EFE !important;
+    border-color: #0F0 !important;
+    color: #050 !important;
+}
+
+/* Responsive Design */
+
+/* =========================================
+   WordPress Form Override (Redesign)
+   ========================================= */
+
+/* Login Form Container */
+.kayarine-auth-panel-content .woocommerce-form-login,
+.kayarine-auth-panel-content form.login,
+.kayarine-auth-panel-content form {
+    display: flex !important;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Form Rows/Groups */
+.kayarine-auth-panel-content .form-row,
+.kayarine-auth-panel-content .woocommerce-form__form-row {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Labels */
+.kayarine-auth-panel-content label,
+.kayarine-auth-panel-content .form-row label {
+    display: block !important;
+    margin-bottom: 6px !important;
+    font-weight: 600 !important;
+    color: #2d3748 !important;
+    font-size: 0.9rem !important;
+}
+
+/* All Inputs */
+.kayarine-auth-panel-content input[type="text"],
+.kayarine-auth-panel-content input[type="email"],
+.kayarine-auth-panel-content input[type="password"],
+.kayarine-auth-panel-content input.input-text,
+.kayarine-auth-panel-content .woocommerce-form__input {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    background: #f7fafc !important;
+    transition: all 0.2s ease !important;
+    box-sizing: border-box !important;
+    font-family: inherit !important;
+}
+
+/* Input Focus */
+.kayarine-auth-panel-content input[type="text"]:focus,
+.kayarine-auth-panel-content input[type="email"]:focus,
+.kayarine-auth-panel-content input[type="password"]:focus,
+.kayarine-auth-panel-content input.input-text:focus,
+.kayarine-auth-panel-content .woocommerce-form__input:focus {
+    border-color: #3182ce !important;
+    background: #ffffff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.1) !important;
+}
+
+/* Checkbox */
+.kayarine-auth-panel-content input[type="checkbox"],
+.kayarine-auth-panel-content .woocommerce-form__input-checkbox {
+    margin-right: 8px !important;
+    cursor: pointer !important;
+    accent-color: #3182ce !important;
+}
+
+/* Checkbox Label */
+.kayarine-auth-panel-content .woocommerce-form__label-for-checkbox,
+.kayarine-auth-panel-content .login-remember label {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+    font-weight: normal !important;
+    font-size: 0.9rem !important;
+    color: #718096 !important;
+}
+
+/* Submit Button */
+.kayarine-auth-panel-content input[type="submit"],
+.kayarine-auth-panel-content button[type="submit"],
+.kayarine-auth-panel-content .woocommerce-button,
+.kayarine-auth-panel-content .button {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Submit Button Hover */
+.kayarine-auth-panel-content input[type="submit"]:hover,
+.kayarine-auth-panel-content button[type="submit"]:hover,
+.kayarine-auth-panel-content .woocommerce-button:hover,
+.kayarine-auth-panel-content .button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(49, 130, 206, 0.4) !important;
+}
+
+/* Lost Password Link */
+.kayarine-auth-panel-content .lost_password,
+.kayarine-auth-panel-content .woocommerce-form-login__lost_password {
+    text-align: center !important;
+    margin-top: 15px !important;
+    padding-top: 10px !important;
+    border-top: none !important;
+}
+
+.kayarine-auth-panel-content .lost_password a,
+.kayarine-auth-panel-content .woocommerce-form-login__lost_password a {
+    color: #3182ce !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.kayarine-auth-panel-content .lost_password a:hover,
+.kayarine-auth-panel-content .woocommerce-form-login__lost_password a:hover {
+    color: #2c5282 !important;
+    text-decoration: underline !important;
+}
+
+/* Hide unnecessary elements */
+.kayarine-auth-panel-content .woocommerce-form__error,
+.kayarine-auth-panel-content .woocommerce-login {
+    display: block !important;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .kayarine-auth-redesigned {
+        padding: 10px;
+        min-height: auto;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .kayarine-auth-container {
+        max-width: 100%;
+    }
+
+    .kayarine-auth-header {
+        padding: 30px 20px;
+    }
+
+    .kayarine-auth-logo h1 {
+        font-size: 2rem;
+    }
+
+    .kayarine-auth-logo p {
+        font-size: 0.85rem;
+    }
+
+    .kayarine-auth-tabs {
+        gap: 0;
+    }
+
+    .kayarine-auth-tab-btn {
+        padding: 14px 16px;
+        font-size: 0.85rem;
+        gap: 4px;
+    }
+
+    .tab-icon {
+        font-size: 1rem;
+    }
+
+    .tab-text {
+        display: none;
+    }
+
+    .kayarine-auth-panel-content {
+        padding: 30px 20px;
+    }
+
+    .kayarine-auth-panel-content h2 {
+        font-size: 1.3rem;
+    }
+
+    .panel-description {
+        font-size: 0.85rem;
+    }
+
+    .kayarine-benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .benefit-card {
+        padding: 16px 12px;
+    }
+
+    .kayarine-auth-security {
+        padding: 10px 15px 15px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+    .security-icon {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* Dark Mode Support - DISABLED per user request */
+
+/* Accessibility */
+.kayarine-auth-tab-btn:focus-visible {
+    outline: 3px solid #3182ce;
+    outline-offset: 2px;
+}
+
+.kayarine-auth-switch-btn:focus-visible {
+    outline: 2px solid #3182ce;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.kayarine-btn:focus-visible {
+    outline: 3px solid rgba(49, 130, 206, 0.5);
+    outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .kayarine-auth-bg-accent {
+        animation: none;
+    }
+}
+

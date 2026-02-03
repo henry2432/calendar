@@ -1,0 +1,115 @@
+# ========================================
+# Kayarine 部署配置 - SSH 自動部署
+# ========================================
+# 
+# 使用方法：
+# 1. cp deploy.conf.example deploy.conf
+# 2. 編輯 deploy.conf 填入你的服務器信息
+# 3. 運行 chmod +x kayarine-booking/deploy.sh
+# 4. 執行 ./kayarine-booking/deploy.sh
+#
+
+# ========================================
+# 服務器信息
+# ========================================
+
+# SSH 主機名或 IP 地址
+DEPLOY_HOST="your-server.example.com"
+
+# SSH 用戶名
+DEPLOY_USER="wordpress"
+
+# SSH 端口（默認 22）
+DEPLOY_PORT="22"
+
+# SSH 私鑰路徑（推薦使用金鑰而不是密碼）
+# 生成方法：ssh-keygen -t rsa -b 4096 -f ~/.ssh/kayarine_key
+DEPLOY_KEY="/Users/henrylo/.ssh/id_rsa"
+
+# ========================================
+# WordPress 路徑（遠程服務器上）
+# ========================================
+
+# WordPress 根目錄
+WP_PATH="/var/www/html/wordpress"
+
+# Kayarine 插件目錄
+PLUGIN_PATH="/var/www/html/wordpress/wp-content/plugins/kayarine-booking"
+
+# ========================================
+# 備份設置
+# ========================================
+
+# 本地備份目錄
+BACKUP_DIR="./backups"
+
+# 保留舊備份的天數（超過此天數的備份會自動刪除）
+KEEP_BACKUPS="7"
+
+# ========================================
+# 環境設置
+# ========================================
+
+# 默認環境（staging 或 production）
+ENVIRONMENT="staging"
+
+# ========================================
+# Slack 通知（可選）
+# ========================================
+
+# Slack Webhook URL（留空則不發送通知）
+# 獲取方法：
+# 1. 在 Slack 工作區創建 Incoming Webhook
+# 2. 複製 Webhook URL
+# SLACK_WEBHOOK="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+SLACK_WEBHOOK=""
+
+# ========================================
+# 快速開始
+# ========================================
+#
+# 部署命令：
+#
+# 1. 標準部署（創建備份 + 驗證 + 上傳 + 驗證）
+#    ./kayarine-booking/deploy.sh
+#
+# 2. 快速部署（跳過本地備份，加快速度）
+#    ./kayarine-booking/deploy.sh --fast
+#
+# 3. 部署 + 清除緩存（適合測試）
+#    ./kayarine-booking/deploy.sh --clear-cache
+#
+# 4. 上傳特定文件（快速開發迭代）
+#    ./kayarine-booking/deploy.sh --files class-kayarine-checkout-manager.php
+#
+# 5. 指定環境部署
+#    ./kayarine-booking/deploy.sh production
+#
+
+# ========================================
+# SSH 金鑰生成（首次設置）
+# ========================================
+#
+# 1. 生成 SSH 金鑰對
+#    ssh-keygen -t rsa -b 4096 -f ~/.ssh/kayarine_key
+#
+# 2. 複製公鑰到服務器
+#    ssh-copy-id -i ~/.ssh/kayarine_key.pub wordpress@your-server.example.com
+#
+# 3. 更新此配置文件
+#    DEPLOY_KEY="/Users/henrylo/.ssh/kayarine_key"
+#
+# 4. 測試連接
+#    ssh -i ~/.ssh/kayarine_key wordpress@your-server.example.com "echo OK"
+#
+
+# ========================================
+# 安全建議
+# ========================================
+#
+# ✓ 使用 SSH 金鑰而不是密碼
+# ✓ 限制 SSH 金鑰權限：chmod 600 ~/.ssh/kayarine_key
+# ✓ 在服務器上創建專用用戶（wordpress）
+# ✓ 定期檢查備份完整性
+# ✓ 監控遠程部署日誌
+#

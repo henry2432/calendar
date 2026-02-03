@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayarine 會員中心 - Template</title>
+    <style>
+        :root {
+            --primary-color: #3182ce; /* Blue */
+            --primary-dark: #2c5282;
+            --accent-color: #ed8936; /* Orange */
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-sub: #718096;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- Layout --- */
+        .member-dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .member-dashboard {
+                grid-template-columns: 300px 1fr; /* Sidebar + Main */
+            }
+        }
+
+        /* --- Cards --- */
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* --- Profile / Sidebar --- */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+            background: #E6FFFA;
+            color: #2C7A7B;
+            border: 1px solid #B2F5EA;
+        }
+        
+        .tier-badge.bronze { background: #fffaf0; color: #9c4221; border-color: #fbd38d; }
+        .tier-badge.silver { background: #edf2f7; color: #4a5568; border-color: #cbd5e0; }
+        .tier-badge.gold   { background: #fffff0; color: #b7791f; border-color: #f6e05e; }
+        .tier-badge.vip    { background: #2d3748; color: #fff; border-color: #1a202c; }
+
+        /* --- Stats Grid --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .points-val { color: var(--accent-color); }
+
+        /* --- Progress Bar --- */
+        .progress-section {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: var(--text-sub);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4299e1, #667eea);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .upgrade-hint {
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* --- Booking List --- */
+        .booking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            background: #fff;
+            transition: box-shadow 0.2s;
+        }
+
+        .booking-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .booking-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking-date {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .booking-details {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .booking-status {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            background: #C6F6D5;
+            color: #22543D;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-reschedule {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #FED7D7;
+            color: #C53030;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Store Credit Promo --- */
+        .promo-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .promo-content h3 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        .promo-content p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
+
+        .btn-buy-credit {
+            background: #F6AD55;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="member-dashboard">
+    
+    <!-- Sidebar: Profile & Stats -->
+    <aside class="dashboard-card">
+        <div class="profile-header">
+            <div class="user-avatar">👤</div>
+            <div class="user-name">陳大文</div>
+            <div class="tier-badge silver">銀級會員 Silver</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">現有積分</div>
+                <div class="stat-value points-val">1,250</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">儲值金</div>
+                <div class="stat-value">$300</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>目前消費: $3,500</span>
+                <span>目標: $5,000</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 70%;"></div>
+            </div>
+            <div class="upgrade-hint">
+                再消費 <strong>$1,500</strong> 即可升級金級 (3% 回饋)！
+            </div>
+        </div>
+        
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <div style="font-size:0.9rem; color:#4a5568;">
+            <strong>目前權益：</strong>
+            <ul style="padding-left: 20px; margin-top:5px;">
+                <li>每筆消費享 2% 積分回饋</li>
+                <li>積分可折抵現金</li>
+                <li>早上 9:00 前免費改期</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        
+        <!-- Promo Banner -->
+        <div class="promo-banner">
+            <div class="promo-content">
+                <h3>儲值優惠限時賞！</h3>
+                <p>存入 HK$1,500 即享 85 折優惠 (只需付 HK$1,275)</p>
+            </div>
+            <button class="btn-buy-credit">立即儲值</button>
+        </div>
+
+        <!-- Upcoming Bookings -->
+        <div class="dashboard-card">
+            <div class="card-title">我的預約 Upcoming Bookings</div>
+            
+            <div class="booking-list">
+                
+                <!-- Booking Item 1 -->
+                <div class="booking-item">
+                    <div class="booking-info">
+                        <span class="booking-date">2026年 5月 20日 (週三)</span>
+                        <div class="booking-details">
+                            單人獨木舟 x2, 浮潛面罩 x1 <span class="booking-status">已付款</span>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn-action btn-reschedule">改期</button>
+                        <button class="btn-action btn-cancel">取消</button>
+                    </div>
+                </div>
+
+                <!-- Booking Item 2 (Past/Locked example) -->
+                 <div class="booking-item" style="opacity: 0.7;">
+                    <div class="booking-info">
+                        <span class="booking-date">2026年 6月 01日 (週日)</span>
+                        <div class="booking-details">
+                            雙人獨木舟 x1
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn-action btn-reschedule">改期</button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <p style="text-align:center; color:#a0aec0; margin-top:20px; font-size:0.9rem;">
+                沒有更多預約了
+            </p>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
