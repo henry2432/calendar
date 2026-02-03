@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayarine 會員儀表板</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --background: #fff;
+            --foreground: #030213;
+            --border: rgba(0, 0, 0, 0.1);
+            --muted-foreground: #717182;
+            --radius: 0.625rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-1 { flex: 1; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-8 > * + * { margin-top: 2rem; }
+
+        /* Spacing */
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Sizing */
+        .w-full { width: 100%; }
+        .h-2 { height: 0.5rem; }
+        .h-24 { height: 6rem; }
+        .h-32 { height: 8rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-7xl { max-width: 80rem; }
+
+        /* Colors */
+        .bg-white { background-color: #fff; }
+        .bg-primary\/5 { background-color: rgba(255, 107, 53, 0.05); }
+        .bg-primary\/10 { background-color: rgba(255, 107, 53, 0.1); }
+        .text-primary { color: var(--primary); }
+        .text-foreground { color: var(--foreground); }
+        .text-muted-foreground { color: var(--muted-foreground); }
+
+        /* Border & Shadow */
+        .border { border: 1px solid var(--border); }
+        .border-t { border-top: 1px solid var(--border); }
+        .rounded-lg { border-radius: var(--radius); }
+        .rounded-full { border-radius: 9999px; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+        /* Typography */
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-5xl { font-size: 3rem; }
+        .text-6xl { font-size: 3.75rem; }
+
+        .font-light { font-weight: 300; }
+        .font-normal { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+
+        .text-center { text-align: center; }
+        .tracking-tight { letter-spacing: -0.025em; }
+
+        /* Effects */
+        .overflow-hidden { overflow: hidden; }
+        .object-cover { object-fit: cover; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+
+        .transition { transition: all 0.15s ease; }
+        .transition-transform { transition: transform 0.3s ease; }
+        .duration-700 { transition-duration: 0.7s; }
+
+        @media (hover: hover) {
+            .group:hover .group-hover\:scale-105 { transform: scale(1.05); }
+            .group:hover .group-hover\:opacity-100 { opacity: 1; }
+            .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        }
+
+        @media (min-width: 768px) {
+            .md\:flex { display: flex; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:items-center { align-items: center; }
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:py-32 { padding-top: 8rem; padding-bottom: 8rem; }
+            .md\:text-3xl { font-size: 1.875rem; }
+            .md\:text-5xl { font-size: 3rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:text-6xl { font-size: 3.75rem; }
+        }
+
+        .hidden { display: none; }
+        .shrink-0 { flex-shrink: 0; }
+        .opacity-0 { opacity: 0; }
+
+        /* Components */
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+            background-color: transparent;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(255, 107, 53, 0.9);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-destructive {
+            color: #d4183d;
+        }
+
+        .progress {
+            width: 100%;
+            height: 0.5rem;
+            background-color: var(--border);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .avatar {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 9999px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Aspect Ratio */
+        .aspect-\[3\/4\] {
+            aspect-ratio: 3 / 4;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-white min-h-screen">
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8">
+            <div class="space-y-8">
+                <!-- Welcome Card -->
+                <div class="card bg-gradient-to-r from-primary/5 to-primary/10" style="background-image: linear-gradient(to right, rgba(255, 107, 53, 0.05), rgba(255, 107, 53, 0.1));">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                            <!-- Avatar -->
+                            <div class="relative shrink-0">
+                                <div class="avatar">
+                                    <img src="https://images.unsplash.com/photo-1557110437-0bcd0a636d62?w=200&h=200&fit=crop" alt="頭像" />
+                                </div>
+                                <div class="text-center mt-2 text-sm">
+                                    <p class="font-semibold">2,450 積分</p>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-1 space-y-4">
+                                <div>
+                                    <h1 class="text-2xl md:text-3xl font-normal">歡迎回來，<strong>John！</strong></h1>
+                                    <p class="text-muted-foreground flex items-center gap-2 mt-1">
+                                        今年已出海 <strong>5 次</strong>
+                                        <i class="fas fa-trophy text-amber-500"></i>
+                                    </p>
+                                </div>
+
+                                <!-- Upgrade Progress -->
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">升級進度</span>
+                                        <span class="text-sm text-primary">消費 $680 / $1000</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-fill" style="width: 68%;"></div>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground">
+                                        再消費 $320 即可升級至白金會員
+                                    </p>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-user-edit"></i>
+                                        編輯檔案
+                                    </button>
+                                    <button class="btn btn-sm">
+                                        <i class="fas fa-trophy"></i>
+                                        查看成就
+                                    </button>
+                                    <button class="btn btn-sm">
+                                        會員專享優惠
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Bookings -->
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+                            <i class="fas fa-calendar"></i>
+                            我的預約
+                        </h2>
+                        <div class="space-y-4">
+                            <!-- Booking 1 -->
+                            <div class="p-4 border border-l-4" style="border-left-color: #10b981; background-color: rgba(16, 185, 129, 0.05);">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold">雙人獨木舟探險 - 日落巡遊</h3>
+                                    </div>
+                                    <span class="badge" style="background-color: #10b981;">已確認</span>
+                                </div>
+                                <div class="space-y-2 text-sm mb-4">
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-calendar"></i>2026-02-15
+                                    </p>
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-clock"></i>下午 2:00 - 6:00 (4 小時)
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                    <span class="font-semibold">$2,980</span>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm">改期</button>
+                                        <button class="btn btn-sm btn-destructive">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Booking 2 -->
+                            <div class="p-4 border border-l-4" style="border-left-color: #f59e0b; background-color: rgba(245, 158, 11, 0.05);">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold">釣魚獨木舟體驗</h3>
+                                    </div>
+                                    <span class="badge" style="background-color: #f59e0b;">待處理</span>
+                                </div>
+                                <div class="space-y-2 text-sm mb-4">
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-calendar"></i>2026-02-22
+                                    </p>
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-clock"></i>上午 8:00 - 12:00 (4 小時)
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                    <span class="font-semibold">$1,800</span>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm">改期</button>
+                                        <button class="btn btn-sm btn-destructive">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Booking 3 -->
+                            <div class="p-4 border border-l-4" style="border-left-color: #3b82f6; background-color: rgba(59, 130, 246, 0.05);">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold">海洋生物觀察之旅</h3>
+                                    </div>
+                                    <span class="badge" style="background-color: #3b82f6;">處理中</span>
+                                </div>
+                                <div class="space-y-2 text-sm mb-4">
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-calendar"></i>2026-03-01
+                                    </p>
+                                    <p class="text-muted-foreground flex items-center gap-1">
+                                        <i class="fas fa-clock"></i>上午 9:00 - 下午 1:00 (4 小時)
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                    <span class="font-semibold">$2,500</span>
+                                    <div class="flex gap-2">
+                                        <button class="btn btn-sm">改期</button>
+                                        <button class="btn btn-sm btn-destructive">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Apple Slogan Section -->
+        <section class="py-24 md:py-32">
+            <div class="max-w-4xl mx-auto px-4 text-center space-y-8">
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight">
+                    我們不只提供設備
+                </h2>
+                <p class="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light">
+                    更創造屬於你的海洋故事
+                </p>
+                <div class="pt-8">
+                    <p class="text-lg md:text-xl text-primary font-medium italic">
+                        "Go with the flow"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommended Tours -->
+        <main class="max-w-7xl mx-auto px-4 lg:px-8 pb-8">
+            <h2 class="text-2xl font-semibold mb-6">推薦旅程</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Tour 1 -->
+                <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://images.unsplash.com/photo-1759595812385-2d2e85095946?w=500&h=300&fit=crop" alt="日落獨木舟之旅" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute top-2 right-2">
+                            <span class="badge">可預約</span>
+                        </div>
+                    </div>
+                    <div class="card-content space-y-2">
+                        <h3 class="font-semibold">日落獨木舟之旅</h3>
+                        <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-clock"></i>2 小時
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-users"></i>最多 8 人
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>4.9
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-lg font-semibold text-primary">$280</span>
+                        </div>
+                        <button class="w-full btn btn-primary btn-sm mt-2">預約</button>
+                    </div>
+                </div>
+
+                <!-- Tour 2 -->
+                <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://images.unsplash.com/photo-1486655643111-5a1741acd481?w=500&h=300&fit=crop" alt="浮潛冒險" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute top-2 right-2">
+                            <span class="badge">可預約</span>
+                        </div>
+                    </div>
+                    <div class="card-content space-y-2">
+                        <h3 class="font-semibold">浮潛冒險</h3>
+                        <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-clock"></i>3 小時
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-users"></i>最多 12 人
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>5.0
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-lg font-semibold text-primary">$330</span>
+                        </div>
+                        <button class="w-full btn btn-primary btn-sm mt-2">預約</button>
+                    </div>
+                </div>
+
+                <!-- Tour 3 -->
+                <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://images.unsplash.com/photo-1603179333467-2368f9fc16a9?w=500&h=300&fit=crop" alt="獨木舟島嶼遊" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute top-2 right-2">
+                            <span class="badge" style="background-color: #f59e0b;">有限名額</span>
+                        </div>
+                    </div>
+                    <div class="card-content space-y-2">
+                        <h3 class="font-semibold">獨木舟島嶼遊</h3>
+                        <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-clock"></i>4 小時
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-users"></i>最多 10 人
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>4.8
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-lg font-semibold text-primary">$390</span>
+                        </div>
+                        <button class="w-full btn btn-primary btn-sm mt-2">預約</button>
+                    </div>
+                </div>
+
+                <!-- Tour 4 -->
+                <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                    <div class="relative overflow-hidden aspect-video">
+                        <img src="https://images.unsplash.com/photo-1760815630515-139b860d8feb?w=500&h=300&fit=crop" alt="島嶼跳島遊" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <span class="badge" style="background-color: #6b7280;">已滿團</span>
+                        </div>
+                    </div>
+                    <div class="card-content space-y-2">
+                        <h3 class="font-semibold">島嶼跳島遊</h3>
+                        <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-clock"></i>6 小時
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-users"></i>最多 15 人
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>5.0
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-lg font-semibold text-primary">$510</span>
+                        </div>
+                        <button class="w-full btn btn-primary btn-sm mt-2" disabled style="opacity: 0.5; cursor: not-allowed;">已滿團</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Recommended Products -->
+        <section class="bg-white py-16">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-light mb-4">推薦購買</h2>
+                    <p class="text-muted-foreground text-lg">專為海洋而生的時尚泳裝</p>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product 1 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-100 mb-4 aspect-\[3\/4\]" style="aspect-ratio: 3/4;">
+                            <img src="https://images.unsplash.com/photo-1630406440709-80170ed7dfbb?w=400&h=500&fit=crop" alt="優雅連身泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">優雅連身泳衣</h3>
+                            <div class="flex items-center gap-2 text-xs">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                <span>4.9</span>
+                                <span class="text-muted-foreground">(243)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light text-primary">$768</span>
+                                <span class="text-sm text-muted-foreground line-through">$960</span>
+                            </div>
+                            <button class="w-full py-3 border border-foreground hover:bg-foreground hover:text-white transition-colors duration-300 text-sm mt-2 rounded-md">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-100 mb-4 aspect-\[3\/4\]" style="aspect-ratio: 3/4;">
+                            <img src="https://images.unsplash.com/photo-1575232707828-11f149efc281?w=400&h=500&fit=crop" alt="專業防曬泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">專業防曬泳衣</h3>
+                            <div class="flex items-center gap-2 text-xs">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                <span>4.8</span>
+                                <span class="text-muted-foreground">(189)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light text-primary">$588</span>
+                                <span class="text-sm text-muted-foreground line-through">$750</span>
+                            </div>
+                            <button class="w-full py-3 border border-foreground hover:bg-foreground hover:text-white transition-colors duration-300 text-sm mt-2 rounded-md">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-100 mb-4 aspect-\[3\/4\]" style="aspect-ratio: 3/4;">
+                            <img src="https://images.unsplash.com/photo-1560660019-7625c7e27d91?w=400&h=500&fit=crop" alt="經典比基尼套裝" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">經典比基尼套裝</h3>
+                            <div class="flex items-center gap-2 text-xs">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                <span>5.0</span>
+                                <span class="text-muted-foreground">(312)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light text-primary">$528</span>
+                                <span class="text-sm text-muted-foreground line-through">$660</span>
+                            </div>
+                            <button class="w-full py-3 border border-foreground hover:bg-foreground hover:text-white transition-colors duration-300 text-sm mt-2 rounded-md">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden bg-gray-100 mb-4 aspect-\[3\/4\]" style="aspect-ratio: 3/4;">
+                            <img src="https://images.unsplash.com/photo-1624296841740-d7255c8508cc?w=400&h=500&fit=crop" alt="運動型泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                            <div class="absolute inset-0 bg-black/70 flex items-center justify-center">
+                                <span class="text-white text-sm border border-white px-4 py-2">補貨中</span>
+                            </div>
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">運動型泳衣</h3>
+                            <div class="flex items-center gap-2 text-xs">
+                                <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                <span>4.7</span>
+                                <span class="text-muted-foreground">(156)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light text-primary">$690</span>
+                                <span class="text-sm text-muted-foreground line-through">$870</span>
+                            </div>
+                            <button class="w-full py-3 border border-gray-300 text-muted-foreground cursor-not-allowed text-sm mt-2 rounded-md" disabled>
+                                補貨中
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="text-center mt-16 pt-8 border-t border-border">
+                    <p class="text-sm text-muted-foreground mb-6">
+                        所有商品均提供 UPF 50+ 防曬保護 · 會員享專屬優惠
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

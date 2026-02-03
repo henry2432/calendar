@@ -58,11 +58,11 @@ class Kayarine_Member_Dashboard {
 		$orders = get_transient( $cache_key );
 		
 		if ( false === $orders ) {
-			// 獲取訂單數據（性能優化：只顯示最近 30 個訂單）
+			// 獲取訂單數據（所有訂單，無限制）
 			$orders = wc_get_orders( array(
 				'customer_id' => $user_id,
 				'status'   => array( 'pending', 'processing', 'on-hold', 'completed', 'refunded', 'cancelled' ),
-				'limit'    => 30,
+				'limit'    => -1,
 				'orderby'  => 'date',
 				'order'    => 'DESC',
 			) );

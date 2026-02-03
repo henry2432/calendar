@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayarine Member Dashboard - fig-tem1 Exact</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --font-size: 14px;
+            --background: #fff;
+            --foreground: #030213;
+            --card: #fff;
+            --card-foreground: #030213;
+            --popover: #fff;
+            --popover-foreground: #030213;
+            --primary: #ff6b35;
+            --primary-foreground: #fff;
+            --secondary: #f3f3f5;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --destructive: #d4183d;
+            --destructive-foreground: #fff;
+            --border: rgba(0, 0, 0, 0.1);
+            --input: transparent;
+            --input-background: #f3f3f5;
+            --ring: #ff6b35;
+            --radius: 0.625rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: var(--font-size);
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        /* Layout Utilities */
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-row { flex-direction: row; }
+        .flex-1 { flex: 1; }
+        .flex-wrap { flex-wrap: wrap; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .inline-flex { display: inline-flex; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-1 { gap: 0.25rem; }
+        .gap-1\.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .space-y-1 > * + * { margin-top: 0.25rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-8 > * + * { margin-top: 2rem; }
+
+        /* Spacing */
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .pt-2 { padding-top: 0.5rem; }
+        .pt-6 { padding-top: 1.5rem; }
+        .pt-8 { padding-top: 2rem; }
+        .pb-6 { padding-bottom: 1.5rem; }
+        .pb-8 { padding-bottom: 2rem; }
+
+        .m-0 { margin: 0; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .ml-auto { margin-left: auto; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Sizing */
+        .w-full { width: 100%; }
+        .w-10 { width: 2.5rem; }
+        .w-24 { width: 6rem; }
+        .w-32 { width: 8rem; }
+        .h-2 { height: 0.5rem; }
+        .h-3 { height: 0.75rem; }
+        .h-4 { height: 1rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-10 { height: 2.5rem; }
+        .h-16 { height: 4rem; }
+        .h-24 { height: 6rem; }
+        .h-32 { height: 8rem; }
+        .h-full { height: 100%; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-7xl { max-width: 80rem; }
+
+        /* Border & Shadow */
+        .border { border: 1px solid var(--border); }
+        .border-t { border-top: 1px solid var(--border); }
+        .border-b { border-bottom: 1px solid var(--border); }
+        .border-l { border-left: 1px solid var(--border); }
+        .border-l-4 { border-left: 4px solid; }
+        .rounded { border-radius: 0.375rem; }
+        .rounded-lg { border-radius: var(--radius); }
+        .rounded-xl { border-radius: calc(var(--radius) + 4px); }
+        .rounded-full { border-radius: 9999px; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+
+        /* Background & Text Colors */
+        .bg-background { background-color: var(--background); }
+        .bg-card { background-color: var(--card); }
+        .bg-black { background-color: #000; }
+        .bg-gray-900 { background-color: #111827; }
+        .bg-white { background-color: #fff; }
+        .bg-white\/90 { background-color: rgba(255, 255, 255, 0.9); }
+        .bg-primary { background-color: var(--primary); }
+        .bg-primary\/5 { background-color: rgba(255, 107, 53, 0.05); }
+        .bg-primary\/10 { background-color: rgba(255, 107, 53, 0.1); }
+        .bg-primary\/20 { background-color: rgba(255, 107, 53, 0.2); }
+        .bg-green-500 { background-color: #10b981; }
+        .bg-amber-500 { background-color: #f59e0b; }
+        .bg-blue-500 { background-color: #3b82f6; }
+        .bg-gray-400 { background-color: #9ca3af; }
+
+        .text-foreground { color: var(--foreground); }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .text-primary { color: var(--primary); }
+        .text-white { color: #fff; }
+        .text-black { color: #000; }
+        .text-destructive { color: var(--destructive); }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+
+        /* Text Styles */
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .text-5xl { font-size: 3rem; line-height: 1; }
+        .text-6xl { font-size: 3.75rem; line-height: 1; }
+
+        .font-light { font-weight: 300; }
+        .font-normal { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+
+        .text-center { text-align: center; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .whitespace-nowrap { white-space: nowrap; }
+        .line-through { text-decoration-line: line-through; }
+        .italic { font-style: italic; }
+
+        /* Effects */
+        .opacity-0 { opacity: 0; }
+        .opacity-50 { opacity: 0.5; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+        .object-cover { object-fit: cover; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { inset: 0; }
+
+        /* Transitions */
+        .transition { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.15s; }
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.15s; }
+        .transition-colors { transition-property: color, background-color, border-color; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.15s; }
+        .transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.15s; }
+        .transition-transform { transition-property: transform, translate, scale, rotate; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.15s; }
+        .duration-300 { transition-duration: 0.3s; }
+        .duration-700 { transition-duration: 0.7s; }
+        .ease-out { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+
+        @media (hover: hover) {
+            .group:hover { background-color: inherit; }
+            .group:hover .group-hover\:scale-105 { transform: scale(1.05); }
+            .group:hover .group-hover\:opacity-100 { opacity: 1; }
+            .hover\:bg-primary\/90:hover { background-color: rgba(255, 107, 53, 0.9); }
+            .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+            .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+            a:hover { text-decoration: none; }
+        }
+
+        /* Responsive */
+        @media (min-width: 640px) {
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .sm\:block { display: block; }
+        }
+
+        @media (min-width: 768px) {
+            .md\:flex { display: flex; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:h-24 { height: 6rem; }
+            .md\:h-32 { height: 8rem; }
+            .md\:w-32 { width: 8rem; }
+            .md\:items-center { align-items: center; }
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:py-32 { padding-top: 8rem; padding-bottom: 8rem; }
+            .md\:text-2xl { font-size: 1.5rem; }
+            .md\:text-3xl { font-size: 1.875rem; }
+            .md\:text-4xl { font-size: 2.25rem; }
+            .md\:text-5xl { font-size: 3rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:text-3xl { font-size: 1.875rem; }
+            .lg\:text-6xl { font-size: 3.75rem; }
+        }
+
+        .hidden { display: none; }
+        .shrink-0 { flex-shrink: 0; }
+
+        /* Components */
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Avatar */
+        .avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-default {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .badge-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .badge-destructive {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        /* Card */
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.75rem;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(255, 107, 53, 0.9);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-destructive {
+            color: var(--destructive);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        /* Progress */
+        .progress {
+            width: 100%;
+            height: 0.5rem;
+            background-color: var(--border);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        /* Input */
+        input[type="text"],
+        input[type="search"] {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            background-color: var(--input-background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: inherit;
+            color: var(--foreground);
+            transition: all 0.15s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="search"]:focus {
+            outline: none;
+            ring: 2px var(--ring);
+            box-shadow: 0 0 0 2px var(--ring);
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Aspect Ratio */
+        .aspect-video {
+            aspect-ratio: 16 / 9;
+        }
+
+        .aspect-\[3\/4\] {
+            aspect-ratio: 3 / 4;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu-trigger {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dropdown-menu-content {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 14rem;
+            z-index: 50;
+            display: none;
+        }
+
+        .dropdown-menu-trigger:hover .dropdown-menu-content {
+            display: block;
+        }
+
+        .dropdown-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .dropdown-menu-item:hover {
+            background-color: var(--accent);
+        }
+
+        .dropdown-menu-item i {
+            margin-right: 0.5rem;
+            width: 1rem;
+        }
+
+        .dropdown-menu-separator {
+            height: 1px;
+            background-color: var(--border);
+            margin: 0.25rem 0;
+        }
+
+        /* Select */
+        select {
+            padding: 0.5rem 1rem;
+            background-color: var(--input-background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: inherit;
+            color: var(--foreground);
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--ring);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-background">
+        <!-- Header -->
+        <header class="border-b border-border bg-card">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo -->
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-water text-primary text-2xl"></i>
+                        <span class="text-xl font-semibold text-primary">Kayak Rentals</span>
+                    </div>
+
+                    <!-- Search Bar - Hidden on mobile -->
+                    <div class="hidden md:flex flex-1 max-w-lg mx-8">
+                        <div class="relative w-full">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
+                            <input type="search" placeholder="Search kayaks, locations..." />
+                        </div>
+                    </div>
+
+                    <!-- Right side actions -->
+                    <div class="flex items-center gap-4">
+                        <!-- Notifications -->
+                        <button class="relative">
+                            <i class="fas fa-bell text-muted-foreground text-lg"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+
+                        <!-- Profile Dropdown -->
+                        <div class="dropdown-menu-trigger">
+                            <div class="flex items-center gap-3 cursor-pointer">
+                                <div class="avatar">
+                                    <img src="https://images.unsplash.com/photo-1557110437-0bcd0a636d62?w=100&h=100&fit=crop" alt="Profile" />
+                                </div>
+                                <div class="hidden sm:block">
+                                    <p class="text-sm font-medium">John Doe</p>
+                                    <p class="text-xs text-muted-foreground">Gold Member</p>
+                                </div>
+                            </div>
+                            <div class="dropdown-menu-content">
+                                <div class="dropdown-menu-item">
+                                    <i class="fas fa-user"></i>
+                                    My Profile
+                                </div>
+                                <div class="dropdown-menu-item">
+                                    <i class="fas fa-cog"></i>
+                                    Settings
+                                </div>
+                                <div class="dropdown-menu-separator"></div>
+                                <div class="dropdown-menu-item">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Log out
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="space-y-8">
+                <!-- Welcome Card -->
+                <div class="card bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                            <!-- Avatar -->
+                            <div class="relative shrink-0">
+                                <div class="avatar" style="width: 6rem; height: 6rem;">
+                                    <img src="https://images.unsplash.com/photo-1557110437-0bcd0a636d62?w=200&h=200&fit=crop" alt="Profile" />
+                                </div>
+                                <button class="absolute -bottom-2 -right-2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary/90 transition">
+                                    <i class="fas fa-camera text-sm"></i>
+                                </button>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-1 space-y-4">
+                                <div>
+                                    <h1 class="text-2xl md:text-3xl font-normal">Welcome back, <strong>John!</strong></h1>
+                                    <p class="text-muted-foreground flex items-center gap-2 mt-1">
+                                        你今年已出海了 <strong>5 次</strong>
+                                        <i class="fas fa-trophy text-amber-500"></i>
+                                    </p>
+                                </div>
+
+                                <!-- Points Progress -->
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">積分進度</span>
+                                        <span class="text-sm text-primary">850 points</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-fill" style="width: 68%;"></div>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground">
+                                        150 more points to unlock Gold Membership rewards
+                                    </p>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                        Edit Profile
+                                    </button>
+                                    <button class="btn btn-outline btn-sm">
+                                        <i class="fas fa-trophy"></i>
+                                        查看更多成就徽章
+                                    </button>
+                                    <button class="btn btn-outline btn-sm">
+                                        不同會員等級專享
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Bookings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title flex items-center gap-2">
+                            <i class="fas fa-calendar"></i>
+                            Upcoming Bookings
+                        </h2>
+                    </div>
+                    <div class="card-content space-y-4">
+                        <!-- Booking 1 -->
+                        <div class="p-4 border border-border rounded-lg space-y-3 hover:shadow-md transition-shadow">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-1">
+                                    <h4 class="font-semibold">Single Kayak</h4>
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i class="fas fa-map-pin"></i>
+                                        Marina Bay
+                                    </div>
+                                </div>
+                                <span class="badge badge-default">CONFIRMED</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-calendar"></i>
+                                    Feb 5, 2026
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-clock"></i>
+                                    10:00 AM - 2:00 PM
+                                </div>
+                            </div>
+                            <div class="flex gap-2 pt-2">
+                                <button class="flex-1 btn btn-outline btn-sm">
+                                    <i class="fas fa-redo"></i>
+                                    Re-schedule
+                                </button>
+                                <button class="flex-1 btn btn-outline btn-sm btn-destructive">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Booking 2 -->
+                        <div class="p-4 border border-border rounded-lg space-y-3 hover:shadow-md transition-shadow">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-1">
+                                    <h4 class="font-semibold">Double Kayak</h4>
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i class="fas fa-map-pin"></i>
+                                        Sunset Beach
+                                    </div>
+                                </div>
+                                <span class="badge badge-secondary">PENDING</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-calendar"></i>
+                                    Feb 12, 2026
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-clock"></i>
+                                    3:00 PM - 6:00 PM
+                                </div>
+                            </div>
+                            <div class="flex gap-2 pt-2">
+                                <button class="flex-1 btn btn-outline btn-sm">
+                                    <i class="fas fa-redo"></i>
+                                    Re-schedule
+                                </button>
+                                <button class="flex-1 btn btn-outline btn-sm btn-destructive">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Booking 3 -->
+                        <div class="p-4 border border-border rounded-lg space-y-3 hover:shadow-md transition-shadow">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-1">
+                                    <h4 class="font-semibold">Fishing Kayak</h4>
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i class="fas fa-map-pin"></i>
+                                        River Point
+                                    </div>
+                                </div>
+                                <span class="badge badge-secondary">PENDING</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-calendar"></i>
+                                    Feb 18, 2026
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-clock"></i>
+                                    8:00 AM - 12:00 PM
+                                </div>
+                            </div>
+                            <div class="flex gap-2 pt-2">
+                                <button class="flex-1 btn btn-outline btn-sm">
+                                    <i class="fas fa-redo"></i>
+                                    Re-schedule
+                                </button>
+                                <button class="flex-1 btn btn-outline btn-sm btn-destructive">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Apple Slogan Section -->
+        <section class="py-24 md:py-32">
+            <div class="max-w-4xl mx-auto px-4 text-center space-y-8">
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight">
+                    我們不只提供設備
+                </h2>
+                <p class="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light">
+                    更創造屬於你的海洋故事
+                </p>
+                <div class="pt-8">
+                    <p class="text-lg md:text-xl text-primary font-medium italic">
+                        "Go with the flow"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Available Tours -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex items-center justify-between">
+                        <h2 class="card-title">Available Tours</h2>
+                        <div class="flex items-center gap-2">
+                            <select class="w-40">
+                                <option value="all"><i class="fas fa-filter"></i> All Tours</option>
+                                <option value="sup">SUP</option>
+                                <option value="snorkeling">Snorkeling</option>
+                                <option value="kayaking">Kayaking</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                        <!-- Tour 1 -->
+                        <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1759595812385-2d2e85095946?w=500&h=300&fit=crop" alt="Sunset SUP Tour" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div class="absolute top-2 right-2">
+                                    <span class="badge badge-default">Available</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold">Sunset SUP Tour</h3>
+                                            <div class="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                                                <i class="fas fa-map-pin"></i>
+                                                <span>Sunset Beach</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn" style="padding: 0.5rem;">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-clock"></i>
+                                            2 hours
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-users"></i>
+                                            Up to 8
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                            4.9
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="badge badge-secondary text-xs">Stand-Up Paddle</span>
+                                            <span class="text-lg font-semibold text-primary">$45</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 pt-2">
+                                        <button class="flex-1 btn btn-primary btn-sm">Book Tour</button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-comment-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tour 2 -->
+                        <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1486655643111-5a1741acd481?w=500&h=300&fit=crop" alt="Snorkeling Adventure" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div class="absolute top-2 right-2">
+                                    <span class="badge badge-default">Available</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold">Snorkeling Adventure</h3>
+                                            <div class="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                                                <i class="fas fa-map-pin"></i>
+                                                <span>Coral Bay</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn" style="padding: 0.5rem;">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-clock"></i>
+                                            3 hours
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-users"></i>
+                                            Up to 12
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                            5.0
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="badge badge-secondary text-xs">Snorkeling</span>
+                                            <span class="text-lg font-semibold text-primary">$55</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 pt-2">
+                                        <button class="flex-1 btn btn-primary btn-sm">Book Tour</button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-comment-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tour 3 -->
+                        <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1603179333467-2368f9fc16a9?w=500&h=300&fit=crop" alt="Kayak Island Tour" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div class="absolute top-2 right-2">
+                                    <span class="badge" style="background-color: #f59e0b; color: white;">Limited</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold">Kayak Island Tour</h3>
+                                            <div class="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                                                <i class="fas fa-map-pin"></i>
+                                                <span>Marine Park</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn" style="padding: 0.5rem;">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-clock"></i>
+                                            4 hours
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-users"></i>
+                                            Up to 10
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                            4.8
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="badge badge-secondary text-xs">Kayaking</span>
+                                            <span class="text-lg font-semibold text-primary">$65</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 pt-2">
+                                        <button class="flex-1 btn btn-primary btn-sm">Book Tour</button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-comment-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tour 4 -->
+                        <div class="card hover:shadow-lg transition-shadow group overflow-hidden">
+                            <div class="aspect-video relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1760815630515-139b860d8feb?w=500&h=300&fit=crop" alt="Island Hopping Tour" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                    <span class="badge badge-secondary">Fully Booked</span>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold">Island Hopping Tour</h3>
+                                            <div class="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                                                <i class="fas fa-map-pin"></i>
+                                                <span>Paradise Islands</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn" style="padding: 0.5rem;">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-clock"></i>
+                                            6 hours
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-users"></i>
+                                            Up to 15
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-star" style="color: #f59e0b;"></i>
+                                            5.0
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="badge badge-secondary text-xs">Multi-Activity</span>
+                                            <span class="text-lg font-semibold text-primary">$85</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 pt-2">
+                                        <button class="flex-1 btn btn-primary btn-sm" disabled>Fully Booked</button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                        <button class="btn btn-outline btn-sm">
+                                            <i class="fas fa-comment-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button class="btn btn-outline btn-sm">View All Tours</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Recommended Products -->
+        <section class="bg-black text-white py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-light mb-4">推薦購買</h2>
+                    <p class="text-gray-400 text-lg">專為海洋而生的時尚泳裝</p>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product 1 -->
+                    <div class="group">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-gray-900 mb-4">
+                            <img src="https://images.unsplash.com/photo-1630406440709-80170ed7dfbb?w=400&h=500&fit=crop" alt="優雅連身泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">優雅連身泳衣</h3>
+                            <p class="text-xs text-gray-500">Elegant One-Piece Swimsuit</p>
+                            <div class="flex items-center gap-2 text-xs">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star" style="color: white;"></i>
+                                    <span>4.9</span>
+                                </div>
+                                <span class="text-gray-500">(243)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light">$128</span>
+                                <span class="text-sm text-gray-500 line-through">$160</span>
+                            </div>
+                            <button class="w-full py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 text-sm mt-4">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="group">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-gray-900 mb-4">
+                            <img src="https://images.unsplash.com/photo-1575232707828-11f149efc281?w=400&h=500&fit=crop" alt="專業防曬泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">專業防曬泳衣</h3>
+                            <p class="text-xs text-gray-500">UV Protection Rashguard</p>
+                            <div class="flex items-center gap-2 text-xs">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star" style="color: white;"></i>
+                                    <span>4.8</span>
+                                </div>
+                                <span class="text-gray-500">(189)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light">$98</span>
+                                <span class="text-sm text-gray-500 line-through">$125</span>
+                            </div>
+                            <button class="w-full py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 text-sm mt-4">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="group">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-gray-900 mb-4">
+                            <img src="https://images.unsplash.com/photo-1560660019-7625c7e27d91?w=400&h=500&fit=crop" alt="經典比基尼套裝" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">經典比基尼套裝</h3>
+                            <p class="text-xs text-gray-500">Classic Bikini Set</p>
+                            <div class="flex items-center gap-2 text-xs">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star" style="color: white;"></i>
+                                    <span>5.0</span>
+                                </div>
+                                <span class="text-gray-500">(312)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light">$88</span>
+                                <span class="text-sm text-gray-500 line-through">$110</span>
+                            </div>
+                            <button class="w-full py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 text-sm mt-4">
+                                加入購物車
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="group">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-gray-900 mb-4">
+                            <img src="https://images.unsplash.com/photo-1624296841740-d7255c8508cc?w=400&h=500&fit=crop" alt="運動型泳衣" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                            <div class="absolute inset-0 bg-black/70 flex items-center justify-center">
+                                <span class="text-white text-sm border border-white px-4 py-2">補貨中</span>
+                            </div>
+                            <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fas fa-heart text-black"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-sm font-light">運動型泳衣</h3>
+                            <p class="text-xs text-gray-500">Athletic Swimsuit</p>
+                            <div class="flex items-center gap-2 text-xs">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star" style="color: white;"></i>
+                                    <span>4.7</span>
+                                </div>
+                                <span class="text-gray-500">(156)</span>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-lg font-light">$115</span>
+                                <span class="text-sm text-gray-500 line-through">$145</span>
+                            </div>
+                            <button class="w-full py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300 text-sm mt-4 disabled opacity-50 cursor-not-allowed" disabled>
+                                補貨中
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="text-center mt-16 pt-8 border-t border-gray-800">
+                    <p class="text-sm text-gray-400 mb-6">
+                        所有商品均提供 UPF 50+ 防曬保護 · 會員享專屬優惠
+                    </p>
+                    <button class="text-sm border border-white px-8 py-3 hover:bg-white hover:text-black transition-colors duration-300">
+                        查看全部商品
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Simple interaction handlers
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.textContent.includes('加入購物車') || this.textContent.includes('Book Tour')) {
+                    e.preventDefault();
+                    alert('Action: ' + this.textContent);
+                }
+            });
+        });
+
+        // Search input focus effect
+        const searchInput = document.querySelector('input[type="search"]');
+        if (searchInput) {
+            searchInput.addEventListener('focus', function() {
+                this.style.boxShadow = '0 0 0 3px rgba(255, 107, 53, 0.1)';
+            });
+            searchInput.addEventListener('blur', function() {
+                this.style.boxShadow = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

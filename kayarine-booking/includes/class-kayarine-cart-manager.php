@@ -26,6 +26,10 @@ class Kayarine_Cart_Manager {
         // Optimize Cart Update Logic to prevent recursion
          add_action( 'woocommerce_check_cart_items', array( $this, 'validate_cart_inventory' ) );
          
+         // ✅ NEW: Save booking_date to order item meta when order line item is created
+         // This is BEFORE woocommerce_checkout_order_processed, so we have access to cart
+         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'save_booking_date_to_order_item' ), 10, 4 );
+         
          // ✅ FIX: Use woocommerce_checkout_order_processed
          // At this point, order is fully saved with real Order ID and Item IDs
          // Unlike woocommerce_checkout_create_order_line_item where IDs are 0
@@ -193,9 +197,45 @@ class Kayarine_Cart_Manager {
     }
 
     /**
+     * ✅ NEW: Save booking_date to order item during line item creation
+     * Called during woocommerce_checkout_create_order_line_item hook
+     * At this point, cart still has data and we can access kayarine_booking_date
+     *
+     * @param WC_Order_Item_Product $item - Order line item object
+     * @param string $cart_item_key - Cart item key
+     * @param array $values - Cart item data (contains kayarine_booking_date)
+     * @param WC_Order $order - Order object
+     */
+    public function save_booking_date_to_order_item( $item, $cart_item_key, $values, $order ) {
+        try {
+            error_log( '════════════════════════════════════════════' );
+            error_log( '[Cart Manager] save_booking_date_to_order_item() CALLED' );
+            
+            // Check if this cart item has booking date
+            if ( ! isset( $values['kayarine_booking_date'] ) ) {
+                error_log( '[Cart Manager] ⚠️ No kayarine_booking_date in cart item' );
+                return;
+            }
+            
+            $booking_date = $values['kayarine_booking_date'];
+            error_log( '[Cart Manager] Found booking_date: ' . $booking_date );
+            
+            // Save to order item meta
+            $item->update_meta_data( '_kayarine_booking_date', $booking_date );
+            $item->save();
+            
+            error_log( '[Cart Manager] ✅ Saved _kayarine_booking_date to order item' );
+            error_log( '[Cart Manager] Order ID: ' . $order->get_id() . ', Item ID: ' . $item->get_id() );
+            error_log( '════════════════════════════════════════════' );
+        } catch ( Exception $e ) {
+            error_log( '[Cart Manager] ❌ EXCEPTION in save_booking_date_to_order_item: ' . $e->getMessage() );
+        }
+    }
+
+    /**
      * ✅ FINAL FIX: Save order item meta after order is fully processed
      * At this point, Order ID and Item IDs are REAL, not 0
-     * 
+     *
      * @param int $order_id - Valid real order ID
      * @param array $posted_data - POST data from checkout form
      * @param WC_Order $order - Order object (fully populated)
@@ -211,40 +251,24 @@ class Kayarine_Cart_Manager {
                 return;
             }
             
-            // Get cart to match booking dates
-            $cart = WC()->cart ? WC()->cart->get_cart() : array();
-            
-            // Build a map: product_id => booking_date from cart
-            $cart_booking_map = array();
-            foreach ( $cart as $cart_item ) {
-                if ( isset($cart_item['kayarine_booking_date']) && isset($cart_item['product_id']) ) {
-                    $cart_booking_map[$cart_item['product_id']] = $cart_item['kayarine_booking_date'];
-                }
-            }
-            
-            error_log( '[Cart Manager] Cart booking map: ' . json_encode($cart_booking_map) );
-            
             // Process each order item
-            $items_updated = 0;
+            $items_processed = 0;
             foreach ( $order->get_items() as $item_id => $item ) {
                 $product_id = $item->get_product_id();
                 $qty = $item->get_quantity();
                 
                 error_log( '[Cart Manager] Processing Item ' . $item_id . ' - Product: ' . $product_id . ', Qty: ' . $qty );
                 
-                // Get booking date from cart map
-                $booking_date = isset($cart_booking_map[$product_id]) ? $cart_booking_map[$product_id] : null;
+                // ✅ 改進：從訂單項目元數據讀取 booking_date（已由 save_booking_date_to_order_item() 保存）
+                // 這樣避免依賴購物車，購物車在 woocommerce_checkout_order_processed 時可能已被清空
+                $booking_date = $item->get_meta( '_kayarine_booking_date' );
                 
                 if ( ! $booking_date ) {
-                    error_log( '[Cart Manager] ⚠️ No booking date found for product ' . $product_id );
+                    error_log( '[Cart Manager] ⚠️ No _kayarine_booking_date found for item ' . $item_id );
                     continue;
                 }
                 
-                // Update meta data using WooCommerce object
-                $item->update_meta_data( '_kayarine_booking_date', $booking_date );
-                $item->save();
-                
-                error_log( '[Cart Manager] ✅ Set _kayarine_booking_date = ' . $booking_date . ' for Item ' . $item_id );
+                error_log( '[Cart Manager] ✅ Retrieved _kayarine_booking_date = ' . $booking_date . ' from Item ' . $item_id );
                 
                 // Record pending usage for inventory
                 if ( class_exists('Kayarine_Inventory') ) {
@@ -252,10 +276,10 @@ class Kayarine_Cart_Manager {
                     error_log( '[Inventory] ✅ Recorded pending usage: Order ' . $order_id . ', Date: ' . $booking_date . ', Product: ' . $product_id . ', Qty: ' . $qty );
                 }
                 
-                $items_updated++;
+                $items_processed++;
             }
             
-            error_log( '[Cart Manager] Complete - Updated ' . $items_updated . ' items' );
+            error_log( '[Cart Manager] Complete - Processed ' . $items_processed . ' items' );
             error_log( '════════════════════════════════════════════' );
         } catch ( Exception $e ) {
             error_log( '[Cart Manager] ❌ EXCEPTION: ' . $e->getMessage() );

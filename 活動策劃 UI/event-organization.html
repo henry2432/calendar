@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活動策劃 - Kayarine Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-in-out;
+        }
+        
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <!-- Hero Section -->
+    <section id="home" style="position: relative; width: 100%; min-height: 600px; height: 100vh; max-height: 900px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <!-- Background Image with Overlay -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;">
+            <img
+                src="/wp-content/pages/Hero Pic.jpg"
+                alt="Team kayaking at sunset"
+                style="width: 100%; height: 100%; object-fit: cover;"
+            />
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.1), rgba(0,0,0,0.7));"></div>
+        </div>
+
+        <!-- Content -->
+        <div style="position: relative; z-index: 10; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1rem; color: white;">
+            <div style="max-width: 56rem; padding-top: 3rem;">
+                <h1 class="text-3xl md:text-5xl lg:text-6xl mb-6 animate-fade-in font-light">
+                    獨木舟・直立板定制活動專家
+                </h1>
+                <p class="text-lg md:text-xl lg:text-2xl mb-4 max-w-2xl opacity-95 font-light">
+                    你的首選出海活動定制
+                </p>
+                <p class="text-base md:text-lg mb-8 max-w-xl opacity-90">
+                    安全專業．客製化樂趣．增進團隊合作．自然體驗．品牌打造
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 items-start mb-8">
+                    <a href="https://wa.me/85259893466" target="_blank" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg rounded-lg transition-colors font-medium">
+                        立即查詢團體報價
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+            <svg class="h-8 w-8 text-white opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Target Groups Section -->
+    <section id="target-groups" class="py-16 md:py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4 font-light">
+                    我們服務的對象
+                </h2>
+                <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+                    專業定制方案，滿足不同團體需求
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Corporate Card -->
+                <div class="overflow-hidden rounded-lg hover:shadow-xl transition-shadow duration-300 border-none bg-white">
+                    <div class="relative h-64 overflow-hidden">
+                        <img
+                            src="/wp-content/pages/Company Picture.JPG"
+                            alt="Corporate team building"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="text-2xl mb-1">公司 / Corporate</h3>
+                            <p class="text-sm opacity-90">團隊建設專家</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <p class="text-gray-700 mb-4 min-h-[60px]">
+                            提升團隊凝聚力、領導力與壓力釋放 – 客製化 Fun Day / Annual Outing，建立品牌形象
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">Team Building</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">Fun Day</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">年度活動</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">品牌活動</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schools Card -->
+                <div class="overflow-hidden rounded-lg hover:shadow-xl transition-shadow duration-300 border-none bg-white">
+                    <div class="relative h-64 overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1766818981351-af3c479803de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMGNoaWxkcmVuJTIwcGxheWluZyUyMHdhdGVyJTIwYmVhY2glMjBncm91cHxlbnwxfHx8fDE3NzAwNTQzMjR8MA&ixlib=rb-4.0.3&q=80&w=1080"
+                            alt="Students kayaking"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="text-2xl mb-1">學校 / Schools</h3>
+                            <p class="text-sm opacity-90">戶外教育課程</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <p class="text-gray-700 mb-4 min-h-[60px]">
+                            戶外教育課程、冒險體驗、證書課程（直立板入門/中級）
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">戶外教育</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">冒險體驗</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">證書課程</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">團體訓練</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Card -->
+                <div class="overflow-hidden rounded-lg hover:shadow-xl transition-shadow duration-300 border-none bg-white">
+                    <div class="relative h-64 overflow-hidden">
+                        <img
+                            src="/wp-content/pages/社區中心.jpg"
+                            alt="Community beach activity"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="text-2xl mb-1">社區中心 / Community</h3>
+                            <p class="text-sm opacity-90">社區凝聚活動</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <p class="text-gray-700 mb-4 min-h-[60px]">
+                            社區凝聚活動、親子/長者友善行程、沙灘清潔結合水上體驗
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">親子活動</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">長者友善</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">社區活動</span>
+                            <span class="text-xs px-3 py-1 bg-orange-50 text-orange-600 rounded-full">環保體驗</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Kayarine Section -->
+    <section id="why-kayarine" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <!-- Mascot with Speech Bubble -->
+            <div class="text-center mb-12">
+                <div class="flex justify-center items-center mb-8">
+                    <div class="relative">
+                        <img 
+                            src="/wp-content/pages/吉祥物.png"
+                            alt="Kayarine Mascot" 
+                            class="w-64 h-64 xl:w-96 xl:h-96 object-contain"
+                        />
+                        <!-- Speech Bubble -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-4 bg-white rounded-2xl px-6 py-3 shadow-lg border-2 border-orange-500">
+                            <p class="text-lg font-medium text-gray-800 whitespace-nowrap">
+                                為什麼選擇 Kayarine？
+                            </p>
+                            <div class="absolute left-1/2 -translate-x-1/2 -bottom-3 w-0 h-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-orange-500 border-r-[12px] border-r-transparent"></div>
+                            <div class="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-[10px] border-l-transparent border-t-[10px] border-t-white border-r-[10px] border-r-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="mb-16">
+                <div class="max-w-4xl mx-auto p-8 rounded-xl border-2 border-orange-200 bg-gradient-to-b from-white to-orange-50">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Stat 1 -->
+                        <div class="flex flex-col items-center text-center">
+                            <svg class="h-10 w-10 mb-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-2a6 6 0 0112 0v2zm0 0h6v-2a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <div class="text-4xl md:text-5xl mb-2 text-gray-800">50+</div>
+                            <div class="text-lg text-gray-600">合作機構團體</div>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="flex flex-col items-center text-center">
+                            <svg class="h-10 w-10 mb-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-2a6 6 0 0112 0v2zm0 0h6v-2a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            <div class="text-4xl md:text-5xl mb-2 text-gray-800">1000+</div>
+                            <div class="text-lg text-gray-600">服務客戶</div>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="flex flex-col items-center text-center">
+                            <svg class="h-10 w-10 mb-3 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <div class="text-4xl md:text-5xl mb-2 text-gray-800">4.9</div>
+                            <div class="text-lg text-gray-600">Google 評分</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advantages Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <!-- Advantage 1 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="h-8 w-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">專業教練 & 安全第一</h3>
+                    <p class="text-gray-600">經驗豐富教練團隊，全程安全保障</p>
+                </div>
+
+                <!-- Advantage 2 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="h-8 w-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 6H21v7a2 2 0 01-2 2H3.75a2 2 0 01-2-2V6m0 0h18m-18 0V4m18 0V4m0 6H3.75m0 0v6a2 2 0 002 2h14.5a2 2 0 002-2v-6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">客製化團體行程</h3>
+                    <p class="text-gray-600">人數、時間、難度、主題靈活調整</p>
+                </div>
+
+                <!-- Advantage 3 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="h-8 w-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">彈性改期 & 天氣保障</h3>
+                    <p class="text-gray-600">免費改期服務，天氣不適全額退款</p>
+                </div>
+            </div>
+
+            <!-- Photography Mascot Section -->
+            <div class="text-center mt-16 mb-8">
+                <div class="flex justify-center items-center mb-8">
+                    <div class="relative">
+                        <img 
+                            src="/wp-content/pages/攝影師吉祥物.png"
+                            alt="Kayarine Photographer Mascot" 
+                            class="w-64 h-64 xl:w-80 xl:h-80 object-contain"
+                        />
+                        <!-- Speech Bubble -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-4 bg-white rounded-2xl px-6 py-3 shadow-lg border-2 border-orange-500">
+                            <p class="text-lg font-medium text-gray-800 whitespace-nowrap">
+                                需要活動記錄素材？
+                            </p>
+                            <div class="absolute left-1/2 -translate-x-1/2 -bottom-3 w-0 h-0 border-l-[12px] border-l-transparent border-t-[12px] border-t-orange-500 border-r-[12px] border-r-transparent"></div>
+                            <div class="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-[10px] border-l-transparent border-t-[10px] border-t-white border-r-[10px] border-r-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Photography Service -->
+            <div class="mb-16 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 md:p-12 border-2 border-orange-200">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-full mb-4">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="font-medium">品牌價值提升</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl mb-4 font-light">
+                            專業攝影服務
+                        </h3>
+                        <p class="text-lg text-gray-700 mb-6">
+                            專業攝影師 Drone 航拍，多角度記錄精彩瞬間
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <span class="text-white text-sm">✓</span>
+                                </div>
+                                <p class="text-gray-700">專業器材提供高質素材，增加品牌活動彈性</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <span class="text-white text-sm">✓</span>
+                                </div>
+                                <p class="text-gray-700">航拍視角展現團隊氣勢，提升企業形象</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                    <span class="text-white text-sm">✓</span>
+                                </div>
+                                <p class="text-gray-700">即時分享社交媒體，擴大活動影響力</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg">
+                        <h4 class="text-xl mb-4 text-center font-medium">我們的社交媒體影響力</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <svg class="h-8 w-8 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"></path>
+                                        <path d="M5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.322a1.44 1.44 0 110-2.88 1.44 1.44 0 010 2.88z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm text-gray-600">Instagram 追蹤者</p>
+                                        <p class="text-2xl font-semibold">1.8萬+</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-sm text-gray-600">單篇最高流量</p>
+                                        <p class="text-2xl font-semibold">20萬+</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 text-center mt-4">
+                            您的活動將獲得專業曝光，觸及更廣泛受眾
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-16 md:py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl mb-6 font-light">
+                    準備好為您的團隊打造難忘體驗？
+                </h2>
+                <p class="text-lg md:text-xl text-gray-600 mb-8">
+                    立即聯絡我們，獲取專屬定制方案和團體報價
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <a
+                        href="https://wa.me/85259893466"
+                        target="_blank"
+                        class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg rounded-lg transition-colors font-medium"
+                    >
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-9.746 9.806c0 2.734.714 5.389 2.082 7.723l-2.213 8.073a.75.75 0 00.926.926l8.073-2.213a9.87 9.87 0 007.723 2.082c5.441 0 9.905-4.464 9.905-9.905 0-2.635-.948-5.124-2.682-7.082-1.734-1.958-4.173-3.223-6.84-3.223-5.44 0-9.904 4.464-9.904 9.905zm0-1.5a11.37 11.37 0 0111.358 11.358 11.37 11.37 0 01-11.358-11.358z"></path>
+                        </svg>
+                        WhatsApp 查詢
+                    </a>
+                    <a
+                        href="tel:+85259893466"
+                        class="inline-flex items-center justify-center gap-2 border-2 border-orange-500 text-orange-500 hover:bg-orange-50 px-8 py-6 text-lg rounded-lg transition-colors font-medium"
+                    >
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        致電查詢
+                    </a>
+                    <a
+                        href="mailto:contact@kayarine.club"
+                        class="inline-flex items-center justify-center gap-2 border-2 border-orange-500 text-orange-500 hover:bg-orange-50 px-8 py-6 text-lg rounded-lg transition-colors font-medium"
+                    >
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        電郵查詢
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

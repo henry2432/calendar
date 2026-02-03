@@ -389,10 +389,10 @@ class Kayarine_Inventory {
             $use_wc_prefix = true;
         }
         
-        // 訂單狀態（支持兩種格式）
+        // 訂單狀態（支持兩種格式，包括 draft 用於新訂單）
         $statuses = $use_wc_prefix
-            ? array( 'wc-pending', 'wc-processing', 'wc-completed', 'wc-on-hold' )
-            : array( 'pending', 'processing', 'completed', 'on-hold' );
+            ? array( 'wc-pending', 'wc-processing', 'wc-completed', 'wc-on-hold', 'wc-draft', 'draft' )
+            : array( 'pending', 'processing', 'completed', 'on-hold', 'draft' );
         
         $status_placeholders = implode( ',', array_fill( 0, count( $statuses ), '%s' ) );
         
@@ -423,7 +423,7 @@ class Kayarine_Inventory {
             WHERE
                 item_meta_date.meta_key = '_kayarine_booking_date'
                 AND item_meta_date.meta_value = %s
-                AND orders.post_type = 'shop_order'
+                AND orders.post_type IN ('shop_order', 'shop_order_placehold')
                 AND orders.post_status IN ({$status_placeholders})
                 AND items.order_item_type = 'line_item'
             
@@ -509,9 +509,10 @@ class Kayarine_Inventory {
             Kayarine_Inventory::log($log);
         }
 
-        // Save to Transient (5 seconds)
-        // Short TTL prevents stale data in calendar while reducing DB load
-        set_transient( $transient_key, $usage, 5 );
+        // ✅ 修復：增加 TTL 到 3600 秒（1小時）
+        // 說明：Hook 會主動清除快取，TTL 只是保險機制
+        // 更長的 TTL 減少 DB 查詢，防止邊界情況導致的快取問題
+        set_transient( $transient_key, $usage, 3600 );
 
         // Save to runtime cache
         $runtime_cache[$date] = $usage;

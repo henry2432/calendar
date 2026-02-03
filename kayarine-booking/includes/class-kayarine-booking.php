@@ -10,10 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Kayarine_Booking {
 
 	public function run() {
+		$start_time = microtime(true);
+		
 		$this->load_dependencies();
+		$load_time = microtime(true) - $start_time;
+		error_log( "[Kayarine Perf] load_dependencies: " . number_format($load_time*1000, 2) . "ms" );
+		
 		$this->define_admin_hooks();
+		$admin_time = microtime(true) - $start_time - $load_time;
+		error_log( "[Kayarine Perf] define_admin_hooks: " . number_format($admin_time*1000, 2) . "ms" );
+		
 		$this->define_public_hooks();
-}
+		$public_time = microtime(true) - $start_time - $load_time - $admin_time;
+		error_log( "[Kayarine Perf] define_public_hooks: " . number_format($public_time*1000, 2) . "ms" );
+		
+		$total_time = microtime(true) - $start_time;
+		error_log( "[Kayarine Perf] Total plugin load: " . number_format($total_time*1000, 2) . "ms" );
+	}
 
 private function load_dependencies() {
 	require_once KAYARINE_BOOKING_PATH . 'includes/kayarine-config.php';
@@ -65,6 +78,12 @@ private function load_dependencies() {
 		            add_action( 'woocommerce_order_status_pending_to_on_hold', array( $this, 'on_order_status_change' ), 10, 1 );
 		            add_action( 'woocommerce_order_status_completed_to_cancelled', array( $this, 'on_order_status_change' ), 10, 1 );
 		            add_action( 'woocommerce_order_status_processing_to_cancelled', array( $this, 'on_order_status_change' ), 10, 1 );
+		            
+		            // ✅ 新增：監聽訂單 trash 事件以清除快取
+		            // 說明：訂單被 trash 後，post_status 變成 'trash'
+		            // SQL 查詢只找 pending/processing/completed/on-hold，自動排除 trash 訂單
+		            // 但快取仍存在，需要清除以獲得最新庫存
+		            add_action( 'trashed_post', array( $this, 'clear_inventory_cache_on_trash' ), 10, 1 );
 }
 
 		  /**
@@ -241,4 +260,30 @@ public function enqueue_scripts() {
 		    'ajax_url' => admin_url( 'admin-ajax.php' )
 		));
 }
+
+	/**
+	 * ✅ 新增：監聽訂單 trash 事件
+	 * 當訂單被移至垃圾桶時，清除相關日期的庫存快取
+	 *
+	 * 說明：
+	 * - 訂單 trash 後，post_status 變成 'trash'
+	 * - SQL 查詢自動排除 trash 訂單（只查 pending/processing/completed/on-hold）
+	 * - 但快取仍然存在（5秒 TTL），需要清除
+	 * - 下次查詢時會重新計算，自動排除已 trash 的訂單
+	 */
+	public function clear_inventory_cache_on_trash( $post_id ) {
+		// 確認這是訂單 post
+		$post = get_post( $post_id );
+		if ( ! $post || $post->post_type !== 'shop_order' ) {
+			return;
+		}
+		
+		$order = wc_get_order( $post_id );
+		if ( ! $order ) {
+			return;
+		}
+		
+		error_log( "[Kayarine Cache] Order TRASHED - ID: $post_id, 清除相關日期快取" );
+		$this->process_order_dates_for_clearing( $order );
+	}
 }

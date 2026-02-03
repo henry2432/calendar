@@ -112,8 +112,8 @@ class Kayarine_WooCommerce_Customizer {
             <!-- No Navigation Menu - Direct to Kayarine Dashboard -->
             <div class="kayarine-account-content">
                 <?php
-                // Always show Kayarine dashboard - no menu navigation
-                $this->render_kayarine_dashboard();
+                // ✅ 已修復：使用正確的 shortcode 實現而非舊方法
+                echo do_shortcode( '[kayarine_member_dashboard]' );
                 ?>
             </div>
         </div>
@@ -438,10 +438,10 @@ class Kayarine_WooCommerce_Customizer {
     }
 
     /**
-     * Render Kayarine custom dashboard (replaces WooCommerce account dashboard)
-     * Based on member_dashboard_preview.html design (excluding store credit section)
+     * ⚠️ DISABLED - 已移至 class-kayarine-member-dashboard.php
+     * 此方法已被禁用，強制使用新的 shortcode 實現
      */
-    private function render_kayarine_dashboard() {
+    private function render_kayarine_dashboard_DISABLED() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -870,9 +870,9 @@ class Kayarine_WooCommerce_Customizer {
         // Query user's orders
         // ✅ 修復：包含 pending 狀態確保新訂單立即顯示
         $orders = wc_get_orders( array(
-            'customer' => $user_id,
-            'status'   => array( 'pending', 'processing', 'completed', 'on-hold' ),
-            'limit'    => 20,
+        	'customer_id' => $user_id,
+        	'status'   => array( 'pending', 'processing', 'completed', 'on-hold' ),
+        	'limit'    => 20,
         ) );
         
         if ( ! empty( $orders ) ) {
@@ -1388,9 +1388,9 @@ JS;
         
         // Verify user owns this booking
         $orders = wc_get_orders( array(
-            'customer' => $user_id,
-            'status'   => array( 'completed', 'processing' ),
-            'limit'    => 50,
+        	'customer_id' => $user_id,
+        	'status'   => array( 'completed', 'processing' ),
+        	'limit'    => 50,
         ) );
         
         error_log( '[Kayarine Reschedule] Found ' . count( $orders ) . ' orders' );
@@ -1505,9 +1505,9 @@ JS;
         
         // Verify user owns this booking
         $orders = wc_get_orders( array(
-            'customer' => $user_id,
-            'status'   => array( 'completed', 'processing' ),
-            'limit'    => 50,
+        	'customer_id' => $user_id,
+        	'status'   => array( 'completed', 'processing' ),
+        	'limit'    => 50,
         ) );
         
         error_log( '[Kayarine Cancel] Found ' . count( $orders ) . ' orders' );

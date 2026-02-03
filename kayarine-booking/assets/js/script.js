@@ -444,9 +444,9 @@ jQuery(document).ready(function($) {
     // Initial calc (Single Product Page)
     calculateTotal();
     
-    // ----Preload today's inventory (Cold start optimization)----
-    // Load today's and tomorrow's stock in background to populate Transient cache
-    // This makes the calendar interactive faster on first page load
+    // ✅ 性能優化：延遲日期快取預加載（requestIdleCallback）
+    // 原問題：無條件在 document.ready 時發送 2 個 AJAX，阻塞頁面渲染
+    // 優化：在瀏覽器空閒時預加載（不阻塞主線程）
     (function() {
         var today = new Date();
         var tomorrow = new Date(today);
@@ -465,29 +465,34 @@ jQuery(document).ready(function($) {
         var todayStr = formatDate2(today);
         var tomorrowStr = formatDate2(tomorrow);
         
-        // Preload both dates in background (no UI blocking)
-        // This primes the Transient cache for faster calendar interaction
-        $.ajax({
-            url: kayarine_vars.ajax_url,
-            data: { action: 'kayarine_proxy_check', date: todayStr },
-            method: 'POST',
-            dataType: 'json',
-            timeout: 3000, // Don't wait too long
-            error: function() {
-                // Silently ignore - calendar still works, just without preload
-            }
-        });
+        // ✅ 優化：延遲到瀏覽器空閒時才預加載
+        function preloadDates() {
+            $.ajax({
+                url: kayarine_vars.ajax_url,
+                data: { action: 'kayarine_proxy_check', date: todayStr },
+                method: 'POST',
+                dataType: 'json',
+                timeout: 3000,
+                error: function() { /* 忽略 */ }
+            });
+            
+            $.ajax({
+                url: kayarine_vars.ajax_url,
+                data: { action: 'kayarine_proxy_check', date: tomorrowStr },
+                method: 'POST',
+                dataType: 'json',
+                timeout: 3000,
+                error: function() { /* 忽略 */ }
+            });
+        }
         
-        $.ajax({
-            url: kayarine_vars.ajax_url,
-            data: { action: 'kayarine_proxy_check', date: tomorrowStr },
-            method: 'POST',
-            dataType: 'json',
-            timeout: 3000,
-            error: function() {
-                // Silently ignore
-            }
-        });
+        // 現代瀏覽器：使用 requestIdleCallback（不阻塞主線程）
+        if (typeof requestIdleCallback !== 'undefined') {
+            requestIdleCallback(preloadDates);
+        } else {
+            // 降級方案：延遲 1.5 秒後預加載（在頁面加載完成後）
+            setTimeout(preloadDates, 1500);
+        }
     })();
 
     // ----------------------------------------------------

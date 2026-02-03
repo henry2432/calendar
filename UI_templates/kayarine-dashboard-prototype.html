@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayarine 會員中心 - 原型</title>
+    
+    <!-- Flatpickr 日期選擇器 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* ===== 頂部導航 ===== */
+        .kb-dashboard-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: -1px;
+        }
+        
+        .kb-dashboard-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .kb-dashboard-header .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .kb-dashboard-header .logout-btn:hover {
+            background: #c53030;
+        }
+        
+        /* ===== 主容器 ===== */
+        .kayarine-member-dashboard {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        /* ===== 頂部卡片區域 ===== */
+        .kb-top-section {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        /* ===== 會員資料卡片 ===== */
+        .kb-member-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+        }
+        
+        .kb-member-info-card .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .kb-member-info-card .card-title::before {
+            content: '👤';
+            font-size: 24px;
+        }
+        
+        .kb-member-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .kb-member-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .kb-member-info-item .label {
+            font-weight: 600;
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .kb-member-info-item .value {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 16px;
+        }
+        
+        .kb-member-info-item .tier-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .kb-member-info-card .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .kb-member-info-card .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+        
+        .kb-member-info-card .btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* ===== 里程碑方塊 ===== */
+        .kb-milestone-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #48bb78;
+            text-align: center;
+        }
+        
+        .kb-milestone-box .box-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .kb-milestone-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .kb-milestone-stats {
+            margin: 20px 0;
+        }
+        
+        .kb-milestone-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #48bb78;
+            line-height: 1;
+        }
+        
+        .kb-milestone-label {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 5px;
+        }
+        
+        .kb-milestone-text {
+            background: #f0fdf4;
+            color: #22863a;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-weight: 600;
+            font-size: 14px;
+            border-left: 4px solid #48bb78;
+        }
+        
+        .kb-milestone-box .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .kb-milestone-box .btn-primary:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+        
+        /* ===== 會員升級進度 ===== */
+        .kb-upgrade-progress {
+            padding: 30px;
+            background: white;
+        }
+        
+        .kb-upgrade-progress .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .kb-upgrade-progress .current-tier {
+            padding: 15px;
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .kb-tier-path {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .kb-tier-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .kb-tier-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        
+        .kb-tier-name {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        
+        .kb-tier-item.active .kb-tier-icon {
+            font-size: 48px;
+            animation: bounce 0.6s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .kb-tier-path::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #667eea 50%, #cbd5e0 50%);
+            z-index: -1;
+        }
+        
+        .kb-progress-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+        
+        .kb-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        
+        .kb-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .kb-progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .kb-upgrade-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .kb-upgrade-actions .btn-secondary {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .kb-upgrade-actions .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* ===== 預約列表 ===== */
+        .kb-bookings-section {
+            padding: 30px;
+        }
+        
+        .kb-bookings-section .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .kb-bookings-section .btn-new {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .kb-bookings-section .btn-new:hover {
+            background: #38a169;
+        }
+        
+        .kb-booking-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .kb-booking-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e0;
+        }
+        
+        .kb-booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .kb-booking-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        
+        .kb-booking-status.pending {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .kb-booking-status.completed {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .kb-booking-status.cancelled {
+            background: #fc8181;
+            color: #742a2a;
+        }
+        
+        .kb-booking-info {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 16px;
+        }
+        
+        .kb-booking-details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .kb-booking-details .detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .kb-booking-actions {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #cbd5e0;
+        }
+        
+        .kb-booking-actions .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .kb-booking-actions .btn-action:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .kb-booking-actions .btn-action.danger:hover {
+            background: #fed7d7;
+            border-color: #c53030;
+            color: #c53030;
+        }
+        
+        .kb-no-bookings {
+            text-align: center;
+            padding: 40px 20px;
+            color: #718096;
+        }
+        
+        .kb-no-bookings a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        /* ===== 模態框 ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+            transition: color 0.3s;
+        }
+        
+        .modal-header .close-btn:hover {
+            color: #2d3748;
+        }
+        
+        .modal-body {
+            margin: 20px 0;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .modal-footer .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .modal-footer .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal-footer .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .modal-footer .btn-secondary {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        
+        .modal-footer .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        /* ===== 日歷選擇器 ===== */
+        .calendar-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .calendar-picker input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        .calendar-picker input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .calendar-legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .calendar-legend .item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* ===== 會員等級對比表 ===== */
+        .tier-comparison {
+            overflow-x: auto;
+        }
+        
+        .tier-comparison table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .tier-comparison th {
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+        }
+        
+        .tier-comparison td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            background: #f7fafc;
+        }
+        
+        .tier-comparison td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            background: white;
+        }
+        
+        .tier-comparison tr:nth-child(even) td:not(:first-child) {
+            background: white;
+        }
+        
+        .checkmark {
+            color: #48bb78;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+            .kb-top-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .kb-tier-path {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .kb-tier-path::before {
+                display: none;
+            }
+            
+            .kb-booking-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .kb-dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="kayarine-member-dashboard">
+            <!-- 頂部導航 -->
+            <div class="kb-dashboard-header">
+                <h1>Kayarine 會員中心</h1>
+                <button class="logout-btn">登出</button>
+            </div>
+            
+            <!-- 頂部卡片區域 -->
+            <div class="kb-top-section">
+                <!-- 會員資料卡片 -->
+                <div class="kb-member-info-card">
+                    <div class="card-title">會員資料</div>
+                    <div class="kb-member-info-item">
+                        <span class="label">姓名</span>
+                        <span class="value">李明</span>
+                    </div>
+                    <div class="kb-member-info-item">
+                        <span class="label">會員等級</span>
+                        <span class="tier-badge">💎 Platinum</span>
+                    </div>
+                    <div class="kb-member-info-item">
+                        <span class="label">加入時間</span>
+                        <span class="value">2024年5月15日</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn">編輯資料</button>
+                        <button class="btn">更改頭像</button>
+                    </div>
+                </div>
+                
+                <!-- 里程碑方塊 -->
+                <div class="kb-milestone-box">
+                    <div class="box-title">🎯 今年里程碑</div>
+                    <div class="kb-milestone-icon">🚣</div>
+                    <div class="kb-milestone-stats">
+                        <div class="kb-milestone-value">9 / 10</div>
+                        <div class="kb-milestone-label">出海次數</div>
+                    </div>
+                    <div class="kb-milestone-text">
+                        "快要達成目標了！<br>再出海 1 次就完成挑戰！"
+                    </div>
+                    <button class="btn-primary" onclick="openModal('stats-modal')">查看更多統計</button>
+                </div>
+            </div>
+            
+            <!-- 會員升級進度 -->
+            <div class="kb-upgrade-progress">
+                <div class="section-title">📈 會員升級進度</div>
+                
+                <div class="current-tier">
+                    您目前是：🥇 Gold 會員
+                </div>
+                
+                <div class="kb-tier-path">
+                    <div class="kb-tier-item">
+                        <div class="kb-tier-icon">⭐</div>
+                        <div class="kb-tier-name">Bronze</div>
+                    </div>
+                    <div class="kb-tier-item">
+                        <div class="kb-tier-icon">🥈</div>
+                        <div class="kb-tier-name">Silver</div>
+                    </div>
+                    <div class="kb-tier-item active">
+                        <div class="kb-tier-icon">🥇</div>
+                        <div class="kb-tier-name">Gold</div>
+                    </div>
+                    <div class="kb-tier-item">
+                        <div class="kb-tier-icon">💎</div>
+                        <div class="kb-tier-name">Platinum</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #2d3748; font-weight: 700;">距離 💎 Platinum 還需：</h4>
+                </div>
+                
+                <div class="kb-progress-item">
+                    <div class="kb-progress-label">
+                        <span>✓ 出海次數</span>
+                        <span>12 / 15 次</span>
+                    </div>
+                    <div class="kb-progress-bar">
+                        <div class="kb-progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+                
+                <div class="kb-progress-item">
+                    <div class="kb-progress-label">
+                        <span>✓ 累計消費</span>
+                        <span>$4,200 / $5,000</span>
+                    </div>
+                    <div class="kb-progress-bar">
+                        <div class="kb-progress-fill" style="width: 84%;"></div>
+                    </div>
+                </div>
+                
+                <div class="kb-upgrade-actions">
+                    <button class="btn-secondary" onclick="openModal('tier-modal')">查看會員福利對比</button>
+                    <button class="btn-secondary" onclick="openModal('benefits-modal')">查看專賞</button>
+                </div>
+            </div>
+            
+            <!-- 預約列表 -->
+            <div class="kb-bookings-section">
+                <div class="section-title">
+                    我的預約
+                    <button class="btn-new">新增預約 ></button>
+                </div>
+                
+                <!-- 未確認預約 -->
+                <div class="kb-booking-card">
+                    <div class="kb-booking-header">
+                        <div>
+                            <span class="kb-booking-status pending">【未確認】</span>
+                            <span class="kb-booking-info">2026-03-06 家庭獨木舟 $800</span>
+                        </div>
+                    </div>
+                    <div class="kb-booking-details">
+                        <div class="detail">📅 2026年3月6日</div>
+                        <div class="detail">👥 2人</div>
+                        <div class="detail">⭐⭐ 中級</div>
+                    </div>
+                    <div class="kb-booking-actions">
+                        <button class="btn-action" onclick="openModal('calendar-modal')">改期 📅</button>
+                        <button class="btn-action danger" onclick="cancelBooking()">取消 ✕</button>
+                    </div>
+                </div>
+                
+                <!-- 已完成預約 -->
+                <div class="kb-booking-card">
+                    <div class="kb-booking-header">
+                        <div>
+                            <span class="kb-booking-status completed">【已完成】</span>
+                            <span class="kb-booking-info">2026-02-15 家庭獨木舟 $800</span>
+                        </div>
+                    </div>
+                    <div class="kb-booking-details">
+                        <div class="detail">✓ 已完成</div>
+                        <div class="detail">可留下評價</div>
+                    </div>
+                    <div class="kb-booking-actions">
+                        <button class="btn-action">留下評價 ⭐</button>
+                    </div>
+                </div>
+                
+                <!-- 已取消預約 -->
+                <div class="kb-booking-card">
+                    <div class="kb-booking-header">
+                        <div>
+                            <span class="kb-booking-status cancelled">【已取消】</span>
+                            <span class="kb-booking-info">2026-01-10 SUP 體驗課 $600</span>
+                        </div>
+                    </div>
+                    <div class="kb-booking-details">
+                        <div class="detail">✕ 已取消</div>
+                        <div class="detail">申請中退款</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ===== 模態框：日歷選擇器 ===== -->
+    <div id="calendar-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>選擇新預約日期</h3>
+                <button class="close-btn" onclick="closeModal('calendar-modal')">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="calendar-picker">
+                    <label style="font-weight: 700; color: #2d3748;">選擇日期：</label>
+                    <input type="text" id="booking-date" placeholder="點擊選擇日期">
+                    <div class="calendar-legend">
+                        <div class="item"><span style="color: #48bb78;">✓</span> 有貨</div>
+                        <div class="item"><span style="color: #ed8936;">○</span> 部份有貨</div>
+                        <div class="item"><span style="color: #e53e3e;">✕</span> 無貨</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="confirmReschedule()">確認</button>
+                <button class="btn btn-secondary" onclick="closeModal('calendar-modal')">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ===== 模態框：會員等級對比 ===== -->
+    <div id="tier-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>會員等級福利對比</h3>
+                <button class="close-btn" onclick="closeModal('tier-modal')">✕</button>
+            </div>
+            
+            <div class="modal-body tier-comparison">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>福利項目</th>
+                            <th>⭐ Bronze</th>
+                            <th>🥈 Silver</th>
+                            <th>🥇 Gold</th>
+                            <th>💎 Platinum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>預約折扣</td>
+                            <td>-</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                            <td>15%</td>
+                        </tr>
+                        <tr>
+                            <td>優先客服</td>
+                            <td>-</td>
+                            <td><span class="checkmark">✓</span></td>
+                            <td><span class="checkmark">✓</span></td>
+                            <td><span class="checkmark">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>優先預約</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="checkmark">✓</span></td>
+                            <td><span class="checkmark">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>生日禮物</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="checkmark">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>VIP 客服</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="checkmark">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>專屬禮品</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="checkmark">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal('tier-modal')">了解升級條件</button>
+                <button class="btn btn-secondary" onclick="closeModal('tier-modal')">關閉</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ===== 模態框：確認取消 ===== -->
+    <div id="cancel-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>確認取消預約</h3>
+                <button class="close-btn" onclick="closeModal('cancel-modal')">✕</button>
+            </div>
+            
+            <div class="modal-body" style="text-align: center; padding: 30px 20px;">
+                <p style="font-size: 16px; color: #2d3748; margin-bottom: 10px;">確認取消此預約嗎？</p>
+                <p style="font-size: 14px; color: #718096; margin-bottom: 20px;">取消後可申請退款，審核需要 3-5 個工作天。</p>
+                <div style="background: #fed7d7; color: #742a2a; padding: 12px; border-radius: 6px; border-left: 4px solid #fc8181; font-size: 13px;">
+                    取消後無法恢復，請謹慎操作。
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-primary" style="background: #e53e3e;" onclick="confirmCancel()">確認取消</button>
+                <button class="btn btn-secondary" onclick="closeModal('cancel-modal')">不取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 模態框控制
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            
+            // 初始化日期選擇器
+            if (modalId === 'calendar-modal') {
+                flatpickr('#booking-date', {
+                    minDate: 'today',
+                    dateFormat: 'Y-m-d',
+                    disableMobile: false,
+                    inline: false
+                });
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // 預約操作
+        function cancelBooking() {
+            openModal('cancel-modal');
+        }
+        
+        function confirmCancel() {
+            alert('預約已取消，感謝您的使用！');
+            closeModal('cancel-modal');
+        }
+        
+        function confirmReschedule() {
+            const date = document.getElementById('booking-date').value;
+            if (!date) {
+                alert('請選擇新日期');
+                return;
+            }
+            alert('預約已改期至 ' + date + '，感謝您的使用！');
+            closeModal('calendar-modal');
+        }
+        
+        // 點擊外部關閉模態框
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -58,27 +58,39 @@ add_action( 'plugins_loaded', 'kayarine_booking_init', 1 );
 
 /**
  * Ensure unified account page exists
+ * ✅ 性能優化：使用 transient 緩存，避免每次都查詢資料庫
  */
 function kayarine_ensure_unified_account_page() {
 	$page_slug = 'account';
 	
-	// Check if page already exists using direct query
+	// ✅ 檢查 transient 快取（24小時）
+	$cache_key = 'kayarine_account_page_exists';
+	$page_exists = get_transient( $cache_key );
+	
+	if ( $page_exists === 'yes' ) {
+		return; // 頁面已檢查過，快速退出
+	}
+	
+	// 檢查頁面是否存在
 	global $wpdb;
 	$existing = $wpdb->get_var(
 		$wpdb->prepare(
-			"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'page'",
+			"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'page' LIMIT 1",
 			$page_slug
 		)
 	);
 	
 	if ( $existing ) {
-		return; // Page already exists
+		// ✅ 頁面存在，設置 transient（24小時）以避免重複查詢
+		set_transient( $cache_key, 'yes', 24 * HOUR_IN_SECONDS );
+		error_log( "[Kayarine] Account page found, cached for 24 hours" );
+		return;
 	}
 	
-	// Create the unified account page using kayarine_account shortcode (which has proper AJAX handlers)
+	// 建立頁面（只執行一次）
 	$page_data = array(
 		'post_title'   => 'Kayarine 會員中心',
-		'post_content' => '[kayarine_account]',  // Use kayarine_account shortcode which has full AJAX implementation
+		'post_content' => '[kayarine_account]',
 		'post_status'  => 'publish',
 		'post_type'    => 'page',
 		'post_name'    => $page_slug,
@@ -86,9 +98,16 @@ function kayarine_ensure_unified_account_page() {
 	
 	$page_id = wp_insert_post( $page_data );
 	
-	// Flush rewrite rules to ensure page is accessible
 	if ( $page_id && ! is_wp_error( $page_id ) ) {
-		flush_rewrite_rules( false );
+		// ✅ 優化：使用 set_transient 標記而非 flush_rewrite_rules
+		// flush_rewrite_rules() 是非常耗時的操作，應該避免在 plugins_loaded 時執行
+		set_transient( $cache_key, 'yes', 24 * HOUR_IN_SECONDS );
+		error_log( "[Kayarine] Account page created with ID: $page_id, cached for 24 hours" );
+		
+		// ✅ 註：rewrite rules 會在 WordPress 正常初始化時自動生成
+		// 無需手動調用 flush_rewrite_rules()（會導致每次頁面加載都重寫 .htaccess，非常慢）
+	} else {
+		error_log( "[Kayarine] Failed to create account page: " . (is_wp_error($page_id) ? $page_id->get_error_message() : 'Unknown error') );
 	}
 }
 
