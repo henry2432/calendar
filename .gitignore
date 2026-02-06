@@ -1,0 +1,12 @@
+# 憑證與密鑰（切勿 commit）
+config/credentials.json
+config/*.json
+
+# 環境變數
+.env
+.env.local
+.env.*.local
+
+# 系統與 IDE
+.DS_Store
+*.log
