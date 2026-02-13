@@ -3,13 +3,13 @@
  * Plugin Name: Kayarine Booking
  * Plugin URI: https://www.kayarine.com.hk
  * Description: Custom booking system for Kayarine (Single/Double Kayaks, SUP, Add-ons)
- * Version: 1.4.14
+ * Version: 1.5.0
  * Author: Kayarine Dev Team
  * Text Domain: kayarine-booking
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
- exit;
+	exit;
 }
 
 // Force OPCache refresh on plugin load
@@ -18,7 +18,7 @@ if ( function_exists( 'opcache_reset' ) && PHP_SAPI !== 'cli' ) {
 }
 
 // Define Constants
-define( 'KAYARINE_BOOKING_VERSION', '1.4.14' );
+define( 'KAYARINE_BOOKING_VERSION', '1.5.0' );
 define( 'KAYARINE_BOOKING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'KAYARINE_BOOKING_URL', plugin_dir_url( __FILE__ ) );
 
@@ -26,6 +26,9 @@ define( 'KAYARINE_BOOKING_URL', plugin_dir_url( __FILE__ ) );
 require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-booking.php';
 require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-auth-integration.php';
 require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-woocommerce-customizer.php';
+require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-rest-api.php';
+require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-auth-endpoints.php'; // P0-3, P0-4
+require_once KAYARINE_BOOKING_PATH . 'includes/class-kayarine-otp.php'; // P0-3, P0-4
 
 // Initialize Plugin with comprehensive error handling
 function kayarine_booking_init() {
@@ -44,6 +47,12 @@ function kayarine_booking_init() {
 		}
 		
 		$plugin->run();
+		
+		// Initialize OTP system (P0-3, P0-4)
+		if ( class_exists( 'Kayarine_OTP' ) ) {
+			Kayarine_OTP::init();
+			error_log( '[Kayarine ' . KAYARINE_BOOKING_VERSION . '] OTP system initialized' );
+		}
 		
 		// Ensure unified account page exists
 		kayarine_ensure_unified_account_page();

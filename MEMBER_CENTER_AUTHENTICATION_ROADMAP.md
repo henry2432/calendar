@@ -307,6 +307,348 @@ WooCommerce → 狀態 → 工具 → 建立預設頁面
 | 2026-02-06 | WordPress 原生登入方式 | ⏸️ 頁面 404 |
 | 待定 | 認證系統實現 | ⏳ 待開始 |
 
+**會員中心 UI 轉換任務已完成。認證系統整合為新的獨立任務。**
+
 ---
 
-**會員中心 UI 轉換任務已完成。認證系統整合為新的獨立任務。**
+## 📝 任務 5-8：會員中心改進計劃
+
+**創建日期**: 2026-02-07
+**狀態**: 📋 待開發
+**優先級**: 中
+
+### 🎯 任務目標
+
+改進會員中心的用戶體驗和視覺呈現，包含真實商品顯示、品牌吉祥物整合、產品展示優化和品牌商店連結。
+
+---
+
+### 📋 改進項目清單
+
+#### **1. 會員中心顯示真實商品** 🛍️
+
+**當前狀況**:
+- [`RecommendedProducts.tsx`](../kayarine-nextjs-frontend/components/member-dashboard/RecommendedProducts.tsx) 使用佔位符商品
+- 未連接 WordPress 真實產品數據
+
+**改進目標**:
+- ✅ 連接 WordPress WooCommerce API
+- ✅ 顯示真實防曬衣商品
+- ✅ 包含真實價格、圖片、描述
+- ✅ 支持點擊跳轉到商品詳情頁
+
+**相關文件**:
+- [`components/member-dashboard/RecommendedProducts.tsx`](../kayarine-nextjs-frontend/components/member-dashboard/RecommendedProducts.tsx)
+- [`lib/api/rental-equipment.ts`](../kayarine-nextjs-frontend/lib/api/rental-equipment.ts)
+
+---
+
+#### **2. Profile Picture 使用品牌吉祥物** 🎨
+
+**當前狀況**:
+- [`WelcomeCard.tsx`](../kayarine-nextjs-frontend/components/member-dashboard/WelcomeCard.tsx:72) 使用通用佔位符圖片
+- 路徑: `/member-avatar-placeholder.jpg`
+
+**改進目標**:
+- ✅ 替換為 Kayarine 品牌吉祥物圖片
+- ✅ 優化圖片尺寸（建議 256x256px）
+- ✅ 添加 WebP 格式支持（更好的壓縮）
+- ✅ 保持圓形邊框設計（border-4 border-primary/20）
+
+**修改文件**:
+```typescript
+// components/member-dashboard/WelcomeCard.tsx
+<img
+  src="/mascot-avatar.webp"  // 更新為吉祥物圖片
+  alt="Kayarine Member"
+  className="w-full h-full object-cover"
+/>
+```
+
+**所需資源**:
+- 品牌吉祥物圖片（PNG/WebP，256x256px）
+- 放置路徑: `kayarine-nextjs-frontend/public/mascot-avatar.webp`
+
+---
+
+#### **3. 防曬衣 Carousel + 圖片優化** 🎠
+
+**當前狀況**:
+- 靜態商品展示（grid 佈局）
+- 無輪播功能
+- 圖片未優化
+
+**改進目標**:
+- ✅ 實現 carousel 輪播效果（使用 Embla Carousel 或 Swiper）
+- ✅ 支持左右滑動和自動播放
+- ✅ 優化商品圖片（WebP 格式 + 響應式尺寸）
+- ✅ 添加商品快速預覽功能
+- ✅ 移動端支持觸摸滑動
+
+**實現方案**:
+
+**A. 使用 Embla Carousel**（推薦 - 更輕量）:
+```bash
+npm install embla-carousel-react
+```
+
+```typescript
+// components/member-dashboard/RecommendedProducts.tsx
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
+
+export function RecommendedProducts() {
+  const [emblaRef] = useEmblaCarousel(
+    { loop: true, align: 'start' },
+    [Autoplay({ delay: 3000 })]
+  );
+
+  return (
+    <div className="embla" ref={emblaRef}>
+      <div className="embla__container">
+        {products.map(product => (
+          <div className="embla__slide" key={product.id}>
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+**B. 圖片優化策略**:
+```typescript
+import Image from 'next/image';
+
+<Image
+  src={product.image}
+  alt={product.name}
+  width={400}
+  height={400}
+  quality={85}
+  loading="lazy"
+  placeholder="blur"
+  blurDataURL={product.blurDataURL}
+/>
+```
+
+**C. 響應式設計**:
+```css
+/* 移動端: 1個商品 */
+/* 平板: 2個商品 */
+/* 桌面: 3-4個商品 */
+```
+
+---
+
+#### **4. 指向 Brand Shop 連結** 🔗
+
+**改進目標**:
+- ✅ 添加「探索更多」按鈕跳轉到品牌商店
+- ✅ 商品卡片點擊跳轉到商品詳情頁
+- ✅ 整合 brand-shop 路由
+
+**實現方案**:
+
+**A. 添加「探索品牌商店」CTA**:
+```typescript
+// components/member-dashboard/RecommendedProducts.tsx
+<div className="text-center mt-6">
+  <Button
+    size="lg"
+    onClick={() => router.push('/brand-shop')}
+    className="gap-2"
+  >
+    <Store className="w-5 h-5" />
+    探索品牌商店
+  </Button>
+</div>
+```
+
+**B. 商品卡片跳轉**:
+```typescript
+<Card
+  className="cursor-pointer hover:shadow-lg transition-shadow"
+  onClick={() => router.push(`/brand-shop/product/${product.id}`)}
+>
+  {/* 商品內容 */}
+</Card>
+```
+
+**相關路由**:
+- `/brand-shop` - 品牌商店主頁
+- `/brand-shop/product/[id]` - 商品詳情頁
+
+---
+
+### 🏗️ 技術架構
+
+**API 整合**:
+```typescript
+// lib/api/brand-shop.ts
+export async function getBrandProducts() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/wp-json/wc/store/products?category=防曬衣`
+  );
+  return response.json();
+}
+
+export async function getProductById(id: number) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/wp-json/wc/store/products/${id}`
+  );
+  return response.json();
+}
+```
+
+---
+
+### 📦 修改文件清單
+
+**需要修改**:
+1. [`components/member-dashboard/WelcomeCard.tsx`](../kayarine-nextjs-frontend/components/member-dashboard/WelcomeCard.tsx) - 更新 profile 圖片
+2. [`components/member-dashboard/RecommendedProducts.tsx`](../kayarine-nextjs-frontend/components/member-dashboard/RecommendedProducts.tsx) - 實現 carousel + 真實商品
+3. [`lib/api/brand-shop.ts`](../kayarine-nextjs-frontend/lib/api/brand-shop.ts) - 新增（品牌商店 API）
+
+**需要新增**:
+4. [`app/(pages)/brand-shop/page.tsx`](../kayarine-nextjs-frontend/app/(pages)/brand-shop/page.tsx) - 品牌商店頁面
+5. [`app/(pages)/brand-shop/product/[id]/page.tsx`](../kayarine-nextjs-frontend/app/(pages)/brand-shop/product/[id]/page.tsx) - 商品詳情頁
+6. [`components/brand-shop/ProductGrid.tsx`](../kayarine-nextjs-frontend/components/brand-shop/ProductGrid.tsx) - 商品網格組件
+7. `public/mascot-avatar.webp` - 品牌吉祥物圖片
+
+---
+
+### 📋 開發步驟
+
+#### **階段 1：基礎設置** (1-2天)
+- [ ] 準備品牌吉祥物圖片（PNG/WebP）
+- [ ] 創建 brand-shop API 模組
+- [ ] 設置 WordPress 防曬衣商品分類
+- [ ] 安裝 Embla Carousel 依賴
+
+#### **階段 2：Profile 圖片更新** (0.5天)
+- [ ] 更新 WelcomeCard.tsx 圖片路徑
+- [ ] 優化圖片尺寸和格式
+- [ ] 測試不同屏幕尺寸顯示
+
+#### **階段 3：真實商品整合** (1-2天)
+- [ ] 實現 getBrandProducts() API
+- [ ] 更新 RecommendedProducts.tsx 使用真實數據
+- [ ] 添加載入狀態和錯誤處理
+- [ ] 優化商品圖片顯示
+
+#### **階段 4：Carousel 實現** (1-2天)
+- [ ] 整合 Embla Carousel
+- [ ] 實現左右滑動控制
+- [ ] 添加自動播放功能
+- [ ] 移動端觸摸支持
+- [ ] 添加分頁指示器
+
+#### **階段 5：品牌商店連結** (1天)
+- [ ] 創建 /brand-shop 頁面
+- [ ] 創建商品詳情頁模板
+- [ ] 實現商品卡片點擊跳轉
+- [ ] 添加「探索更多」CTA 按鈕
+
+#### **階段 6：測試與優化** (1天)
+- [ ] 功能測試（所有連結和跳轉）
+- [ ] 響應式測試（移動端/平板/桌面）
+- [ ] 性能優化（圖片載入、Carousel 流暢度）
+- [ ] 無障礙測試（鍵盤導航、屏幕閱讀器）
+
+---
+
+### 🧪 測試檢查清單
+
+**Profile 圖片**:
+- [ ] 吉祥物圖片正確顯示
+- [ ] 圓形邊框樣式正確
+- [ ] 移動端/桌面端顯示正常
+- [ ] 圖片載入速度快
+
+**真實商品**:
+- [ ] 商品數據從 WordPress 正確獲取
+- [ ] 價格、名稱、圖片正確顯示
+- [ ] 無商品時顯示友好提示
+
+**Carousel 功能**:
+- [ ] 左右滑動正常
+- [ ] 自動播放正常
+- [ ] 移動端觸摸滑動流暢
+- [ ] 分頁指示器正確顯示
+- [ ] 無限循環正常
+
+**品牌商店連結**:
+- [ ] 商品卡片點擊跳轉正確
+- [ ] 「探索更多」按鈕跳轉正確
+- [ ] 商品詳情頁正確顯示
+- [ ] 返回功能正常
+
+---
+
+### 🎨 設計規範
+
+**吉祥物圖片規格**:
+- 尺寸: 256x256px（1x），512x512px（2x Retina）
+- 格式: WebP（主）+ PNG（後備）
+- 背景: 透明或品牌色
+- 風格: 友好、可愛、品牌一致性
+
+**Carousel 設計**:
+- 滑動速度: 300ms 過渡
+- 自動播放間隔: 3-5秒
+- 商品間距: 16px (移動端), 24px (桌面端)
+- 控制按鈕: 橙色主題 (#FF6B35)
+
+**商品卡片**:
+- 懸停效果: shadow-lg + scale(1.02)
+- 圖片比例: 1:1 (正方形)
+- 角落圓角: rounded-lg (8px)
+- 邊框: border border-gray-200
+
+---
+
+### 💡 後續優化建議
+
+**短期**:
+- [ ] 商品收藏功能（添加到願望清單）
+- [ ] 商品快速預覽（Modal）
+- [ ] 商品篩選和排序
+
+**中期**:
+- [ ] 商品評論和評分系統
+- [ ] 會員專屬折扣標籤
+- [ ] 庫存狀態實時顯示
+
+**長期**:
+- [ ] 個性化商品推薦（基於用戶歷史）
+- [ ] AR 試穿功能
+- [ ] 社交分享功能
+
+---
+
+### 📊 優先級評估
+
+| 項目 | 優先級 | 工作量 | 影響範圍 |
+|------|--------|--------|----------|
+| 真實商品顯示 | 🔴 高 | 2天 | 會員中心體驗 |
+| Profile 吉祥物 | 🟡 中 | 0.5天 | 品牌形象 |
+| Carousel 實現 | 🟡 中 | 2天 | 用戶體驗 |
+| 品牌商店連結 | 🟢 低 | 1天 | 商業轉換 |
+
+**總預估工作量**: 5-7 天
+
+---
+
+### 🔗 相關文件
+
+- [`MEMBER_CENTER_AUTHENTICATION_ROADMAP.md`](MEMBER_CENTER_AUTHENTICATION_ROADMAP.md) - 會員中心路線圖
+- [`DEVELOPMENT_LOG.md`](DEVELOPMENT_LOG.md) - 開發日誌
+- [`DEPLOYMENT_GUIDE_GCP_STANDARD.md`](DEPLOYMENT_GUIDE_GCP_STANDARD.md) - 部署指南
+- [`components/member-dashboard/`](../kayarine-nextjs-frontend/components/member-dashboard/) - 會員中心組件目錄
+
+---
+
+**任務記錄日期**: 2026-02-07
+**下一步**: 準備吉祥物圖片資源，並開始 API 整合工作
